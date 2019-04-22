@@ -1,17 +1,18 @@
 <template>
   <div>
-    登录
-    <el-button type="primary" @click="go">跳转到注册</el-button>
+    注册
+    <el-button type="success" @click="go">跳转到登录</el-button>
   </div>
 </template>
 
 <script>
 export default {
-  name: "login",
+  name: "register",
   methods: {
     go() {
+      // history.pushState({}, "", "/login");
       this.$router.push({
-        path: "/register"
+        path: "/login"
       });
     }
   }
