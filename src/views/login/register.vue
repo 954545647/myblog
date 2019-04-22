@@ -82,8 +82,8 @@ export default {
     // 上传前的回调
     beforeAvatarUpload() {},
     goToLogin() {
-      this.$router.push({
-        path: "/login"
+      this.router.push({
+        path: "/myblog/login"
       });
     },
     touchstart() {

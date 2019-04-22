@@ -8,15 +8,15 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/login'
+      redirect: '/myblog/login'
     },
     {
-      path: '/login',
+      path: '/myblog/login',
       name: 'login',
       component: ()=> import('./views/login/login.vue')
     },
     {
-      path: '/register',
+      path: '/myblog/register',
       name: 'register',
       component: ()=> import('./views/login/register.vue')
     },

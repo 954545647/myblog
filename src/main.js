@@ -6,6 +6,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import "@/assets/styles/global.scss";
 import '@/assets/styles/fonts/iconfont.css';
+Vue.prototype.router = router;
 Vue.use(ElementUI);
 Vue.config.productionTip = false;
 

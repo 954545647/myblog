@@ -86,9 +86,7 @@ export default {
     // 上传前的回调
     beforeAvatarUpload() {},
     goToRegister() {
-      this.$router.push({
-        path: "/register"
-      });
+      this.router.push('/myblog/register');
     }
   }
 };
