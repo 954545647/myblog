@@ -1,0 +1,10 @@
+$base : 37.5;
+@function px2rem($px){
+  @return $px / $base + rem
+}
+
+@mixin center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
