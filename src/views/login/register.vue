@@ -1,23 +1,343 @@
 <template>
-  <div>
-    注册
-    <el-button type="success" @click="go">跳转到登录</el-button>
+  <div class="register" @touchstart="HomeTouch()">
+    <div class="register-wrapper">
+      <!-- 登录注册按钮 -->
+      <div class="register-btn-wrapper">
+        <div class="login-btn" @click="goToLogin()">
+          <span>登录</span>
+        </div>
+        <div class="register-btn">
+          <span>注册</span>
+        </div>
+      </div>
+      <!-- 帐号密码 -->
+      <div class="register-text-wrapper">
+        <div class="register-username">
+          <el-input v-model="username" placeholder="请输入邮箱" class="username"></el-input>
+          <div class="iconfont-wrapper">
+            <span class="iconfont icon-yonghu"></span>
+          </div>
+        </div>
+        <div class="register-password">
+          <el-input v-model="password" placeholder="点击获取验证码"></el-input>
+          <div class="iconfont-wrapper">
+            <span class="iconfont icon-mima-copy"></span>
+          </div>
+        </div>
+        <div class="register-check">
+          <div class="iconfont-wrapper">
+            <span class="iconfont icon-mima-copy"></span>
+          </div>
+          <el-input v-model="password" placeholder="输入密码"></el-input>
+        </div>
+      </div>
+      <!-- 登录注册按钮 -->
+      <div class="register-check-wrapper">
+        <div class="register-check">注册</div>
+        <!-- <div class="register-check"></div> -->
+      </div>
+      <!-- 使用合作帐号分界线 -->
+      <div class="cooperation-wrapper">
+        <span class="dashed-left"></span>
+        <div class="cooperation">
+          <span class="cooperation-text">使用合作伙伴登录</span>
+        </div>
+        <span class="dashed-right"></span>
+      </div>
+      <!-- 使用合作帐号 -->
+      <div class="cooperation-btn-wrapper">
+        <div class="btn-wrapper">
+          <div
+            class="youxiang"
+            @touchstart.stop="touchstart()"
+            @touchmove="touchmove()"
+            @touchend="touchend()"
+          >
+            <span class="iconfont icon-youxiang1"></span>
+          </div>
+          <span :class="{'showText' : ifShowText}" v-if="ifShowText">你好</span>
+          <div class="youke">
+            <span class="iconfont icon-youke"></span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
+
 <script>
 export default {
-  name: "register",
+  data() {
+    return {
+      imageUrl: true,
+      username: "",
+      password: "",
+      ifShowText: false
+    };
+  },
   methods: {
-    go() {
-      // history.pushState({}, "", "/login");
+    // 成功上传的回调
+    handleAvatarSuccess() {},
+    // 上传前的回调
+    beforeAvatarUpload() {},
+    goToLogin() {
       this.$router.push({
         path: "/login"
       });
-    }
+    },
+    touchstart() {
+      this.ifShowText = true;
+    },
+    touchmove() {
+      this.ifShowText = true;
+    },
+    HomeTouch() {
+      this.ifShowText = false;
+    },
+    touchend() {}
   }
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+@import "@/assets/styles/global.scss";
+.register {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  @include center;
+  .register-wrapper {
+    width: 80%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 px2rem(5) rgba($color: #000000, $alpha: 0.2);
+    @include center;
+    .register-btn-wrapper {
+      @include center;
+      height: px2rem(40);
+      flex: 0 0 px2rem(40);
+      width: 80%;
+      display: flex;
+      margin: px2rem(15) 0;
+      box-sizing: border-box;
+      text-align: center;
+      font-size: px2rem(16);
+      color: white;
+      .login-btn {
+        flex: 1;
+        height: 100%;
+        line-height: px2rem(40);
+        color: #2bafff;
+      }
+      .register-btn {
+        flex: 1;
+        background: #2bafff;
+        height: 100%;
+        line-height: px2rem(40);
+      }
+    }
+    .register-text-wrapper {
+      height: px2rem(150);
+      flex: 0 0 px2rem(150);
+      width: 100%;
+      flex-direction: column;
+      box-sizing: border-box;
+      @include center;
+      .register-username {
+        position: relative;
+        flex: 0 0 px2rem(50);
+        height: px2rem(50);
+        width: 80%;
+        box-sizing: border-box;
+        display: flex;
+        padding-bottom: px2rem(10);
+        .el-input {
+          flex: 1;
+          font-size: px2rem(16);
+          & .el-input__inner {
+            height: 100%;
+            border-radius: 0 5px 5px 0;
+            padding: 0 20px;
+          }
+        }
+        .iconfont-wrapper {
+          position: absolute;
+          flex: 0 0 px2rem(25);
+          width: px2rem(25);
+          text-align: center;
+          display: flex;
+          align-items: center;
+          line-height: 100%;
+          padding-left: px2rem(3);
+          .iconfont {
+            font-size: px2rem(20);
+            color: #464646;
+          }
+        }
+      }
+      .register-password {
+        position: relative;
+        flex: 0 0 px2rem(50);
+        height: px2rem(50);
+        width: 80%;
+        box-sizing: border-box;
+        display: flex;
+        padding-bottom: px2rem(10);
+        .el-input {
+          flex: 1;
+          font-size: px2rem(16);
+          & .el-input__inner {
+            height: 100%;
+            border-radius: 0 5px 5px 0;
+            padding: 0 20px;
+          }
+        }
+        .iconfont-wrapper {
+          position: absolute;
+          flex: 0 0 px2rem(25);
+          width: px2rem(25);
+          border-radius: 5px 0 0 5px;
+          text-align: center;
+          display: flex;
+          align-items: center;
+          line-height: 100%;
+          padding-left: px2rem(3);
+          .iconfont {
+            font-size: px2rem(20);
+            color: #464646;
+          }
+        }
+      }
+      .register-check {
+        position: relative;
+        flex: 0 0 px2rem(50);
+        height: px2rem(50);
+        width: 80%;
+        box-sizing: border-box;
+        display: flex;
+        padding-bottom: px2rem(10);
+        .el-input {
+          flex: 1;
+          font-size: px2rem(16);
+          & .el-input__inner {
+            height: 100%;
+            border-radius: 0 5px 5px 0;
+            padding: 0 20px;
+          }
+        }
+        .iconfont-wrapper {
+          position: absolute;
+          flex: 0 0 px2rem(25);
+          width: px2rem(25);
+          border-radius: 5px 0 0 5px;
+          text-align: center;
+          display: flex;
+          align-items: center;
+          line-height: 100%;
+          padding-left: px2rem(3);
+          .iconfont {
+            font-size: px2rem(20);
+            color: #464646;
+          }
+        }
+      }
+    }
+    .register-check-wrapper {
+      flex: 0 0 px2rem(40);
+      width: 80%;
+      height: 100%;
+      justify-content: center;
+      display: flex;
+      .register-check {
+        width: 100%;
+        height: px2rem(35);
+        border-radius: px2rem(15);
+        background: #31bbee;
+        text-align: center;
+        color: white;
+        font-size: px2rem(14);
+        line-height: px2rem(35);
+      }
+    }
+    .cooperation-wrapper {
+      position: relative;
+      flex: 0 0 px2rem(20);
+      width: 80%;
+      display: flex;
+      justify-content: space-between;
+      .dashed-left {
+        flex: 0 0 25%;
+        border-bottom: px2rem(1) dashed #ccc;
+      }
+      .cooperation {
+        position: absolute;
+        left: 50%;
+        top: px2rem(-6);
+        transform: translate(-50%, 0);
+        .cooperation-text {
+          flex: 1;
+          font-size: px2rem(14);
+          color: #ccc;
+        }
+      }
+      .dashed-right {
+        flex: 0 0 25%;
+        border-bottom: px2rem(1) dashed #ccc;
+      }
+    }
+    .cooperation-btn-wrapper {
+      margin-top: px2rem(15);
+      margin-bottom: px2rem(20);
+      width: 80%;
+      flex: 0 0 px2rem(40);
+      display: flex;
+      position: relative;
+      .btn-wrapper {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        .youke {
+          position: absolute;
+          right: 20%;
+          top: 0;
+          border-radius: 50%;
+          width: px2rem(40);
+          height: px2rem(40);
+          background: #3fb137;
+          @include center;
+          color: #ccc;
+          .icon-youke {
+            color: #fff;
+            font-size: px2rem(38);
+          }
+        }
+        .youxiang {
+          position: absolute;
+          left: 20%;
+          top: 0%;
+          width: px2rem(40);
+          height: px2rem(40);
+          border-radius: 50%;
+          background: #e14968;
+          @include center;
+          &:hover:after {
+            color: red;
+          }
+          .icon-youxiang1 {
+            font-size: px2rem(40);
+            color: #fff;
+            &:hover:after {
+              color: red;
+            }
+          }
+        }
+      }
+    }
+  }
+}
 </style>

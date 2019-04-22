@@ -1,6 +1,12 @@
-$base : 37.5;
-@function px2rem($px){
-  @return $px / $base + rem
+$base: 37.5;
+@function px2rem($px) {
+  @return $px / $base + rem;
+}
+
+@mixin ellipse {
+  overflow: hidden;
+  text-overflow: hidden;
+  white-space: nowrap;
 }
 
 @mixin center {

@@ -1,15 +1,36 @@
 <template>
   <div id="app">
-    <router-view/>
+    <!-- <transition name="login"> -->
+      <router-view/>
+    <!-- </transition> -->
   </div>
 </template>
 
+<script>
+export default {};
+function changeFontSize() {
+  let html = document.querySelector("html");
+  let fontSize =
+    (document.documentElement.clientWidth || document.body.clientWidth) / 10;
+  fontSize = fontSize > 50 ? 50 : fontSize;
+  html.style.fontSize = fontSize + "px";
+}
+// DOMContentLoaded是DOM加载完毕,但是图片等资源还没有加载完毕
+window.addEventListener("DOMContentLoaded", () => {
+  changeFontSize();
+});
+</script>
+
 <style lang="scss">
+@import "@/assets/styles/global.scss";
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 </style>
