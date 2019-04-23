@@ -21,24 +21,18 @@
           class="demo-ruleForm"
         >
           <!-- 输入邮箱 -->
-          <el-form-item label prop="email" class="email-wrapper">
+          <el-form-item label=" " prop="email" class="email-wrapper">
             <div class="iconfont-wrapper">
               <span class="iconfont icon-yonghu"></span>
             </div>
-            <el-input v-model.number="ruleForm.email" class="email" placeholder="输入邮箱"></el-input>
+            <el-input v-model="ruleForm.email" class="email" placeholder="输入邮箱"></el-input>
           </el-form-item>
           <!-- 输入验证码 -->
           <el-form-item label prop="code" class="code-wrapper">
             <div class="iconfont-wrapper">
               <span class="iconfont icon-mima-copy"></span>
             </div>
-            <el-input
-              type="password"
-              v-model="ruleForm.code"
-              autocomplete="off"
-              class="code"
-              placeholder="点击获取验证码"
-            ></el-input>
+            <el-input v-model.number="ruleForm.code" class="code" placeholder="点击获取验证码"></el-input>
           </el-form-item>
           <!-- 输入密码 -->
           <el-form-item prop="pass" class="pass-wrapper">
@@ -46,7 +40,7 @@
               <span class="iconfont icon-mima-copy"></span>
             </div>
             <el-input
-              v-model.number="ruleForm.pass"
+              v-model="ruleForm.pass"
               class="pass"
               autocomplete="off"
               type="password"
@@ -54,32 +48,11 @@
             ></el-input>
           </el-form-item>
           <!-- 注册按钮 -->
-          <div class="register-check-wrapper">
-            <div class="register-check">注册</div>
-          </div>
+          <el-form-item class="register-check-wrapper">
+            <el-button type="primary" @click="submitForm('ruleForm')" class="register-check">注册</el-button>
+          </el-form-item>
         </el-form>
       </div>
-
-      <!-- <div class="register-text-wrapper">
-        <div class="register-username">
-          <el-input v-model="username" placeholder="请输入邮箱" class="username"></el-input>
-          <div class="iconfont-wrapper">
-            <span class="iconfont icon-yonghu"></span>
-          </div>
-        </div>
-        <div class="register-password">
-          <el-input v-model="password" placeholder="点击获取验证码"></el-input>
-          <div class="iconfont-wrapper">
-            <span class="iconfont icon-mima-copy"></span>
-          </div>
-        </div>
-        <div class="register-check">
-          <div class="iconfont-wrapper">
-            <span class="iconfont icon-mima-copy"></span>
-          </div>
-          <el-input v-model="password" placeholder="输入密码"></el-input>
-        </div>
-      </div>-->
       <!-- 登录注册按钮 -->
       <!-- <div class="register-check-wrapper"> -->
       <!-- <div class="register-check">注册</div> -->
@@ -113,57 +86,81 @@
 export default {
   data() {
     var validateEmail = (rule, value, callback) => {
+      const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+      // var mailReg = /^.{3,10}$/;
       if (value === "") {
-        callback(new Error(" "));
-      } else {
-        if (this.ruleForm.checkPass !== "") {
-          this.$refs.ruleForm.validateField("checkPass");
+        return callback(new Error("请输入邮箱"));
+      }
+      setTimeout(() => {
+        if (mailReg.test(value)) {
+          callback();
+        } else {
+          callback(new Error("请输入正确的邮箱格式"));
         }
+      }, 100);
+    };
+    var validateCode = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入验证码"));
+      } else {
         callback();
       }
     };
     var validatePass = (rule, value, callback) => {
+      // var PassReg1 = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{8,30}$/;
+      // var PassReg2 = /^[a-zA-Z0-9]{6,10}$/;
+      var PassReg = /^.{1,100}$/;
       if (value === "") {
-        callback(new Error(" "));
+        callback(new Error("请输入密码"));
       } else {
-        if (this.ruleForm.pass !== "") {
-          this.$refs.ruleForm.validateField("checkPass");
+        if (PassReg.test(value)) {
+          callback();
+        } else {
+          callback(new Error("请输入至少6位任意字符"));
         }
-        callback();
       }
     };
-    var validateCode = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error(" "));
-      } else {
-        if (this.ruleForm.pass !== "") {
-          this.$refs.ruleForm.validateField("checkPass");
-        }
-        callback();
-      }
-    };
+
     return {
       username: "",
       password: "",
       ruleForm: {
         email: "",
-        pass: "",
-        checkPass: ""
+        code: "",
+        pass: ""
       },
       rules: {
-        email: [{ validator: validateEmail, trigger: "blur" }],
+        email: [{ validator: validateEmail, trigger: ["blur", "change"] }],
         code: [{ validator: validateCode, trigger: "blur" }],
-        pass: [{ validator: validatePass, trigger: "blur" }]
+        pass: [{ validator: validatePass, trigger: ["blur", "change"] }]
       }
     };
   },
   methods: {
+    // 跳转到注册页面
     goToLogin() {
       this.router.push({
         path: "/login"
       });
     },
-    submitForm() {}
+    // 点击注册按钮
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          console.log(this.ruleForm)
+          this.sendEmail(this.ruleForm.email)
+        } else {
+          return false;
+        }
+      });
+    },
+    // 发送邮件
+    sendEmail(email){
+      console.log(`${process.env.VUE_APP_BASE_URL}`)
+      this.$axios.post(`${process.env.VUE_APP_BASE_URL}/user/register`,{
+        email
+      })
+    }
   }
 };
 </script>
@@ -210,8 +207,7 @@ export default {
       }
     }
     .form-wrapper {
-      height: px2rem(200);
-      flex: 0 0 px2rem(200);
+      height: px2rem(250);
       width: 100%;
       flex-direction: column;
       box-sizing: border-box;
@@ -219,7 +215,7 @@ export default {
       position: relative;
       .demo-ruleForm {
         flex: 0 0 px2rem(200);
-        height: px2rem(200);
+        height: 100%;
         width: 100%;
         position: absolute;
         left: 0;
@@ -230,9 +226,9 @@ export default {
         justify-content: center;
         align-items: center;
         .email-wrapper {
-          flex: 0 0 px2rem(50);
-          height: px2rem(50);
-          margin-bottom: 0;
+          // flex: 0 0 px2rem(50);
+          // height: px2rem(50);
+          margin-bottom: px2rem(20);
           position: relative;
           margin-left: -30px;
           width: 60%;
@@ -259,13 +255,16 @@ export default {
               .el-input__inner {
                 padding: 0 px2rem(20);
               }
+              .el-form-item.is-success .el-input__inner {
+                border-color: #31bbee;
+              }
             }
           }
         }
         .code-wrapper {
-          flex: 0 0 px2rem(50);
-          height: px2rem(50);
-          margin-bottom: 0;
+          margin-bottom: px2rem(20);
+          // flex: 0 0 px2rem(50);
+          // height: px2rem(50);
           position: relative;
           margin-left: -30px;
           width: 60%;
@@ -296,9 +295,9 @@ export default {
           }
         }
         .pass-wrapper {
-          flex: 0 0 px2rem(50);
-          height: px2rem(50);
-          margin-bottom: 0;
+          // flex: 0 0 px2rem(50);
+          // height: px2rem(50);
+          margin-bottom: px2rem(15);
           position: relative;
           box-sizing: border-box;
           width: 60%;
@@ -306,13 +305,13 @@ export default {
           .el-form-item__content {
             margin: 0 !important;
             width: calc(100% + 30px);
+            height: 100%;
             .iconfont-wrapper {
               position: absolute;
               flex: 0 0 px2rem(25);
               width: px2rem(25);
               border-radius: 5px 0 0 5px;
               text-align: center;
-              height: 100%;
               display: flex;
               align-items: center;
               padding-left: px2rem(2);
@@ -332,19 +331,23 @@ export default {
         .register-check-wrapper {
           flex: 0 0 px2rem(40);
           height: px2rem(40);
-          width: 70%;
-          margin-top: px2rem(5);
-          .register-check {
+          width: 65%;
+          margin-bottom: 0;
+          .el-form-item__content {
             width: 100%;
-            height: px2rem(35);
-            border-radius: px2rem(15);
-            background: #31bbee;
-            text-align: center;
-            color: white;
-            font-size: px2rem(14);
-            line-height: px2rem(35);
-            box-sizing: border-box;
-            padding: 0 px2rem(20);
+            margin-left: 0 !important;
+            .register-check {
+              width: 100%;
+              height: px2rem(35);
+              border-radius: px2rem(15);
+              background: #31bbee;
+              text-align: center;
+              color: white;
+              font-size: px2rem(14);
+              line-height: px2rem(35);
+              box-sizing: border-box;
+              padding: 0 px2rem(20);
+            }
           }
         }
       }
@@ -456,29 +459,13 @@ export default {
     //     }
     //   }
     // }
-    .register-check-wrapper {
-      flex: 0 0 px2rem(40);
-      width: 80%;
-      height: 100%;
-      justify-content: center;
-      display: flex;
-      .register-check {
-        width: 100%;
-        height: px2rem(35);
-        border-radius: px2rem(15);
-        background: #31bbee;
-        text-align: center;
-        color: white;
-        font-size: px2rem(14);
-        line-height: px2rem(35);
-      }
-    }
     .cooperation-wrapper {
       position: relative;
-      flex: 0 0 px2rem(20);
+      flex: 0 0 px2rem(10);
       width: 80%;
       display: flex;
       justify-content: space-between;
+      box-sizing: border-box;
       .dashed-left {
         flex: 0 0 25%;
         border-bottom: px2rem(1) dashed #ccc;
@@ -486,7 +473,7 @@ export default {
       .cooperation {
         position: absolute;
         left: 50%;
-        top: px2rem(-6);
+        top: px2rem(-16);
         transform: translate(-50%, 0);
         .cooperation-text {
           flex: 1;
