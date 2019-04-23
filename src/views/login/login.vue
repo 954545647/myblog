@@ -1,6 +1,6 @@
 <template>
-  <!-- <transition name="login"> -->
   <div class="login">
+  <transition name="login">
     <div class="login-wrapper">
       <!-- 登录注册按钮 -->
       <div class="login-btn-wrapper">
@@ -65,8 +65,8 @@
         </div>
       </div>
     </div>
+  </transition>
   </div>
-  <!-- </transition> -->
 </template>
 
 
@@ -86,7 +86,8 @@ export default {
     // 上传前的回调
     beforeAvatarUpload() {},
     goToRegister() {
-      this.router.push('/myblog/register');
+      this.router.push("/register");
+      // history.pushState({}, "", "/register");
     }
   }
 };

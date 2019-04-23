@@ -83,8 +83,9 @@ export default {
     beforeAvatarUpload() {},
     goToLogin() {
       this.router.push({
-        path: "/myblog/login"
+        path: "/login"
       });
+      // history.pushState({},'','/login')
     },
     touchstart() {
       this.ifShowText = true;
