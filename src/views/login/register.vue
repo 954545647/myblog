@@ -1,5 +1,5 @@
 <template>
-  <div class="register" @touchstart="HomeTouch()">
+  <div class="register">
     <div class="register-wrapper">
       <!-- 登录注册按钮 -->
       <div class="register-btn-wrapper">
@@ -11,7 +11,56 @@
         </div>
       </div>
       <!-- 帐号密码 -->
-      <div class="register-text-wrapper">
+      <div class="form-wrapper">
+        <el-form
+          :model="ruleForm"
+          status-icon
+          :rules="rules"
+          ref="ruleForm"
+          label-width="100px"
+          class="demo-ruleForm"
+        >
+          <!-- 输入邮箱 -->
+          <el-form-item label prop="email" class="email-wrapper">
+            <div class="iconfont-wrapper">
+              <span class="iconfont icon-yonghu"></span>
+            </div>
+            <el-input v-model.number="ruleForm.email" class="email" placeholder="输入邮箱"></el-input>
+          </el-form-item>
+          <!-- 输入验证码 -->
+          <el-form-item label prop="code" class="code-wrapper">
+            <div class="iconfont-wrapper">
+              <span class="iconfont icon-mima-copy"></span>
+            </div>
+            <el-input
+              type="password"
+              v-model="ruleForm.code"
+              autocomplete="off"
+              class="code"
+              placeholder="点击获取验证码"
+            ></el-input>
+          </el-form-item>
+          <!-- 输入密码 -->
+          <el-form-item prop="pass" class="pass-wrapper">
+            <div class="iconfont-wrapper">
+              <span class="iconfont icon-mima-copy"></span>
+            </div>
+            <el-input
+              v-model.number="ruleForm.pass"
+              class="pass"
+              autocomplete="off"
+              type="password"
+              placeholder="输入密码"
+            ></el-input>
+          </el-form-item>
+          <!-- 注册按钮 -->
+          <div class="register-check-wrapper">
+            <div class="register-check">注册</div>
+          </div>
+        </el-form>
+      </div>
+
+      <!-- <div class="register-text-wrapper">
         <div class="register-username">
           <el-input v-model="username" placeholder="请输入邮箱" class="username"></el-input>
           <div class="iconfont-wrapper">
@@ -30,12 +79,12 @@
           </div>
           <el-input v-model="password" placeholder="输入密码"></el-input>
         </div>
-      </div>
+      </div>-->
       <!-- 登录注册按钮 -->
-      <div class="register-check-wrapper">
-        <div class="register-check">注册</div>
-        <!-- <div class="register-check"></div> -->
-      </div>
+      <!-- <div class="register-check-wrapper"> -->
+      <!-- <div class="register-check">注册</div> -->
+      <!-- <div class="register-check"></div> -->
+      <!-- </div> -->
       <!-- 使用合作帐号分界线 -->
       <div class="cooperation-wrapper">
         <span class="dashed-left"></span>
@@ -47,15 +96,9 @@
       <!-- 使用合作帐号 -->
       <div class="cooperation-btn-wrapper">
         <div class="btn-wrapper">
-          <div
-            class="youxiang"
-            @touchstart.stop="touchstart()"
-            @touchmove="touchmove()"
-            @touchend="touchend()"
-          >
+          <div class="youxiang">
             <span class="iconfont icon-youxiang1"></span>
           </div>
-          <span :class="{'showText' : ifShowText}" v-if="ifShowText">你好</span>
           <div class="youke">
             <span class="iconfont icon-youke"></span>
           </div>
@@ -69,34 +112,58 @@
 <script>
 export default {
   data() {
+    var validateEmail = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error(" "));
+      } else {
+        if (this.ruleForm.checkPass !== "") {
+          this.$refs.ruleForm.validateField("checkPass");
+        }
+        callback();
+      }
+    };
+    var validatePass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error(" "));
+      } else {
+        if (this.ruleForm.pass !== "") {
+          this.$refs.ruleForm.validateField("checkPass");
+        }
+        callback();
+      }
+    };
+    var validateCode = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error(" "));
+      } else {
+        if (this.ruleForm.pass !== "") {
+          this.$refs.ruleForm.validateField("checkPass");
+        }
+        callback();
+      }
+    };
     return {
-      imageUrl: true,
       username: "",
       password: "",
-      ifShowText: false
+      ruleForm: {
+        email: "",
+        pass: "",
+        checkPass: ""
+      },
+      rules: {
+        email: [{ validator: validateEmail, trigger: "blur" }],
+        code: [{ validator: validateCode, trigger: "blur" }],
+        pass: [{ validator: validatePass, trigger: "blur" }]
+      }
     };
   },
   methods: {
-    // 成功上传的回调
-    handleAvatarSuccess() {},
-    // 上传前的回调
-    beforeAvatarUpload() {},
     goToLogin() {
       this.router.push({
         path: "/login"
       });
-      // history.pushState({},'','/login')
     },
-    touchstart() {
-      this.ifShowText = true;
-    },
-    touchmove() {
-      this.ifShowText = true;
-    },
-    HomeTouch() {
-      this.ifShowText = false;
-    },
-    touchend() {}
+    submitForm() {}
   }
 };
 </script>
@@ -142,112 +209,253 @@ export default {
         line-height: px2rem(40);
       }
     }
-    .register-text-wrapper {
-      height: px2rem(150);
-      flex: 0 0 px2rem(150);
+    .form-wrapper {
+      height: px2rem(200);
+      flex: 0 0 px2rem(200);
       width: 100%;
       flex-direction: column;
       box-sizing: border-box;
       @include center;
-      .register-username {
-        position: relative;
-        flex: 0 0 px2rem(50);
-        height: px2rem(50);
-        width: 80%;
-        box-sizing: border-box;
+      position: relative;
+      .demo-ruleForm {
+        flex: 0 0 px2rem(200);
+        height: px2rem(200);
+        width: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        font-size: px2rem(14);
+        flex-direction: column;
         display: flex;
-        padding-bottom: px2rem(10);
-        .el-input {
-          flex: 1;
-          font-size: px2rem(16);
-          & .el-input__inner {
-            height: 100%;
-            border-radius: 0 5px 5px 0;
-            padding: 0 20px;
+        justify-content: center;
+        align-items: center;
+        .email-wrapper {
+          flex: 0 0 px2rem(50);
+          height: px2rem(50);
+          margin-bottom: 0;
+          position: relative;
+          margin-left: -30px;
+          width: 60%;
+          .el-form-item__content {
+            width: calc(100% + 30px);
+            margin: 0 !important;
+            .iconfont-wrapper {
+              position: absolute;
+              flex: 0 0 px2rem(25);
+              width: px2rem(25);
+              border-radius: 5px 0 0 5px;
+              text-align: center;
+              height: 100%;
+              display: flex;
+              align-items: center;
+              padding-left: px2rem(2);
+              z-index: 1;
+              .iconfont {
+                font-size: px2rem(16);
+                color: #464646;
+              }
+            }
+            .email {
+              .el-input__inner {
+                padding: 0 px2rem(20);
+              }
+            }
           }
         }
-        .iconfont-wrapper {
-          position: absolute;
-          flex: 0 0 px2rem(25);
-          width: px2rem(25);
-          text-align: center;
-          display: flex;
-          align-items: center;
-          line-height: 100%;
-          padding-left: px2rem(3);
-          .iconfont {
-            font-size: px2rem(20);
-            color: #464646;
+        .code-wrapper {
+          flex: 0 0 px2rem(50);
+          height: px2rem(50);
+          margin-bottom: 0;
+          position: relative;
+          margin-left: -30px;
+          width: 60%;
+          .el-form-item__content {
+            width: calc(100% + 30px);
+            margin: 0 !important;
+            .iconfont-wrapper {
+              position: absolute;
+              flex: 0 0 px2rem(25);
+              width: px2rem(25);
+              border-radius: 5px 0 0 5px;
+              text-align: center;
+              height: 100%;
+              display: flex;
+              align-items: center;
+              padding-left: px2rem(2);
+              z-index: 1;
+              .iconfont {
+                font-size: px2rem(16);
+                color: #464646;
+              }
+            }
+            .code {
+              .el-input__inner {
+                padding: 0 px2rem(20);
+              }
+            }
           }
         }
-      }
-      .register-password {
-        position: relative;
-        flex: 0 0 px2rem(50);
-        height: px2rem(50);
-        width: 80%;
-        box-sizing: border-box;
-        display: flex;
-        padding-bottom: px2rem(10);
-        .el-input {
-          flex: 1;
-          font-size: px2rem(16);
-          & .el-input__inner {
-            height: 100%;
-            border-radius: 0 5px 5px 0;
-            padding: 0 20px;
+        .pass-wrapper {
+          flex: 0 0 px2rem(50);
+          height: px2rem(50);
+          margin-bottom: 0;
+          position: relative;
+          box-sizing: border-box;
+          width: 60%;
+          margin-left: -30px;
+          .el-form-item__content {
+            margin: 0 !important;
+            width: calc(100% + 30px);
+            .iconfont-wrapper {
+              position: absolute;
+              flex: 0 0 px2rem(25);
+              width: px2rem(25);
+              border-radius: 5px 0 0 5px;
+              text-align: center;
+              height: 100%;
+              display: flex;
+              align-items: center;
+              padding-left: px2rem(2);
+              z-index: 1;
+              .iconfont {
+                font-size: px2rem(16);
+                color: #464646;
+              }
+            }
+            .pass {
+              .el-input__inner {
+                padding: 0 px2rem(20);
+              }
+            }
           }
         }
-        .iconfont-wrapper {
-          position: absolute;
-          flex: 0 0 px2rem(25);
-          width: px2rem(25);
-          border-radius: 5px 0 0 5px;
-          text-align: center;
-          display: flex;
-          align-items: center;
-          line-height: 100%;
-          padding-left: px2rem(3);
-          .iconfont {
-            font-size: px2rem(20);
-            color: #464646;
-          }
-        }
-      }
-      .register-check {
-        position: relative;
-        flex: 0 0 px2rem(50);
-        height: px2rem(50);
-        width: 80%;
-        box-sizing: border-box;
-        display: flex;
-        padding-bottom: px2rem(10);
-        .el-input {
-          flex: 1;
-          font-size: px2rem(16);
-          & .el-input__inner {
-            height: 100%;
-            border-radius: 0 5px 5px 0;
-            padding: 0 20px;
-          }
-        }
-        .iconfont-wrapper {
-          position: absolute;
-          flex: 0 0 px2rem(25);
-          width: px2rem(25);
-          border-radius: 5px 0 0 5px;
-          text-align: center;
-          display: flex;
-          align-items: center;
-          line-height: 100%;
-          padding-left: px2rem(3);
-          .iconfont {
-            font-size: px2rem(20);
-            color: #464646;
+        .register-check-wrapper {
+          flex: 0 0 px2rem(40);
+          height: px2rem(40);
+          width: 70%;
+          margin-top: px2rem(5);
+          .register-check {
+            width: 100%;
+            height: px2rem(35);
+            border-radius: px2rem(15);
+            background: #31bbee;
+            text-align: center;
+            color: white;
+            font-size: px2rem(14);
+            line-height: px2rem(35);
+            box-sizing: border-box;
+            padding: 0 px2rem(20);
           }
         }
       }
     }
+
+    // .register-text-wrapper {
+    //   height: px2rem(150);
+    //   flex: 0 0 px2rem(150);
+    //   width: 100%;
+    //   flex-direction: column;
+    //   box-sizing: border-box;
+    //   @include center;
+    //   .register-username {
+    //     position: relative;
+    //     flex: 0 0 px2rem(50);
+    //     height: px2rem(50);
+    //     width: 80%;
+    //     box-sizing: border-box;
+    //     display: flex;
+    //     padding-bottom: px2rem(10);
+    //     .el-input {
+    //       flex: 1;
+    //       font-size: px2rem(14);
+    //       & .el-input__inner {
+    //         height: 100%;
+    //         border-radius: 0 5px 5px 0;
+    //         padding: 0 20px;
+    //       }
+    //     }
+    //     .iconfont-wrapper {
+    //       position: absolute;
+    //       flex: 0 0 px2rem(25);
+    //       width: px2rem(25);
+    //       text-align: center;
+    //       display: flex;
+    //       align-items: center;
+    //       line-height: 100%;
+    //       padding-left: px2rem(2);
+    //       .iconfont {
+    //         font-size: px2rem(16);
+    //         color: #464646;
+    //       }
+    //     }
+    //   }
+    //   .register-password {
+    //     position: relative;
+    //     flex: 0 0 px2rem(50);
+    //     height: px2rem(50);
+    //     width: 80%;
+    //     box-sizing: border-box;
+    //     display: flex;
+    //     padding-bottom: px2rem(10);
+    //     .el-input {
+    //       flex: 1;
+    //       font-size: px2rem(14);
+    //       & .el-input__inner {
+    //         height: 100%;
+    //         border-radius: 0 5px 5px 0;
+    //         padding: 0 20px;
+    //       }
+    //     }
+    //     .iconfont-wrapper {
+    //       position: absolute;
+    //       flex: 0 0 px2rem(25);
+    //       width: px2rem(25);
+    //       border-radius: 5px 0 0 5px;
+    //       text-align: center;
+    //       display: flex;
+    //       align-items: center;
+    //       line-height: 100%;
+    //       padding-left: px2rem(2);
+    //       .iconfont {
+    //         font-size: px2rem(16);
+    //         color: #464646;
+    //       }
+    //     }
+    //   }
+    //   .register-check {
+    //     position: relative;
+    //     flex: 0 0 px2rem(50);
+    //     height: px2rem(50);
+    //     width: 80%;
+    //     box-sizing: border-box;
+    //     display: flex;
+    //     padding-bottom: px2rem(10);
+    //     .el-input {
+    //       flex: 1;
+    //       font-size: px2rem(14);
+    //       & .el-input__inner {
+    //         height: 100%;
+    //         border-radius: 0 5px 5px 0;
+    //         padding: 0 20px;
+    //       }
+    //     }
+    //     .iconfont-wrapper {
+    //       position: absolute;
+    //       flex: 0 0 px2rem(25);
+    //       width: px2rem(25);
+    //       border-radius: 5px 0 0 5px;
+    //       text-align: center;
+    //       display: flex;
+    //       align-items: center;
+    //       line-height: 100%;
+    //       padding-left: px2rem(2);
+    //       .iconfont {
+    //         font-size: px2rem(16);
+    //         color: #464646;
+    //       }
+    //     }
+    //   }
+    // }
     .register-check-wrapper {
       flex: 0 0 px2rem(40);
       width: 80%;

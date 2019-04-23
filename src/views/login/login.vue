@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-  <transition name="login">
+  <transition name="el-zoom-in-bottom">
     <div class="login-wrapper">
       <!-- 登录注册按钮 -->
       <div class="login-btn-wrapper">
@@ -74,17 +74,12 @@
 export default {
   data() {
     return {
-      imageUrl: true,
       username: "",
       password: "",
       ifShowText: false
     };
   },
   methods: {
-    // 成功上传的回调
-    handleAvatarSuccess() {},
-    // 上传前的回调
-    beforeAvatarUpload() {},
     goToRegister() {
       this.router.push("/register");
       // history.pushState({}, "", "/register");
@@ -148,11 +143,11 @@ export default {
         margin-bottom: px2rem(10);
         .el-input {
           flex: 1;
-          font-size: px2rem(16);
+          font-size: px2rem(14);
           & .el-input__inner {
             height: 100%;
             border-radius: 0 5px 5px 0;
-            padding: 0 20px !important;
+            padding: 0 20px;
           }
         }
         .iconfont-wrapper {
@@ -164,9 +159,9 @@ export default {
           height: 100%;
           display: flex;
           align-items: center;
-          padding-left: px2rem(3);
+          padding-left: px2rem(2);
           .iconfont {
-            font-size: px2rem(20);
+            font-size: px2rem(16);
             color: #464646;
           }
         }
@@ -179,7 +174,7 @@ export default {
         display: flex;
         .el-input {
           flex: 1;
-          font-size: px2rem(16);
+          font-size: px2rem(14);
           & .el-input__inner {
             height: 100%;
             border-radius: 0 5px 5px 0;
@@ -194,11 +189,11 @@ export default {
           height: 100%;
           display: flex;
           align-items: center;
-          padding-left: px2rem(3);
+          padding-left: px2rem(2);
           padding-bottom: px2rem(2);
           box-sizing: border-box;
           .iconfont {
-            font-size: px2rem(18);
+            font-size: px2rem(16);
             color: #464646;
           }
         }

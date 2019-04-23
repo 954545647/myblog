@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <!-- <transition name="login"> -->
+    <transition name="el-zoom-in-center">
       <router-view/>
-    <!-- </transition> -->
+    </transition>
   </div>
 </template>
 
