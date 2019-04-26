@@ -8,6 +8,16 @@
   transition: all .2s linear;
 }
 
+.longFade-enter, .longFade-leave-to{
+  opacity: 0;
+}
+.longFade-leave, .longFade-enter-to{
+  opacity: 1;
+}
+.longFade-enter-active, .longFade-leave-active{
+  transition: all 1s linear;
+}
+
 .login-enter, .login-leave-to{
   opacity: 0;
   transform: scale(0.5,0.5)

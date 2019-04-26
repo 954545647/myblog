@@ -16,9 +16,9 @@ function changeFontSize() {
   html.style.fontSize = fontSize + "px";
 }
 // DOMContentLoaded是DOM加载完毕,但是图片等资源还没有加载完毕
-window.addEventListener("DOMContentLoaded", () => {
+// window.addEventListener("DOMContentLoaded", () => {
   changeFontSize();
-});
+// });
 </script>
 
 <style lang="scss">

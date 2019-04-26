@@ -14,23 +14,31 @@
       <div class="form-wrapper">
         <el-form
           :model="ruleForm"
-          status-icon
           :rules="rules"
           ref="ruleForm"
           label-width="100px"
           class="demo-ruleForm"
         >
           <!-- 输入邮箱 -->
-          <el-form-item label=" " prop="email" class="email-wrapper">
-            <div class="iconfont-wrapper">
+          <el-form-item prop="email" class="email-wrapper">
+            <div class="iconfont-wrapper-one">
               <span class="iconfont icon-yonghu"></span>
             </div>
-            <el-input v-model="ruleForm.email" class="email" placeholder="输入邮箱"></el-input>
+            <!-- <div class="iconfont-wrapper-two">
+              <span class="iconfont icon-fasongyanzhengma"></span>
+            </div>-->
+            <el-input
+              v-model="ruleForm.email"
+              class="email"
+              placeholder="输入邮箱"
+              @blur="startSend()"
+              ref="email"
+            ></el-input>
           </el-form-item>
           <!-- 输入验证码 -->
           <el-form-item label prop="code" class="code-wrapper">
             <div class="iconfont-wrapper">
-              <span class="iconfont icon-mima-copy"></span>
+              <span class="iconfont icon-scode"></span>
             </div>
             <el-input v-model.number="ruleForm.code" class="code" placeholder="点击获取验证码"></el-input>
           </el-form-item>
@@ -51,13 +59,14 @@
           <el-form-item class="register-check-wrapper">
             <el-button type="primary" @click="submitForm('ruleForm')" class="register-check">注册</el-button>
           </el-form-item>
+          <!-- 警告信息,邮箱倒计时 -->
+          <transition name="fade">
+            <div class="warning-wrapper" v-show="warningText">
+              <span class="warning-text">{{warningText}}</span>
+            </div>
+          </transition>
         </el-form>
       </div>
-      <!-- 登录注册按钮 -->
-      <!-- <div class="register-check-wrapper"> -->
-      <!-- <div class="register-check">注册</div> -->
-      <!-- <div class="register-check"></div> -->
-      <!-- </div> -->
       <!-- 使用合作帐号分界线 -->
       <div class="cooperation-wrapper">
         <span class="dashed-left"></span>
@@ -66,6 +75,7 @@
         </div>
         <span class="dashed-right"></span>
       </div>
+
       <!-- 使用合作帐号 -->
       <div class="cooperation-btn-wrapper">
         <div class="btn-wrapper">
@@ -86,18 +96,15 @@
 export default {
   data() {
     var validateEmail = (rule, value, callback) => {
-      const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
-      // var mailReg = /^.{3,10}$/;
+      const mailReg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
       if (value === "") {
-        return callback(new Error("请输入邮箱"));
+        callback(new Error("请输入邮箱"));
       }
-      setTimeout(() => {
-        if (mailReg.test(value)) {
-          callback();
-        } else {
-          callback(new Error("请输入正确的邮箱格式"));
-        }
-      }, 100);
+      if (mailReg.test(value)) {
+        callback();
+      } else {
+        callback(new Error("请输入正确的邮箱格式"));
+      }
     };
     var validateCode = (rule, value, callback) => {
       if (value === "") {
@@ -109,7 +116,7 @@ export default {
     var validatePass = (rule, value, callback) => {
       // var PassReg1 = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{8,30}$/;
       // var PassReg2 = /^[a-zA-Z0-9]{6,10}$/;
-      var PassReg = /^.{1,100}$/;
+      var PassReg = /^.{5,100}$/;
       if (value === "") {
         callback(new Error("请输入密码"));
       } else {
@@ -120,19 +127,24 @@ export default {
         }
       }
     };
-
     return {
-      username: "",
-      password: "",
+      emailAdress: "", //用来判断失去焦点后用户输入的邮箱是否改变
+      warningText: "", //警告信息
+      remainTime: 90, //邮箱可重新获取剩余时间
+      CanSend: false,
       ruleForm: {
         email: "",
         code: "",
         pass: ""
       },
       rules: {
-        email: [{ validator: validateEmail, trigger: ["blur", "change"] }],
+        email: [
+          // 可以配置多条规则
+          // 第一条规则是不为空,输出
+          { validator: validateEmail, trigger: "change" }
+        ],
         code: [{ validator: validateCode, trigger: "blur" }],
-        pass: [{ validator: validatePass, trigger: ["blur", "change"] }]
+        pass: [{ validator: validatePass, trigger: "blur" }]
       }
     };
   },
@@ -147,18 +159,81 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.sendEmail(this.ruleForm.email)
+          // 如果检验都合格的话,就带着验证码去后端检验
+          this.$axios
+            .post(`${process.env.VUE_APP_BASE_URL}/user/register`, {
+              email: this.ruleForm.email,
+              code: this.ruleForm.code,
+              pass: this.ruleForm.pass
+            })
+            .then(res => {
+              // 如果注册成功就跳转到首页
+              // 清除定时器
+              if (this.timer) {
+                clearInterval(this.timer);
+              }
+              if (res.status === 200 && res.data.code === 0) {
+                this.warningText = "";
+                this.$router.push({
+                  path: "/login"
+                });
+                return;
+              }
+              // 注册不成功提示错误信息
+              this.warningText = res.data.result;
+            });
         } else {
           return false;
         }
       });
     },
     // 发送邮件
-    sendEmail(email){
-      console.log(`${process.env.VUE_APP_BASE_URL}`)
-      this.$axios.post(`${process.env.VUE_APP_BASE_URL}/user/register`,{
-        email
-      })
+    sendEmail(email) {
+      if(this.timer){
+        clearInterval(this.timer);
+        this.warningText = '正在发送验证码'
+        this.remainTime = 90;
+      }
+      this.emailAdress = email;
+      this.$axios({
+        method: "post",
+        url: `${process.env.VUE_APP_BASE_URL}/user/sendEmail`,
+        data: {
+          email: email
+        }
+      }).then(res => {
+        // 因为用的是qq邮箱发送过去,所以腾讯会自动检测qq.com结尾邮箱的真实性
+        console.log(res);
+        if (res.data.code === 0 && res.status === 200) {
+          this.timer = setInterval(() => {
+            this.remainTime--;
+            this.warningText = `验证码已发送${this.remainTime}秒后可重新获取`;
+            if (this.remainTime === 0) {
+              this.remainTime = 90;
+              this.warningText = "";
+              this.CanSend = true;
+              clearInterval(this.timer);
+              return;
+            }
+          }, 1000);
+        } else {
+          this.warningText = "邮箱不存在";
+        }
+      });
+    },
+    // 失去焦点之后如果邮箱没有变化就开始发送邮件
+    startSend() {
+      this.$refs.ruleForm.validateField("email", email => {
+        // 这个只有获取过验证码才会触发
+        if (
+          !email &&
+          (this.CanSend || this.emailAdress !== this.ruleForm.email)
+        ) {
+          this.sendEmail(this.ruleForm.email);
+          this.CanSend = false;
+          console.log("发送邮件咯");
+        }
+      });
     }
   }
 };
@@ -185,9 +260,9 @@ export default {
       @include center;
       height: px2rem(40);
       flex: 0 0 px2rem(40);
-      width: 80%;
+      width: 70%;
       display: flex;
-      margin: px2rem(15) 0;
+      margin: px2rem(15) 0 px2rem(10) 0;
       box-sizing: border-box;
       text-align: center;
       font-size: px2rem(16);
@@ -206,12 +281,14 @@ export default {
       }
     }
     .form-wrapper {
-      height: px2rem(250);
+      height: px2rem(255);
       width: 100%;
       flex-direction: column;
       box-sizing: border-box;
       @include center;
       position: relative;
+      // margin-bottom: px2rem(5);
+      margin-top: px2rem(5);
       .demo-ruleForm {
         flex: 0 0 px2rem(200);
         height: 100%;
@@ -234,20 +311,37 @@ export default {
           .el-form-item__content {
             width: calc(100% + 30px);
             margin: 0 !important;
-            .iconfont-wrapper {
+            .iconfont-wrapper-one {
               position: absolute;
               flex: 0 0 px2rem(25);
               width: px2rem(25);
-              border-radius: 5px 0 0 5px;
               text-align: center;
               height: 100%;
               display: flex;
               align-items: center;
               padding-left: px2rem(2);
               z-index: 1;
-              .iconfont {
+              .icon-yonghu {
                 font-size: px2rem(16);
                 color: #464646;
+                justify-content: flex-start;
+              }
+            }
+            .iconfont-wrapper-two {
+              position: absolute;
+              flex: 0 0 px2rem(25);
+              width: px2rem(25);
+              text-align: center;
+              height: 100%;
+              display: flex;
+              align-items: center;
+              padding-right: px2rem(3);
+              z-index: 1;
+              right: 0;
+              .icon-fasongyanzhengma {
+                font-size: px2rem(24);
+                justify-content: flex-end;
+                display: flex;
               }
             }
             .email {
@@ -262,8 +356,6 @@ export default {
         }
         .code-wrapper {
           margin-bottom: px2rem(20);
-          // flex: 0 0 px2rem(50);
-          // height: px2rem(50);
           position: relative;
           margin-left: -30px;
           width: 60%;
@@ -274,15 +366,14 @@ export default {
               position: absolute;
               flex: 0 0 px2rem(25);
               width: px2rem(25);
-              border-radius: 5px 0 0 5px;
               text-align: center;
               height: 100%;
               display: flex;
               align-items: center;
-              padding-left: px2rem(2);
+              padding-left: px2rem(3);
               z-index: 1;
               .iconfont {
-                font-size: px2rem(16);
+                font-size: px2rem(14);
                 color: #464646;
               }
             }
@@ -294,9 +385,7 @@ export default {
           }
         }
         .pass-wrapper {
-          // flex: 0 0 px2rem(50);
-          // height: px2rem(50);
-          margin-bottom: px2rem(15);
+          margin-bottom: px2rem(20);
           position: relative;
           box-sizing: border-box;
           width: 60%;
@@ -309,7 +398,6 @@ export default {
               position: absolute;
               flex: 0 0 px2rem(25);
               width: px2rem(25);
-              border-radius: 5px 0 0 5px;
               text-align: center;
               display: flex;
               align-items: center;
@@ -335,6 +423,7 @@ export default {
           .el-form-item__content {
             width: 100%;
             margin-left: 0 !important;
+            line-height: px2rem(30);
             .register-check {
               width: 100%;
               height: px2rem(35);
@@ -349,115 +438,25 @@ export default {
             }
           }
         }
+        // 倒计时信息
+        .warning-wrapper {
+          position: relative;
+          left: 0;
+          top: px2rem(-1);
+          flex: 0 0 px2rem(25);
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          .warning-text {
+            font-size: px2rem(14);
+            width: 100%;
+            color: #b6b6c8;
+          }
+        }
       }
     }
-
-    // .register-text-wrapper {
-    //   height: px2rem(150);
-    //   flex: 0 0 px2rem(150);
-    //   width: 100%;
-    //   flex-direction: column;
-    //   box-sizing: border-box;
-    //   @include center;
-    //   .register-username {
-    //     position: relative;
-    //     flex: 0 0 px2rem(50);
-    //     height: px2rem(50);
-    //     width: 80%;
-    //     box-sizing: border-box;
-    //     display: flex;
-    //     padding-bottom: px2rem(10);
-    //     .el-input {
-    //       flex: 1;
-    //       font-size: px2rem(14);
-    //       & .el-input__inner {
-    //         height: 100%;
-    //         border-radius: 0 5px 5px 0;
-    //         padding: 0 20px;
-    //       }
-    //     }
-    //     .iconfont-wrapper {
-    //       position: absolute;
-    //       flex: 0 0 px2rem(25);
-    //       width: px2rem(25);
-    //       text-align: center;
-    //       display: flex;
-    //       align-items: center;
-    //       line-height: 100%;
-    //       padding-left: px2rem(2);
-    //       .iconfont {
-    //         font-size: px2rem(16);
-    //         color: #464646;
-    //       }
-    //     }
-    //   }
-    //   .register-password {
-    //     position: relative;
-    //     flex: 0 0 px2rem(50);
-    //     height: px2rem(50);
-    //     width: 80%;
-    //     box-sizing: border-box;
-    //     display: flex;
-    //     padding-bottom: px2rem(10);
-    //     .el-input {
-    //       flex: 1;
-    //       font-size: px2rem(14);
-    //       & .el-input__inner {
-    //         height: 100%;
-    //         border-radius: 0 5px 5px 0;
-    //         padding: 0 20px;
-    //       }
-    //     }
-    //     .iconfont-wrapper {
-    //       position: absolute;
-    //       flex: 0 0 px2rem(25);
-    //       width: px2rem(25);
-    //       border-radius: 5px 0 0 5px;
-    //       text-align: center;
-    //       display: flex;
-    //       align-items: center;
-    //       line-height: 100%;
-    //       padding-left: px2rem(2);
-    //       .iconfont {
-    //         font-size: px2rem(16);
-    //         color: #464646;
-    //       }
-    //     }
-    //   }
-    //   .register-check {
-    //     position: relative;
-    //     flex: 0 0 px2rem(50);
-    //     height: px2rem(50);
-    //     width: 80%;
-    //     box-sizing: border-box;
-    //     display: flex;
-    //     padding-bottom: px2rem(10);
-    //     .el-input {
-    //       flex: 1;
-    //       font-size: px2rem(14);
-    //       & .el-input__inner {
-    //         height: 100%;
-    //         border-radius: 0 5px 5px 0;
-    //         padding: 0 20px;
-    //       }
-    //     }
-    //     .iconfont-wrapper {
-    //       position: absolute;
-    //       flex: 0 0 px2rem(25);
-    //       width: px2rem(25);
-    //       border-radius: 5px 0 0 5px;
-    //       text-align: center;
-    //       display: flex;
-    //       align-items: center;
-    //       line-height: 100%;
-    //       padding-left: px2rem(2);
-    //       .iconfont {
-    //         font-size: px2rem(16);
-    //         color: #464646;
-    //       }
-    //     }
-    //   }
-    // }
+    // 合作伙伴分界线
     .cooperation-wrapper {
       position: relative;
       flex: 0 0 px2rem(10);
@@ -465,6 +464,7 @@ export default {
       display: flex;
       justify-content: space-between;
       box-sizing: border-box;
+      height: 100%;
       .dashed-left {
         flex: 0 0 25%;
         border-bottom: px2rem(1) dashed #ccc;
