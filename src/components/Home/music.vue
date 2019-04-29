@@ -3,7 +3,7 @@
     <div class="music-content">
       <!-- 图片 -->
       <div class="img-wrapper">
-        <img :src="imgUrlList[0]" alt>
+        <img :src="imgUrlList[1]" alt>
         <div class="icon-wrapper" @click="playMucic">
           <i class="iconfont icon-normal" v-if="playStatus===0 || playStatus===2"></i>
           <i class="iconfont icon-zantingtingzhi" v-if="playStatus==1"></i>
@@ -11,16 +11,34 @@
       </div>
       <!-- 歌词 -->
       <ul class="lyric-wrapper">
-        <li v-for="(item,index) in lyricList[0]" :key="index" class="lyric-item">{{item}}</li>
+        <li v-for="(item,index) in lyricResult[1]" :key="index" class="lyric-item">{{item}}</li>
       </ul>
       <!-- 自己的控制条 -->
       <div class="control-wrapper">
-        <input type="range">
-        <audio :src="musicUrlList[1]" controls="controls" ref="audio" class="audio"></audio>
+        <div class="play-wrapper">
+          <i class="iconfont icon-shangyishou"></i>
+          <i class="iconfont icon-bofang" v-if="true"></i>
+          <i class="iconfont icon-zantingtingzhi" v-else></i>
+          <i class="iconfont icon-xiayishou"></i>
+        </div>
+        <div class="rang">
+          <input type="range">
+        </div>
+        <div class="model">
+          <i class="iconfont icon-icon78"></i>
+          <i class="iconfont icon-xiazai1"></i>
+          <i class="iconfont icon-aixin"></i>
+        </div>
+        <audio :src="musicUrlList[2]" controls="controls" ref="audio" class="audio"></audio>
+      </div>
+      <!-- 音乐列表 -->
+      <div class="nameList-wrapper">
+        <i class="iconfont icon-bofangqi_shouyegequliebiao_"></i>
+        <span v-for="(item,index) in musicName" :key="index" class="name-item">{{item}}</span>
       </div>
     </div>
     <!-- 音乐图片背景 -->
-    <div class="music-background" :style="{background: `url(${imgUrlList[0]}) no-repeat 0 0`}"></div>
+    <div class="music-background" :style="{background: `url('${imgUrlList[3]}') no-repeat 0 0`}"></div>
     <!-- 音乐蒙版 -->
     <div class="music-mask"></div>
   </div>
@@ -34,7 +52,9 @@ export default {
       musicList: [], //音乐数据
       musicUrlList: [], //音乐mp3
       imgUrlList: [], //音乐封面
-      lyricList: [], //音乐
+      lyricList: [], //音乐歌词
+      lyricResult: [], //所有歌词合并到一起
+      musicName: [],
       playStatus: 0 //播放状态 0:未播放 1:正在播放 2:暂停中
     };
   },
@@ -57,27 +77,35 @@ export default {
     let data = this.$axios
       .get(`${process.env.VUE_APP_MUSIC_URL}/home/music`)
       .then(res => {
-        // this.lyric = res.data.result.split("\n");
         this.musicList = res.data.result.musicList;
-        // 音乐连接
+        // 音乐MP3链接
         this.musicList.map((item, index) => {
           return this.musicUrlList.push(item.url);
         });
         // 音乐歌词
         this.musicList.map((item, index) => {
           // 歌词需要单独处理
-
           return this.lyricList.push(item.lyric.split("\n"));
         });
-        console.log(this.lyricList,'5555');
-        this.$axios.get(`${process.env.VUE_APP_MUSIC_URL}/home/getLyric`, {
-          params: {
-            lyric: this.lyricList
-          }
-        });
+        this.$axios
+          .get(`${process.env.VUE_APP_MUSIC_URL}/home/getLyric`, {
+            params: {
+              // 通过 [].concat(...this.lyricList)把二维数组降成一维数组
+              lyric: [].concat(...this.lyricList)
+            }
+          })
+          .then(res => {
+            res.data.lyricData.map((item, index) => {
+              return this.lyricResult.push(item.split("\n"));
+            });
+          });
         // 音乐封面
         this.musicList.map((item, index) => {
           return this.imgUrlList.push(item.cover);
+        });
+        // 音乐列表名字
+        this.musicList.map((item, index) => {
+          return this.musicName.push(item.name);
         });
       });
   }
@@ -141,15 +169,51 @@ export default {
         color: #fff;
       }
     }
+    .nameList-wrapper {
+      flex: 0 0 px2rem(40);
+      width: 100%;
+      height: px2rem(40);
+      overflow: hidden;
+      .name-item {
+        display: block;
+        height: px2rem(20);
+        line-height: px2rem(20);
+        font-size: px2rem(14);
+      }
+    }
     .control-wrapper {
       position: relative;
       flex: 0 0 px2rem(60);
       width: 100%;
       height: px2rem(60);
+      display: flex;
+      width: 100%;
+      .play-wrapper {
+        flex: 0 0 px2rem(60);
+        @include center;
+        .icon-shangyishou{
+          font-size: px2rem(26);
+          vertical-align: px2rem(-3);
+        }
+        .icon-bofang{
+          font-size: px2rem(22);
+        }
+        .icon-xiayishou{
+          font-size: px2rem(27);
+          padding-bottom:px2rem(4);
+        }
+      }
+      .rang{
+        @include center;
+        flex: 1;
+      }
       .audio {
         position: absolute;
         left: 0;
-        bottom: -100%;
+        bottom: -500%;
+      }
+      .model{
+
       }
     }
   }
