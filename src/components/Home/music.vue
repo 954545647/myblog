@@ -28,7 +28,6 @@
           <i class="iconfont icon-icon78"></i>
           <i class="iconfont icon-xiazai1"></i>
           <i class="iconfont icon-aixin"></i>
-          <span>{{`${imgUrlList[ 1 ]}`}}</span>
         </div>
         <audio :src="musicUrlList[2]" controls="controls" ref="audio" class="audio"></audio>
       </div>
@@ -59,12 +58,13 @@ export default {
       lyricList: [], //音乐歌词
       lyricResult: [], //所有歌词合并到一起
       musicName: [],
-      playStatus: 0 //播放状态 0:未播放 1:正在播放 2:暂停中
+      playStatus: 0, //播放状态 0:未播放 1:正在播放 2:暂停中
+      imgCover:[]
     };
   },
-  computed: {
-    imgCover() {
-      return this.imgUrlList[0] ? this.imgUrlList[1] : '';
+  watch: {
+    imgUrlList: function(val){
+      this.imgCover = this.imgUrlList[0] ? this.imgUrlList[0] : ''
     }
   },
   methods: {
