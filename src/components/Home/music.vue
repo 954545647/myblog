@@ -28,6 +28,7 @@
           <i class="iconfont icon-icon78"></i>
           <i class="iconfont icon-xiazai1"></i>
           <i class="iconfont icon-aixin"></i>
+          <span>{{`${imgUrlList[ 1 ]}`}}</span>
         </div>
         <audio :src="musicUrlList[2]" controls="controls" ref="audio" class="audio"></audio>
       </div>
@@ -37,14 +38,17 @@
         <span v-for="(item,index) in musicName" :key="index" class="name-item">{{item}}</span>
       </div>
     </div>
+    <!--  :style="`background-image: url( ${imgUrlList[ 1 ]} \?  ${imgUrlList[ 1 ]} : \'\')`" -->
     <!-- 音乐图片背景 -->
-    <div class="music-background" :style="{background: `url('${imgUrlList[3]}') no-repeat 0 0`}"></div>
+    <div
+      class="music-background"
+      ref="background"
+      :style="{backgroundImage: `url(${imgCover})` }"
+    ></div>
     <!-- 音乐蒙版 -->
     <div class="music-mask"></div>
   </div>
 </template>
-
-
 <script>
 export default {
   data() {
@@ -57,6 +61,11 @@ export default {
       musicName: [],
       playStatus: 0 //播放状态 0:未播放 1:正在播放 2:暂停中
     };
+  },
+  computed: {
+    imgCover() {
+      return this.imgUrlList[0] ? this.imgUrlList[1] : '';
+    }
   },
   methods: {
     playMucic() {
@@ -101,7 +110,7 @@ export default {
           });
         // 音乐封面
         this.musicList.map((item, index) => {
-          return this.imgUrlList.push(item.cover);
+          return this.imgUrlList.push(encodeURI(item.cover));
         });
         // 音乐列表名字
         this.musicList.map((item, index) => {
@@ -191,19 +200,19 @@ export default {
       .play-wrapper {
         flex: 0 0 px2rem(60);
         @include center;
-        .icon-shangyishou{
+        .icon-shangyishou {
           font-size: px2rem(26);
           vertical-align: px2rem(-3);
         }
-        .icon-bofang{
+        .icon-bofang {
           font-size: px2rem(22);
         }
-        .icon-xiayishou{
+        .icon-xiayishou {
           font-size: px2rem(27);
-          padding-bottom:px2rem(4);
+          padding-bottom: px2rem(4);
         }
       }
-      .rang{
+      .rang {
         @include center;
         flex: 1;
       }
@@ -211,9 +220,6 @@ export default {
         position: absolute;
         left: 0;
         bottom: -500%;
-      }
-      .model{
-
       }
     }
   }
@@ -226,6 +232,7 @@ export default {
     left: 0;
     top: 0;
     filter: blur(20px);
+    background: no-repeat 0 0;
   }
   .music-mask {
     position: absolute;
