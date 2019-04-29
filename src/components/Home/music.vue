@@ -11,7 +11,9 @@
       </div>
       <!-- 歌词 -->
       <ul class="lyric-wrapper">
-        <li v-for="(item,index) in lyricResult[1]" :key="index" class="lyric-item">{{item}}</li>
+        <div class="item-wrapper">
+          <li v-for="(item,index) in lyricResult[1]" :key="index" class="lyric-item">{{item}}</li>
+        </div>
       </ul>
       <!-- 自己的控制条 -->
       <div class="control-wrapper">
@@ -29,7 +31,7 @@
           <i class="iconfont icon-xiazai1"></i>
           <i class="iconfont icon-aixin"></i>
         </div>
-        <audio :src="musicUrlList[2]" controls="controls" ref="audio" class="audio"></audio>
+        <audio :src="musicUrlList[3]" controls="controls" ref="audio" class="audio"></audio>
       </div>
       <!-- 音乐列表 -->
       <div class="nameList-wrapper">
@@ -37,13 +39,7 @@
         <span v-for="(item,index) in musicName" :key="index" class="name-item">{{item}}</span>
       </div>
     </div>
-    <!--  :style="`background-image: url( ${imgUrlList[ 1 ]} \?  ${imgUrlList[ 1 ]} : \'\')`" -->
-    <!-- 音乐图片背景 -->
-    <div
-      class="music-background"
-      ref="background"
-      :style="{backgroundImage: `url(${imgCover})` }"
-    ></div>
+    <div class="music-background" ref="background" :style="{backgroundImage: `url(${imgCover})` }"></div>
     <!-- 音乐蒙版 -->
     <div class="music-mask"></div>
   </div>
@@ -59,12 +55,12 @@ export default {
       lyricResult: [], //所有歌词合并到一起
       musicName: [],
       playStatus: 0, //播放状态 0:未播放 1:正在播放 2:暂停中
-      imgCover:[]
+      imgCover: []
     };
   },
   watch: {
-    imgUrlList: function(val){
-      this.imgCover = this.imgUrlList[0] ? this.imgUrlList[0] : ''
+    imgUrlList: function(val) {
+      this.imgCover = this.imgUrlList[0] ? this.imgUrlList[0] : "";
     }
   },
   methods: {
@@ -129,6 +125,7 @@ export default {
   height: 100%;
   position: relative;
   @include center;
+  color: #fff;
   .music-content {
     @include center;
     flex-direction: column;
@@ -170,12 +167,24 @@ export default {
       height: px2rem(100);
       overflow: hidden;
       margin: 0 0 px2rem(15) 0;
-      .lyric-item {
-        flex: 0 0 px2rem(20);
+      position: relative;
+      .item-wrapper {
+        position: relative;
+        left: 0;
+        top: 0;
         width: 100%;
-        height: px2rem(20);
-        font-size: px2rem(14);
-        color: #fff;
+        @include center;
+        flex-direction: column;
+        height: 100%;
+        .lyric-item {
+          position: absolute;
+          flex: 0 0 px2rem(20);
+          width: 100%;
+          height: px2rem(20);
+          font-size: px2rem(14);
+          color: #fff;
+          line-height: px2rem(20);
+        }
       }
     }
     .nameList-wrapper {
@@ -227,12 +236,12 @@ export default {
     width: 100%;
     height: 100%;
     z-index: -2;
-    background-size: cover;
     position: absolute;
     left: 0;
     top: 0;
-    filter: blur(20px);
-    background: no-repeat 0 0;
+    filter: blur(10px);
+    background: no-repeat center center;
+    background-size: cover;
   }
   .music-mask {
     position: absolute;
