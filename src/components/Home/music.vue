@@ -10,35 +10,73 @@
         </div>
       </div>
       <!-- 歌词 -->
-      <ul class="lyric-wrapper">
+      <div class="lyric-wrapper">
         <div class="item-wrapper">
-          <li v-for="(item,index) in lyricResult[1]" :key="index" class="lyric-item">{{item}}</li>
+          <span
+            v-for="(item,index) in lyricResult[1]"
+            :key="index"
+            class="lyric-item"
+            ref="lyricItem"
+          >{{item}}</span>
         </div>
-      </ul>
-      <!-- 自己的控制条 -->
+      </div>
+      <!-- 进度条 -->
+      <div class="progress-wrapper">
+        <span class="prev-time">{{currentTime}}</span>
+        <input
+          type="range"
+          class="progress"
+          max="100"
+          min="0"
+          step="1"
+          @change="progressChange($event.target.value)"
+          @input="progressInput($event.target.value)"
+          :value="progress"
+          ref="progress"
+        >
+        <span class="total-time">{{totalTime}}</span>
+      </div>
+
+      <!-- 模式 上一首 暂停播放 下一首 歌曲列表-->
       <div class="control-wrapper">
+        <!-- 音乐模式 -->
+        <div class="model">
+          <i class="iconfont icon-icon78"></i>
+          <!-- <i class="iconfont icon-danquxunhuan"></i> -->
+          <!-- <i class="iconfont icon-shunxubofang"></i> -->
+        </div>
+        <!-- 控制播放暂停 -->
         <div class="play-wrapper">
           <i class="iconfont icon-shangyishou"></i>
           <i class="iconfont icon-bofang" v-if="true"></i>
           <i class="iconfont icon-zantingtingzhi" v-else></i>
-          <i class="iconfont icon-xiayishou"></i>
+          <i class="iconfont icon-xiayishou1"></i>
         </div>
-        <div class="rang">
-          <input type="range">
+        <!-- 音乐列表 -->
+        <div class="nameList-wrapper" @click="showMusicList">
+          <i class="iconfont icon-bofangqi_shouyegequliebiao_"></i>
+          <!-- <span v-for="(item,index) in musicName" :key="index" class="name-item">{{item}}</span> -->
         </div>
-        <div class="model">
-          <i class="iconfont icon-icon78"></i>
-          <i class="iconfont icon-xiazai1"></i>
-          <i class="iconfont icon-aixin"></i>
-        </div>
-        <audio :src="musicUrlList[3]" controls="controls" ref="audio" class="audio"></audio>
+        <!-- 音乐播放器 -->
+        <audio
+          :src="musicUrlList[1]"
+          controls="controls"
+          ref="audio"
+          class="audio"
+          @timeupdate="timeupdate"
+          @ended="ended"
+          @canplay="canplay"
+        ></audio>
       </div>
-      <!-- 音乐列表 -->
-      <div class="nameList-wrapper">
-        <i class="iconfont icon-bofangqi_shouyegequliebiao_"></i>
-        <span v-for="(item,index) in musicName" :key="index" class="name-item">{{item}}</span>
+      <!-- 收藏 下载 分享 评论 -->
+      <div class="handle-wrapper">
+        <i class="iconfont icon-aixin"></i>
+        <i class="iconfont icon-xiazai1"></i>
+        <i class="iconfont icon-fenxiang1"></i>
+        <i class="iconfont icon-pinglun2"></i>
       </div>
     </div>
+
     <div class="music-background" ref="background" :style="{backgroundImage: `url(${imgCover})` }"></div>
     <!-- 音乐蒙版 -->
     <div class="music-mask"></div>
@@ -52,18 +90,87 @@ export default {
       musicUrlList: [], //音乐mp3
       imgUrlList: [], //音乐封面
       lyricList: [], //音乐歌词
-      lyricResult: [], //所有歌词合并到一起
-      musicName: [],
+      lyricResult: [], //音乐歌词结果(后端已处理)
+      musicName: [], // 歌单名字列表
+      timeResult: [], // 音乐时间结果(后端已处理)
       playStatus: 0, //播放状态 0:未播放 1:正在播放 2:暂停中
-      imgCover: []
+      imgCover: [], // 当前音乐封面
+      progress: 0, // 音乐播放进度
+      currentTime: 0, //歌曲当前时间
+      totalTime: 0 //歌曲总时长
     };
   },
   watch: {
+    // 避免mounted还没获取到数据,此时值为undefined
     imgUrlList: function(val) {
-      this.imgCover = this.imgUrlList[0] ? this.imgUrlList[0] : "";
+      this.imgCover = this.imgUrlList[1] ? this.imgUrlList[1] : "";
+    },
+    currentTime:function(val){
+      console.log(val);
     }
   },
   methods: {
+    // 转换时间格式
+    timeFormat(time) {
+      let result = "";
+      let min = Math.floor(time / 60); // 分钟
+      let sec = Math.floor(time - min * 60); //秒数
+      // padStart(len,type) 可以用来补齐
+      result += min.toString().padStart(2, "0");
+      result += ":";
+      result += sec.toString().padStart(2, "0");
+      return result;
+    },
+    // 歌曲加载完毕 就离开显示当前歌曲的总时长
+    canplay() {
+      this.currentTime = this.timeFormat(this.$refs.audio.currentTime)
+        ? this.timeFormat(this.$refs.audio.currentTime)
+        : "00:00";
+      this.totalTime = this.timeFormat(this.$refs.audio.duration);
+    },
+    // 显示歌曲列表
+    showMusicList() {},
+    // 拖动进度条更新歌曲播放
+    playTime(percent) {
+      // 根据百分比唱歌
+      this.$refs.audio.currentTime = Math.floor(
+        this.$refs.audio.duration * (percent / 100)
+      );
+      this.updateProgress();
+    },
+    // 进度条松手触发
+    progressChange(val) {
+      this.progress = val;
+      this.updateProgress();
+      this.playTime(this.progress);
+    },
+    // 进度条拖拽触发
+    progressInput(val) {
+      this.progress = val;
+      this.updateProgress();
+      // 计算出拖拽的百分比
+    },
+    updateProgress() {
+      this.$refs.progress.style.cssText += `background-size: ${
+        this.progress
+      }% 100% !important`;
+    },
+    // 监听音频播放时间并更新进度条
+    timeupdate() {
+      // 这两个是个位数 计算总的秒数
+      let playtime = this.$refs.audio.currentTime;
+      let totalTime = this.$refs.audio.duration;
+      // 这两个是格式化好的时间单位
+      this.currentTime = this.timeFormat(this.$refs.audio.currentTime);
+      this.totalTime = this.timeFormat(this.$refs.audio.duration);
+      // let percent = Math.floor((playtime / totalTime) * 100);
+      // this.progress = percent;
+      // this.updateProgress();
+    },
+    // 音乐播放结束
+    ended() {
+      console.log("结束啦");
+    },
     playMucic() {
       // 如果当前不是播放状态则播放
       if (this.playStatus === 0) {
@@ -79,6 +186,7 @@ export default {
     }
   },
   mounted() {
+    this.updateProgress();
     let data = this.$axios
       .get(`${process.env.VUE_APP_MUSIC_URL}/home/music`)
       .then(res => {
@@ -90,19 +198,21 @@ export default {
         // 音乐歌词
         this.musicList.map((item, index) => {
           // 歌词需要单独处理
-          return this.lyricList.push(item.lyric.split("\n"));
+          return this.lyricList.push(item.lyric);
         });
         this.$axios
           .get(`${process.env.VUE_APP_MUSIC_URL}/home/getLyric`, {
             params: {
-              // 通过 [].concat(...this.lyricList)把二维数组降成一维数组
-              lyric: [].concat(...this.lyricList)
+              // 两种数组降维的方式
+              // 1: [].concat(...this.lyricList)
+              // 2: [].concat.apply([],this.lyricList)
+              lyric: [].concat.apply([], this.lyricList)
             }
           })
           .then(res => {
-            res.data.lyricData.map((item, index) => {
-              return this.lyricResult.push(item.split("\n"));
-            });
+            console.log(res);
+            this.lyricResult = res.data.lyricResult;
+            this.timeResult = res.data.timesResult;
           });
         // 音乐封面
         this.musicList.map((item, index) => {
@@ -130,9 +240,9 @@ export default {
     @include center;
     flex-direction: column;
     .img-wrapper {
-      flex: 0 0 px2rem(300);
-      width: px2rem(300);
-      height: px2rem(300);
+      flex: 0 0 px2rem(280);
+      width: px2rem(280);
+      height: px2rem(280);
       border-radius: 50%;
       background-color: #272727;
       margin: 0 0 px2rem(15) 0;
@@ -157,27 +267,24 @@ export default {
         .iconfont {
           padding-left: px2rem(4);
           color: #fff;
-          font-size: px2rem(22);
+          font-size: px2rem(30);
         }
       }
     }
     .lyric-wrapper {
-      flex: 0 0 px2rem(100);
+      flex: 0 0 px2rem(60);
       width: 100%;
-      height: px2rem(100);
+      height: px2rem(60);
       overflow: hidden;
       margin: 0 0 px2rem(15) 0;
       position: relative;
       .item-wrapper {
-        position: relative;
-        left: 0;
-        top: 0;
         width: 100%;
-        @include center;
-        flex-direction: column;
         height: 100%;
+        overflow: hidden;
+        position: relative;
         .lyric-item {
-          position: absolute;
+          display: block;
           flex: 0 0 px2rem(20);
           width: 100%;
           height: px2rem(20);
@@ -187,18 +294,44 @@ export default {
         }
       }
     }
-    .nameList-wrapper {
-      flex: 0 0 px2rem(40);
+    // 进度条
+    .progress-wrapper {
+      display: flex;
       width: 100%;
       height: px2rem(40);
-      overflow: hidden;
-      .name-item {
-        display: block;
-        height: px2rem(20);
-        line-height: px2rem(20);
+      @include center;
+      .prev-time {
+        flex: 0 0 px2re(50);
+        width: px2rem(50);
         font-size: px2rem(14);
       }
+      .total-time {
+        flex: 0 0 px2re(50);
+        width: px2rem(50);
+        font-size: px2rem(14);
+      }
+      .progress {
+        -webkit-appearance: none;
+        height: px2rem(3);
+        margin: auto;
+        flex: 1;
+        width: 100%;
+        background: linear-gradient(#fff, #fff) no-repeat, #999 !important;
+        &:focus {
+          outline: none;
+        }
+        &::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          width: px2rem(15);
+          height: px2rem(15);
+          background: #fff;
+          border-radius: 50%;
+          cursor: pointer;
+          box-shadow: 0 0 px2rem(5) 0 rgba(0, 0, 0, 0.5);
+        }
+      }
     }
+
     .control-wrapper {
       position: relative;
       flex: 0 0 px2rem(60);
@@ -206,29 +339,54 @@ export default {
       height: px2rem(60);
       display: flex;
       width: 100%;
+      @include center;
+      .model {
+        height: 100%;
+        flex: 0 0 px2rem(50);
+        width: px2rem(50);
+        @include center;
+        .iconfont {
+          font-size: px2rem(20);
+        }
+      }
       .play-wrapper {
-        flex: 0 0 px2rem(60);
+        width: 100%;
         @include center;
         .icon-shangyishou {
-          font-size: px2rem(26);
+          font-size: px2rem(30);
           vertical-align: px2rem(-3);
         }
         .icon-bofang {
-          font-size: px2rem(22);
+          margin: 0 px2rem(25);
+          font-size: px2rem(32);
         }
-        .icon-xiayishou {
-          font-size: px2rem(27);
-          padding-bottom: px2rem(4);
+        .icon-xiayishou1 {
+          font-size: px2rem(25);
         }
       }
-      .rang {
+      .nameList-wrapper {
+        flex: 0 0 px2rem(50);
+        width: px2rem(50);
+        height: 100%;
         @include center;
-        flex: 1;
+        .iconfont {
+          font-size: px2rem(25);
+        }
       }
       .audio {
         position: absolute;
         left: 0;
         bottom: -500%;
+      }
+    }
+    .handle-wrapper {
+      flex: 0 0 px2rem(40);
+      height: px2rem(40);
+      width: 100%;
+      @include center;
+      .iconfont {
+        font-size: px2rem(20);
+        flex: 1;
       }
     }
   }
