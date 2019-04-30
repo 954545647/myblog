@@ -106,7 +106,8 @@ export default {
       this.imgCover = this.imgUrlList[1] ? this.imgUrlList[1] : "";
     },
     currentTime:function(val){
-      console.log(val);
+      this.progress = (this.$refs.audio.currentTime / this.$refs.audio.duration) * 100
+      this.updateProgress();
     }
   },
   methods: {
@@ -190,6 +191,7 @@ export default {
     let data = this.$axios
       .get(`${process.env.VUE_APP_MUSIC_URL}/home/music`)
       .then(res => {
+        console.log(res)
         this.musicList = res.data.result.musicList;
         // 音乐MP3链接
         this.musicList.map((item, index) => {
@@ -327,7 +329,7 @@ export default {
           background: #fff;
           border-radius: 50%;
           cursor: pointer;
-          box-shadow: 0 0 px2rem(5) 0 rgba(0, 0, 0, 0.5);
+          box-shadow: 0 0 px2rem(5) 0 rgba(0, 0, 0, 0.6);
         }
       }
     }
