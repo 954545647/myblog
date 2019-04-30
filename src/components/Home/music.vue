@@ -11,14 +11,14 @@
       </div>
       <!-- 歌词 -->
       <div class="lyric-wrapper">
-        <div class="item-wrapper">
-          <span
-            v-for="(item,index) in lyricResult[1]"
+        <ul class="item-wrapper" ref="lyricWrapper">
+          <li
+            v-for="(item,index) in currentlyric"
             :key="index"
             class="lyric-item"
             ref="lyricItem"
-          >{{item}}</span>
-        </div>
+          >{{item}}</li>
+        </ul>
       </div>
       <!-- 进度条 -->
       <div class="progress-wrapper">
@@ -97,7 +97,10 @@ export default {
       imgCover: [], // 当前音乐封面
       progress: 0, // 音乐播放进度
       currentTime: 0, //歌曲当前时间
-      totalTime: 0 //歌曲总时长
+      totalTime: 0, //歌曲总时长
+      lyricIndex: -1, //高亮的歌词
+      currentlyric: [], //当前歌曲的歌词
+      currentMusicTime: [] //当前歌曲的时间
     };
   },
   watch: {
@@ -105,8 +108,9 @@ export default {
     imgUrlList: function(val) {
       this.imgCover = this.imgUrlList[1] ? this.imgUrlList[1] : "";
     },
-    currentTime:function(val){
-      this.progress = (this.$refs.audio.currentTime / this.$refs.audio.duration) * 100
+    currentTime: function(val) {
+      this.progress =
+        (this.$refs.audio.currentTime / this.$refs.audio.duration) * 100;
       this.updateProgress();
     }
   },
@@ -161,12 +165,23 @@ export default {
       // 这两个是个位数 计算总的秒数
       let playtime = this.$refs.audio.currentTime;
       let totalTime = this.$refs.audio.duration;
+      let currentIndex = 0;
       // 这两个是格式化好的时间单位
       this.currentTime = this.timeFormat(this.$refs.audio.currentTime);
       this.totalTime = this.timeFormat(this.$refs.audio.duration);
-      // let percent = Math.floor((playtime / totalTime) * 100);
-      // this.progress = percent;
-      // this.updateProgress();
+      // 根据当前时间去更新歌词
+      if (playtime >= this.currentMusicTime[0] + 1) {
+        this.lyricIndex++;
+        currentIndex++;
+        this.currentMusicTime.shift();
+      }
+      // 让整个ul上移
+      if (this.lyricIndex && this.$refs.lyricItem[this.lyricIndex]) {
+        this.$refs.lyricItem[this.lyricIndex].style.cssText = `color: red`;
+      }
+      if (this.lyricIndex <= 1) return;
+      this.$refs.lyricWrapper.style.cssText = `margin-top: ${this.lyricIndex *
+        -20}px`;
     },
     // 音乐播放结束
     ended() {
@@ -191,7 +206,7 @@ export default {
     let data = this.$axios
       .get(`${process.env.VUE_APP_MUSIC_URL}/home/music`)
       .then(res => {
-        console.log(res)
+        console.log(res);
         this.musicList = res.data.result.musicList;
         // 音乐MP3链接
         this.musicList.map((item, index) => {
@@ -214,7 +229,9 @@ export default {
           .then(res => {
             console.log(res);
             this.lyricResult = res.data.lyricResult;
+            this.currentlyric = this.lyricResult[1];
             this.timeResult = res.data.timesResult;
+            this.currentMusicTime = this.timeResult[1];
           });
         // 音乐封面
         this.musicList.map((item, index) => {
@@ -274,20 +291,20 @@ export default {
       }
     }
     .lyric-wrapper {
-      flex: 0 0 px2rem(60);
       width: 100%;
       height: px2rem(60);
-      overflow: hidden;
       margin: 0 0 px2rem(15) 0;
       position: relative;
+      left: 0;
+      top: 0;
+      overflow: hidden;
       .item-wrapper {
-        width: 100%;
+        text-align: center;
         height: 100%;
-        overflow: hidden;
-        position: relative;
+        margin-top: -0px;
         .lyric-item {
-          display: block;
-          flex: 0 0 px2rem(20);
+          list-style: none;
+          // flex: 0 0 px2rem(20);
           width: 100%;
           height: px2rem(20);
           font-size: px2rem(14);
