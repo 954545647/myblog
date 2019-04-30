@@ -170,7 +170,7 @@ export default {
       this.currentTime = this.timeFormat(this.$refs.audio.currentTime);
       this.totalTime = this.timeFormat(this.$refs.audio.duration);
       // 根据当前时间去更新歌词
-      if (playtime >= this.currentMusicTime[0] + 1) {
+      if (playtime >= this.currentMusicTime[0]) {
         this.lyricIndex++;
         currentIndex++;
         this.currentMusicTime.shift();
