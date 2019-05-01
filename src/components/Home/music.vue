@@ -65,7 +65,7 @@
           class="audio"
           @timeupdate="timeupdate"
           @ended="ended"
-          @canplay="canplay"
+          @canplay.once="canplay"
         ></audio>
       </div>
       <!-- 收藏 下载 分享 评论 -->
@@ -128,6 +128,19 @@ export default {
     },
     // 歌曲加载完毕 就离开显示当前歌曲的总时长
     canplay() {
+      let first = true;
+      let vm = this;
+      document.addEventListener("touchstart", function() {
+        if (first) {
+          vm.$nextTick(function() {
+            this.currentTime = this.timeFormat(this.$refs.audio.currentTime)
+              ? this.timeFormat(this.$refs.audio.currentTime)
+              : "00:00";
+            this.totalTime = this.timeFormat(this.$refs.audio.duration);
+          });
+          first = false;
+        }
+      });
       this.currentTime = this.timeFormat(this.$refs.audio.currentTime)
         ? this.timeFormat(this.$refs.audio.currentTime)
         : "00:00";
@@ -203,6 +216,15 @@ export default {
   },
   mounted() {
     this.updateProgress();
+    document.addEventListener("WeixinJSBridgeReady", function() {
+      // document.getElementById('audios').play()
+      console.log(111);
+    });
+    document.addEventListener("touchstart", function() {
+      // this.$nextTick(()=>{
+      //   console.log(this.$refs.audio)
+      // })
+    });
     let data = this.$axios
       .get(`${process.env.VUE_APP_MUSIC_URL}/home/music`)
       .then(res => {
