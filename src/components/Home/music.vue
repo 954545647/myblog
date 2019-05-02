@@ -3,7 +3,7 @@
     <div class="music-content">
       <!-- 图片 -->
       <div class="img-wrapper">
-        <img :src="imgUrlList[1]" alt>
+        <img :src="imgUrlList[musicIndex]" alt>
         <div class="icon-wrapper" @click="playMucic">
           <i class="iconfont icon-normal" v-if="playStatus===0 || playStatus===2"></i>
           <i class="iconfont icon-zantingtingzhi" v-if="playStatus==1"></i>
@@ -55,11 +55,10 @@
         <!-- 音乐列表 -->
         <div class="nameList-wrapper" @click="showMusicList">
           <i class="iconfont icon-bofangqi_shouyegequliebiao_"></i>
-          <!-- <span v-for="(item,index) in musicName" :key="index" class="name-item">{{item}}</span> -->
         </div>
         <!-- 音乐播放器 -->
         <audio
-          :src="musicUrlList[1]"
+          :src="musicUrlList[musicIndex]"
           controls="controls"
           ref="audio"
           class="audio"
@@ -86,6 +85,7 @@
 export default {
   data() {
     return {
+      musicIndex: 0, //当前播放的音乐是第几个
       musicList: [], //音乐数据
       musicUrlList: [], //音乐mp3
       imgUrlList: [], //音乐封面
@@ -100,13 +100,18 @@ export default {
       totalTime: 0, //歌曲总时长
       lyricIndex: -1, //高亮的歌词
       currentlyric: [], //当前歌曲的歌词
-      currentMusicTime: [] //当前歌曲的时间
+      currentMusicTime: [], //当前歌曲的时间
+      index: 0,
+      sonIndex: 0, //子组件点击改变音乐
+      canshowLyric: false //可以显示歌曲长度
     };
   },
   watch: {
     // 避免mounted还没获取到数据,此时值为undefined
     imgUrlList: function(val) {
-      this.imgCover = this.imgUrlList[1] ? this.imgUrlList[1] : "";
+      this.imgCover = this.imgUrlList[this.musicIndex]
+        ? this.imgUrlList[this.musicIndex]
+        : "";
     },
     currentTime: function(val) {
       this.progress =
@@ -130,24 +135,48 @@ export default {
     canplay() {
       let first = true;
       let vm = this;
-      document.addEventListener("touchstart", function() {
-        if (first) {
-          vm.$nextTick(function() {
-            this.currentTime = this.timeFormat(this.$refs.audio.currentTime)
-              ? this.timeFormat(this.$refs.audio.currentTime)
-              : "00:00";
-            this.totalTime = this.timeFormat(this.$refs.audio.duration);
-          });
-          first = false;
-        }
-      });
+      // document.addEventListener("touchstart", function() {
+      //   if (first) {
+      //     vm.$nextTick(function() {
+      //       if (this.currentTime) {
+      //         this.currentTime = this.timeFormat(this.$refs.audio.currentTime)
+      //           ? this.timeFormat(this.$refs.audio.currentTime)
+      //           : "00:00";
+      //         this.totalTime = this.timeFormat(this.$refs.audio.duration);
+      //       }
+      //     });
+      //     first = false;
+      //   }
+      // });
       this.currentTime = this.timeFormat(this.$refs.audio.currentTime)
         ? this.timeFormat(this.$refs.audio.currentTime)
         : "00:00";
       this.totalTime = this.timeFormat(this.$refs.audio.duration);
+      console.log(this.totalTime, "来自canplay方法");
+      this.canshowLyric = true;
     },
     // 显示歌曲列表
-    showMusicList() {},
+    showMusicList() {
+      let vm = this;
+      let list = this.$createList({
+        $props: {
+          listdata: this.musicName,
+        }
+      });
+      list.show();
+      list.$on("change", index => {
+        this.musicIndex = index; //改变音乐
+        this.currentlyric = this.lyricResult[this.musicIndex]; //当前播放歌的歌词
+        this.currentMusicTime = this.timeResult[this.musicIndex]; //当前播放歌的时间
+        this.totalTime = this.timeFormat(this.$refs.audio.duration);
+        this.imgCover = this.imgUrlList[this.musicIndex]
+        this.$refs.audio.currentTime = 0;
+        this.progress = 0;
+        this.ended();
+        this.updateProgress();
+        list.hide();
+      });
+    },
     // 拖动进度条更新歌曲播放
     playTime(percent) {
       // 根据百分比唱歌
@@ -159,8 +188,24 @@ export default {
     // 进度条松手触发
     progressChange(val) {
       this.progress = val;
-      this.updateProgress();
+      // 根据当前进度条唱歌
+      // let currentProgress = Math.floor(
+      //   (this.$refs.audio.currentTime / this.$refs.audio.duration) * 100
+      // );
+      // let now = Math.floor(this.$refs.audio.duration * (currentProgress / 100));
+      // console.log("现在唱到" + now + "秒");
+      // for (var i = 0; i < this.currentMusicTime.length; i++) {
+      //   if (this.currentMusicTime[i] > now) {
+      //     this.index = i;
+      //     break;
+      //   }
+      // }
+      // console.log(this.index);
+      // let height = this.index * -20;
+      // console.log(height);
+      // this.$refs.lyricWrapper.style.cssText = `margin-top: ${height}px`;
       this.playTime(this.progress);
+      this.updateProgress();
     },
     // 进度条拖拽触发
     progressInput(val) {
@@ -173,32 +218,41 @@ export default {
         this.progress
       }% 100% !important`;
     },
+    changeStyle() {
+      if (this.lyricIndex <= 1) return;
+      let height = this.lyricIndex * -20;
+      this.$refs.lyricWrapper.style.marginTop = `${height}px`;
+    },
     // 监听音频播放时间并更新进度条
     timeupdate() {
-      // 这两个是个位数 计算总的秒数
-      let playtime = this.$refs.audio.currentTime;
-      let totalTime = this.$refs.audio.duration;
       let currentIndex = 0;
       // 这两个是格式化好的时间单位
-      this.currentTime = this.timeFormat(this.$refs.audio.currentTime);
-      this.totalTime = this.timeFormat(this.$refs.audio.duration);
-      // 根据当前时间去更新歌词
-      if (playtime >= this.currentMusicTime[0]) {
-        this.lyricIndex++;
-        currentIndex++;
-        this.currentMusicTime.shift();
+      if (this.currentTime && this.totalTime && this.$refs.audio) {
+        this.currentTime = this.timeFormat(this.$refs.audio.currentTime);
+        let vm = this;
+        this.$refs.audio.ondurationchange = function() {
+          vm.totalTime = vm.timeFormat(vm.$refs.audio.duration);
+        };
+        // 根据当前时间去更新歌词
+        if (this.$refs.audio.currentTime >= this.currentMusicTime[0]) {
+          this.lyricIndex++;
+          currentIndex++;
+          this.currentMusicTime.shift();
+        }
+
+        // 让整个ul上移
+        if (this.lyricIndex && this.$refs.lyricItem[this.lyricIndex]) {
+          this.$refs.lyricItem[this.lyricIndex].style.color = "blue";
+        }
+        // this.$refs.lyricWrapper.style.cssText = `margin-top: ${this.lyricIndex *
+        //   -20}px`;
+        this.changeStyle();
       }
-      // 让整个ul上移
-      if (this.lyricIndex && this.$refs.lyricItem[this.lyricIndex]) {
-        this.$refs.lyricItem[this.lyricIndex].style.cssText = `color: red`;
-      }
-      if (this.lyricIndex <= 1) return;
-      this.$refs.lyricWrapper.style.cssText = `margin-top: ${this.lyricIndex *
-        -20}px`;
     },
-    // 音乐播放结束
+    // 音乐播放结束 重置音乐
     ended() {
-      console.log("结束啦");
+      this.$refs.audio.currentTime = 0;
+      this.progress = 0;
     },
     playMucic() {
       // 如果当前不是播放状态则播放
@@ -215,20 +269,13 @@ export default {
     }
   },
   mounted() {
+    this.musicIndex = new Date().getDay();
     this.updateProgress();
-    document.addEventListener("WeixinJSBridgeReady", function() {
-      // document.getElementById('audios').play()
-      console.log(111);
-    });
-    document.addEventListener("touchstart", function() {
-      // this.$nextTick(()=>{
-      //   console.log(this.$refs.audio)
-      // })
-    });
+    // 监听微信加载完毕
+    document.addEventListener("WeixinJSBridgeReady", function() {});
     let data = this.$axios
       .get(`${process.env.VUE_APP_MUSIC_URL}/home/music`)
       .then(res => {
-        console.log(res);
         this.musicList = res.data.result.musicList;
         // 音乐MP3链接
         this.musicList.map((item, index) => {
@@ -249,11 +296,10 @@ export default {
             }
           })
           .then(res => {
-            console.log(res);
             this.lyricResult = res.data.lyricResult;
-            this.currentlyric = this.lyricResult[1];
             this.timeResult = res.data.timesResult;
-            this.currentMusicTime = this.timeResult[1];
+            this.currentlyric = this.lyricResult[this.musicIndex]; //当前播放歌的歌词
+            this.currentMusicTime = this.timeResult[this.musicIndex]; //当前播放歌的时间
           });
         // 音乐封面
         this.musicList.map((item, index) => {
@@ -314,7 +360,8 @@ export default {
     }
     .lyric-wrapper {
       width: 100%;
-      height: px2rem(60);
+      // height: px2rem(60);
+      height: 60px;
       margin: 0 0 px2rem(15) 0;
       position: relative;
       left: 0;
@@ -324,14 +371,16 @@ export default {
         text-align: center;
         height: 100%;
         margin-top: -0px;
+        transition: all 0.1s linear;
         .lyric-item {
           list-style: none;
-          // flex: 0 0 px2rem(20);
           width: 100%;
-          height: px2rem(20);
+          // height: px2rem(20);
+          height: 20px;
           font-size: px2rem(14);
           color: #fff;
-          line-height: px2rem(20);
+          // line-height: px2rem(20);
+          line-height: 20px;
         }
       }
     }
