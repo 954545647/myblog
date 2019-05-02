@@ -38,7 +38,7 @@
         <!-- 音乐模式 -->
         <div class="model" @click="changeModel">
           <!-- 随机播放 -->
-          <i class="iconfont icon-icon78" v-if="model"></i>  
+          <i class="iconfont icon-icon78" v-if="model"></i>
           <!-- 顺序播放 -->
           <i class="iconfont icon-shunxubofang" v-else></i>
         </div>
@@ -71,7 +71,7 @@
         <i class="iconfont icon-aixin"></i>
         <i class="iconfont icon-xiazai1"></i>
         <i class="iconfont icon-fenxiang1"></i>
-        <i class="iconfont icon-pinglun2"></i>
+        <i class="iconfont icon-pinglun2" @click="showComment"></i>
       </div>
     </div>
 
@@ -103,7 +103,7 @@ export default {
       index: 0, // 当前时间播放到第几个时间戳
       sonIndex: 0, //子组件点击改变音乐
       canshowLyric: false, //可以显示歌曲长度
-      model: false, //false为顺序播放,true为随机播放(默认是单曲循环,因为播放结束不跳下一首)
+      model: false //false为顺序播放,true为随机播放(默认是单曲循环,因为播放结束不跳下一首)
     };
   },
   watch: {
@@ -121,8 +121,12 @@ export default {
     }
   },
   methods: {
+    // 查看评论
+    showComment() {
+    },
     // 下一首
     next() {
+      this.restoreLyric();
       let length = this.musicName.length - 1;
       if (this.musicIndex == length) {
         this.musicIndex = 0;
@@ -132,6 +136,7 @@ export default {
     },
     // 上一首
     prev() {
+      this.restoreLyric();
       let length = this.musicName.length - 1;
       if (this.musicIndex == 0) {
         this.musicIndex = length;
@@ -175,7 +180,7 @@ export default {
       // });
     },
     // 切换播放模式
-    changeModel(){
+    changeModel() {
       this.model = !this.model;
     },
     // 切换歌曲
@@ -189,6 +194,13 @@ export default {
       this.ended();
       this.updateProgress();
     },
+    // 把每句歌词的样式清空
+    restoreLyric() {
+      let item = this.$refs.lyricItem;
+      for (var i = 0; i < item.length; i++) {
+        item[i].style.color = "";
+      }
+    },
     // 显示歌曲全部列表,调用列表通用组件
     showMusicList() {
       let vm = this;
@@ -200,12 +212,9 @@ export default {
       list.show();
       list.$on("change", index => {
         this.musicIndex = index; //改变音乐
-        this.changeMusic();
-        let item = this.$refs.lyricItem;
-        for (var i = 0; i < item.length; i++) {
-          item[i].style.color = ``;
-        }
-        list.hide();
+        this.changeMusic(); //切歌
+        this.restoreLyric(); //重置歌词样式
+        list.hide(); //隐藏列表
       });
     },
     // 拖动进度条后根据进度progress更新唱歌的进度
@@ -218,23 +227,29 @@ export default {
     },
     // 进度条松手触发
     progressChange(val) {
+      this.playStatus = 0;
+      this.playMucic();
+      // 1.根据当前进度计算出唱歌唱到哪
       this.progress = val;
-      // 根据当前进度条唱歌
-      // let currentProgress = Math.floor(
-      //   (this.$refs.audio.currentTime / this.$refs.audio.duration) * 100
-      // );
-      // let now = Math.floor(this.$refs.audio.duration * (currentProgress / 100));
-      // console.log("现在唱到" + now + "秒");
-      // for (var i = 0; i < this.currentMusicTime.length; i++) {
-      //   if (this.currentMusicTime[i] > now) {
-      //     this.index = i;
-      //     break;
-      //   }
-      // }
-      // console.log(this.index);
-      // let height = this.index * -20;
-      // console.log(height);
-      // this.$refs.lyricWrapper.style.cssText = `margin-top: ${height}px`;
+      let now = Math.floor(this.$refs.audio.duration * (this.progress / 100));
+      // 2.遍历歌曲时间戳,找到最近的索引并记录
+      for (var i = 0; i < this.currentMusicTime.length; i++) {
+      // 4.有个bug就是歌词和时间戳我们是过滤过的,最后一句歌词到结束之间的过渡是没有索引的
+      // 直接跳到最后一句歌词
+        if (now > this.currentMusicTime[this.currentMusicTime.length - 1]) {
+          this.index = this.currentMusicTime.length;
+          this.lyricIndex = this.index - 1;
+          break;
+        }
+        if (this.currentMusicTime[i] > now) {
+          this.index = i;
+          // 3.更新歌词的索引,是歌曲时间戳-1
+          this.lyricIndex = this.index - 1;
+          break;
+        }
+      }
+      // 4.重置歌词样式
+      this.restoreLyric();
       this.playTime(this.progress);
       this.updateProgress();
     },
@@ -242,6 +257,8 @@ export default {
     progressInput(val) {
       this.progress = val;
       this.updateProgress();
+      this.playStatus = 0;
+      this.playMucic();
       // 计算出拖拽的百分比
     },
     // 更新进度条
@@ -260,6 +277,7 @@ export default {
         // 这是移动端的坑,更换歌词需要监听事件
         this.$refs.audio.ondurationchange = function() {
           vm.totalTime = vm.timeFormat(vm.$refs.audio.duration);
+          vm.currentTime = vm.timeFormat(vm.$refs.audio.currentTime);
           vm.progress = 0;
           vm.playStatus = 0;
           vm.$refs.lyricWrapper.style.marginTop = 0;
@@ -272,12 +290,12 @@ export default {
         }
         // 让整个ul上移
         if (this.lyricIndex && this.$refs.lyricItem[this.lyricIndex]) {
-          this.$refs.lyricItem[this.lyricIndex].style.color = "blue";
+          this.$refs.lyricItem[this.lyricIndex].style.color = "#61C5FA";
           this.$refs.lyricItem[this.lyricIndex - 1].style.color = "white";
         }
         // 根据歌词跳过的数目将整个ul上移
         if (this.lyricIndex <= 1) return;
-        let height = this.lyricIndex * -20;
+        let height = this.lyricIndex * -30;
         this.$refs.lyricWrapper.style.marginTop = `${height}px`;
       }
     },
@@ -286,9 +304,10 @@ export default {
       this.lyricIndex = -1; //高亮的歌词索引重置
       this.index = 0; //这是时间的索引重置
       this.$refs.audio.currentTime = 0; //当前播放时间归0
-      this.progress = 0;  //进度归0
-      this.$refs.lyricWrapper.style = "0px!important";  //把歌词高亮的去掉
-      this.playStatus = 0;  //状态变为未播放
+      this.progress = 0; //进度归0
+      this.$refs.lyricWrapper.style = "0px!important"; //把上移的部分重置
+      this.playStatus = 0; //状态变为未播放
+      this.restoreLyric(); //重置歌词
     },
     // 点击播放按钮
     playMucic() {
@@ -306,8 +325,8 @@ export default {
     }
   },
   mounted() {
-    this.musicIndex = new Date().getDay();  //根据周几来播放歌曲
-    this.updateProgress();  //更新初步样式 progress此时为0
+    this.musicIndex = new Date().getDay(); //根据周几来播放歌曲
+    this.updateProgress(); //更新初步样式 progress此时为0
     // 监听微信加载完毕
     document.addEventListener("WeixinJSBridgeReady", function() {});
     // 发起请求,获取music.json文件的数据
@@ -335,8 +354,8 @@ export default {
             }
           })
           .then(res => {
-            this.lyricResult = res.data.lyricResult;//所有歌的歌词集合
-            this.timeResult = res.data.timesResult;//所有歌的时间戳的集合
+            this.lyricResult = res.data.lyricResult; //所有歌的歌词集合
+            this.timeResult = res.data.timesResult; //所有歌的时间戳的集合
             this.currentlyric = this.lyricResult[this.musicIndex]; //当前播放歌的歌词
             this.currentMusicTime = this.timeResult[this.musicIndex]; //当前播放歌的时间
           });
@@ -406,6 +425,7 @@ export default {
       left: 0;
       top: 0;
       overflow: hidden;
+      box-sizing: border-box;
       .item-wrapper {
         text-align: center;
         height: 100%;
