@@ -1,84 +1,87 @@
 <template>
   <div class="music-wrapper">
     <div class="music-content">
-      <!-- 图片 -->
-      <div class="img-wrapper">
-        <img :src="imgUrlList[musicIndex]" alt>
-      </div>
-      <!-- 歌词 -->
-      <div class="lyric-wrapper">
-        <ul class="item-wrapper" ref="lyricWrapper">
-          <li
-            v-for="(item,index) in currentlyric"
-            :key="index"
-            class="lyric-item"
-            ref="lyricItem"
-          >{{item}}</li>
-        </ul>
-      </div>
-      <!-- <div class="loading" v-if="musicLoading">
+      <div class="content-bar">
+        <!-- 图片 -->
+        <div class="img-wrapper">
+          <img :src="imgUrlList[musicIndex]" alt>
+        </div>
+        <!-- 歌词 -->
+        <div class="lyric-wrapper">
+          <ul class="item-wrapper" ref="lyricWrapper">
+            <li
+              v-for="(item,index) in currentlyric"
+              :key="index"
+              class="lyric-item"
+              ref="lyricItem"
+            >{{item}}</li>
+          </ul>
+        </div>
+        <!-- <div class="loading" v-if="musicLoading">
         歌曲正在加载中
-      </div>-->
-      <!-- 进度条 -->
-      <div class="progress-wrapper">
-        <div class="prev-time">{{currentTime}}</div>
-        <input
-          type="range"
-          class="progress"
-          max="100"
-          min="0"
-          step="1"
-          @change="progressChange($event.target.value)"
-          @input="progressInput($event.target.value)"
-          :value="progress"
-          ref="progress"
-        >
-        <div class="total-time">{{totalTime}}</div>
+        </div>-->
       </div>
 
-      <!-- 模式 上一首 暂停播放 下一首 歌曲列表-->
-      <div class="control-wrapper">
-        <!-- 音乐模式 -->
-        <div class="model" @click="changeModel">
-          <!-- 随机播放 -->
-          <i class="iconfont icon-icon78" v-if="model"></i>
-          <!-- 顺序播放 -->
-          <i class="iconfont icon-shunxubofang" v-else></i>
+      <div class="control-bar">
+        <!-- 进度条 -->
+        <div class="progress-wrapper">
+          <div class="prev-time">{{currentTime}}</div>
+          <input
+            type="range"
+            class="progress"
+            max="100"
+            min="0"
+            step="1"
+            @change="progressChange($event.target.value)"
+            @input="progressInput($event.target.value)"
+            :value="progress"
+            ref="progress"
+          >
+          <div class="total-time">{{totalTime}}</div>
         </div>
-        <!-- 控制播放暂停 -->
-        <div class="play-wrapper">
-          <i class="iconfont icon-shangyishou" @click="prev"></i>
-          <div class="icon-wrapper" @click="playMucic">
-            <i class="iconfont icon-bofang" v-if="playStatus===0 || playStatus===2"></i>
-            <i class="iconfont icon-zantingtingzhi" v-if="playStatus==1"></i>
+        <!-- 模式 上一首 暂停播放 下一首 歌曲列表-->
+        <div class="control-wrapper">
+          <!-- 音乐模式 -->
+          <div class="model" @click="changeModel">
+            <!-- 随机播放 -->
+            <i class="iconfont icon-icon78" v-if="model"></i>
+            <!-- 顺序播放 -->
+            <i class="iconfont icon-shunxubofang" v-else></i>
           </div>
-          <i class="iconfont icon-xiayishou1" @click="next"></i>
+          <!-- 控制播放暂停 -->
+          <div class="play-wrapper">
+            <i class="iconfont icon-shangxiashou-" @click="prev"></i>
+            <div class="icon-wrapper" @click="playMucic">
+              <i class="iconfont icon-normal" v-if="playStatus===0 || playStatus===2"></i>
+              <i class="iconfont icon-zantingtingzhi" v-if="playStatus==1"></i>
+            </div>
+            <i class="iconfont icon-shangxiashou-1" @click="next"></i>
+          </div>
+          <!-- 音乐列表 -->
+          <div class="nameList-wrapper" @click="showMusicList">
+            <i class="iconfont icon-bofangqi_shouyegequliebiao_"></i>
+          </div>
+          <!-- 音乐播放器 -->
+          <audio
+            :src="musicUrlList[musicIndex]"
+            ref="audio"
+            class="audio"
+            @timeupdate="timeupdate"
+            @ended="ended"
+            @canplay.once="canplay"
+            preload="auto"
+          ></audio>
         </div>
-        <!-- 音乐列表 -->
-        <div class="nameList-wrapper" @click="showMusicList">
-          <i class="iconfont icon-bofangqi_shouyegequliebiao_"></i>
+        <!-- 收藏 下载 分享 评论 -->
+        <div class="handle-wrapper">
+          <i class="iconfont icon-aixin"></i>
+          <i class="iconfont icon-xiazai1"></i>
+          <i class="iconfont icon-fenxiang1"></i>
+          <i class="iconfont icon-pinglun2" @click="showComment"></i>
         </div>
-        <!-- 音乐播放器 -->
-        <audio
-          :src="musicUrlList[musicIndex]"
-          controls="controls"
-          ref="audio"
-          class="audio"
-          @timeupdate="timeupdate"
-          @ended="ended"
-          @canplay.once="canplay"
-          preload='auto'
-        ></audio>
-      </div>
-      <!-- 收藏 下载 分享 评论 -->
-      <div class="handle-wrapper">
-        <i class="iconfont icon-aixin"></i>
-        <i class="iconfont icon-xiazai1"></i>
-        <i class="iconfont icon-fenxiang1"></i>
-        <i class="iconfont icon-pinglun2" @click="showComment"></i>
       </div>
     </div>
-
+    <!-- 背景图片 -->
     <div class="music-background" ref="background" :style="{backgroundImage: `url(${imgCover})` }"></div>
     <!-- 音乐蒙版 -->
     <div class="music-mask"></div>
@@ -378,211 +381,347 @@ export default {
         });
       });
   },
-  beforeDestroy() {
-  }
+  beforeDestroy() {}
 };
 </script>
 
 
 <style lang="scss">
 @import "@/assets/styles/global.scss";
-.music-wrapper {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  @include center;
-  color: #fff;
-  .music-content {
+// 屏幕小于500px
+
+// // 屏幕大于768px
+// @media screen and (min-width: 769px) {
+
+// }
+@media screen and (min-width: 100px) {
+  .music-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
     @include center;
-    flex-direction: column;
-    .img-wrapper {
-      flex: 0 0 px2rem(260);
-      width: px2rem(260);
-      height: px2rem(260);
-      border-radius: 50%;
-      background-color: #272727;
-      margin: 0 0 px2rem(15) 0;
+    color: #fff;
+    .music-content {
       @include center;
       flex-direction: column;
-      position: relative;
-      img {
-        width: px2rem(200);
-        height: px2rem(200);
+      .img-wrapper {
+        flex: 0 0 px2rem(260);
+        width: px2rem(260);
+        height: px2rem(260);
         border-radius: 50%;
-      }
-      .icon-wrapper {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        width: px2rem(50);
-        height: px2rem(50);
+        background-color: #272727;
+        margin: 0 0 px2rem(15) 0;
         @include center;
-        border: 1px solid #fff;
-        border-radius: 50%;
-        .iconfont {
-          padding-left: px2rem(4);
-          color: #fff;
-          font-size: px2rem(30);
-        }
-      }
-    }
-    .lyric-wrapper {
-      width: 100%;
-      // height: px2rem(60);
-      height: 90px;
-      margin: 0 0 px2rem(15) 0;
-      position: relative;
-      left: 0;
-      top: 0;
-      overflow: hidden;
-      box-sizing: border-box;
-      .item-wrapper {
-        text-align: center;
-        height: 100%;
-        margin-top: -0px;
-        transition: all 0.1s linear;
-        .lyric-item {
-          padding: 5px 0;
-          list-style: none;
-          width: 100%;
-          // height: px2rem(20);
-          height: 20px;
-          font-size: px2rem(14);
-          color: #fff;
-          // line-height: px2rem(20);
-          line-height: 30px;
-        }
-        &:prev-position {
-          margin-top: 0 !important;
-        }
-      }
-    }
-    // 进度条
-    .progress-wrapper {
-      display: flex;
-      width: 100%;
-      height: px2rem(40);
-      @include center;
-      .prev-time {
-        flex: 0 0 px2re(50);
-        width: px2rem(50);
-        height: 100%;
-        @include center;
-        font-size: px2rem(14);
-      }
-      .total-time {
-        flex: 0 0 px2re(50);
-        width: px2rem(50);
-        font-size: px2rem(14);
-        height: 100%;
-        @include center;
-      }
-      .progress {
-        -webkit-appearance: none;
-        height: px2rem(3);
-        margin: auto;
-        flex: 1;
-        width: 100%;
-        background: linear-gradient(#fff, #fff) no-repeat, #999 !important;
-        &:focus {
-          outline: none;
-        }
-        &::-webkit-slider-thumb {
-          -webkit-appearance: none;
-          width: px2rem(15);
-          height: px2rem(15);
-          background: #fff;
+        flex-direction: column;
+        position: relative;
+        img {
+          width: px2rem(200);
+          height: px2rem(200);
           border-radius: 50%;
-          cursor: pointer;
-          box-shadow: 0 0 px2rem(5) 0 rgba(0, 0, 0, 0.9);
+        }
+        .icon-wrapper {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          width: px2rem(50);
+          height: px2rem(50);
+          @include center;
+          border: 1px solid #fff;
+          border-radius: 50%;
+          .iconfont {
+            padding-left: px2rem(4);
+            color: #fff;
+            font-size: px2rem(30);
+          }
         }
       }
-    }
+      .lyric-wrapper {
+        width: 100%;
+        // height: px2rem(60);
+        height: 90px;
+        margin: 0 0 px2rem(15) 0;
+        position: relative;
+        left: 0;
+        top: 0;
+        overflow: hidden;
+        box-sizing: border-box;
+        .item-wrapper {
+          text-align: center;
+          height: 100%;
+          margin-top: -0px;
+          transition: all 0.2s linear;
+          .lyric-item {
+            padding: 5px 0;
+            list-style: none;
+            width: 100%;
+            // height: px2rem(20);
+            height: 20px;
+            // font-size: px2rem(14);
+            font-size: px2rem(16);
+            color: #fff;
+            // line-height: px2rem(20);
+            line-height: 30px;
+          }
+          &:prev-position {
+            margin-top: 0 !important;
+          }
+        }
+      }
+      // 进度条
+      .progress-wrapper {
+        display: flex;
+        width: 100%;
+        height: px2rem(40);
+        @include center;
+        .prev-time {
+          flex: 0 0 px2re(50);
+          width: px2rem(50);
+          height: 100%;
+          @include center;
+          font-size: px2rem(14);
+        }
+        .total-time {
+          flex: 0 0 px2re(50);
+          width: px2rem(50);
+          font-size: px2rem(14);
+          height: 100%;
+          @include center;
+        }
+        .progress {
+          // 去除默认样式
+          -webkit-appearance: none;
+          height: px2rem(3);
+          margin: auto;
+          flex: 1;
+          width: 100%;
+          background: linear-gradient(#fff, #fff) no-repeat, #999 !important;
+          &:focus {
+            outline: none;
+          }
+          &::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: px2rem(15);
+            height: px2rem(15);
+            background: #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 px2rem(5) 0 rgba(0, 0, 0, 0.9);
+          }
+        }
+      }
 
-    .control-wrapper {
-      position: relative;
-      flex: 0 0 px2rem(60);
-      width: 100%;
-      height: px2rem(60);
-      display: flex;
-      width: 100%;
-      @include center;
-      .model {
-        height: 100%;
-        flex: 0 0 px2rem(50);
-        width: px2rem(50);
+      .control-wrapper {
+        position: relative;
+        flex: 0 0 px2rem(60);
+        width: 100%;
+        height: px2rem(60);
+        display: flex;
+        width: 100%;
+        @include center;
+        .model {
+          height: 100%;
+          flex: 0 0 px2rem(50);
+          width: px2rem(50);
+          @include center;
+          .iconfont {
+            font-size: px2rem(20);
+          }
+        }
+        .play-wrapper {
+          width: 100%;
+          height: 100%;
+          @include center;
+          .icon-shangxiashou- {
+            font-size: px2rem(25);
+          }
+          .icon-wrapper {
+            @include center;
+            margin: 0 px2rem(10);
+            .iconfont {
+              font-size: px2rem(26);
+              height: 100%;
+              width: 100%;
+            }
+          }
+          .icon-shangxiashou-1 {
+            font-size: px2rem(25);
+          }
+        }
+        .nameList-wrapper {
+          flex: 0 0 px2rem(50);
+          width: px2rem(50);
+          height: 100%;
+          @include center;
+          .iconfont {
+            font-size: px2rem(26);
+          }
+        }
+        .audio {
+          position: absolute;
+          left: 0;
+          bottom: -500%;
+        }
+      }
+      .handle-wrapper {
+        flex: 0 0 px2rem(40);
+        height: px2rem(40);
+        width: 100%;
         @include center;
         .iconfont {
           font-size: px2rem(20);
+          flex: 1;
         }
       }
-      .play-wrapper {
+    }
+    .music-background {
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      position: absolute;
+      left: 0;
+      top: 0;
+      filter: blur(5px);
+      background: no-repeat center center;
+      background-size: cover;
+      transition: all 0.5s linear;
+    }
+    .music-mask {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: rgba(0, 0, 0, 0.4);
+    }
+  }
+}
+// 屏幕大于501px小于768px
+@media screen and (min-width: 501px) {
+  .music-wrapper {
+    .music-content {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      box-sizing: border-box;
+      // 图片和歌词
+      .content-bar {
+        flex: 0 0 85%;
+        height: 600px;
         width: 100%;
+        display: flex;
         @include center;
-        .icon-shangyishou {
-          font-size: px2rem(30);
-          vertical-align: px2rem(-3);
-        }
-        .icon-wrapper {
-          width: px2rem(50);
-          height: px2rem(50);
-          .iconfont {
-            font-size: px2rem(28);
-            height: 100%;
-            width: 100%;
-            @include center;
+        box-sizing: border-box;
+        padding: 0 px2rem(50);
+        .img-wrapper {
+          flex: 0 0 50%;
+          width: px2rem(150);
+          height: px2rem(150);
+          border-radius: 0%;
+          background-color: transparent;
+          img {
+            border-radius: 0;
+            width: px2rem(150);
+            height: px2rem(150);
           }
         }
-        .icon-xiayishou1 {
-          font-size: px2rem(25);
+        .lyric-wrapper {
+          flex: 1;
+          font-size: px2rem(20);
+          height: px2rem(160);
+          .item-wrapper {
+            .lyric-item {
+              font-size: 16px;
+            }
+          }
         }
       }
-      .nameList-wrapper {
-        flex: 0 0 px2rem(50);
-        width: px2rem(50);
-        height: 100%;
-        @include center;
-        .iconfont {
-          font-size: px2rem(26);
-        }
-      }
-      .audio {
-        position: absolute;
-        left: 0;
-        bottom: -500%;
-      }
-    }
-    .handle-wrapper {
-      flex: 0 0 px2rem(40);
-      height: px2rem(40);
-      width: 100%;
-      @include center;
-      .iconfont {
-        font-size: px2rem(20);
+      // 底部控制条
+      .control-bar {
         flex: 1;
+        width: 100%;
+        display: flex;
+        position: relative;
+        padding: 0 20px;
+        box-sizing: border-box;
+        @include center;
+        // 进度条
+        .progress-wrapper {
+          order: 2;
+          flex: 1;
+          margin-right: 10px;
+          .prev-time {
+            flex: 0 0 px2rem(35);
+            width: px2rem(30);
+            font-size: px2rem(12);
+          }
+          .progress {
+            &::-webkit-slider-thumb {
+              width: px2rem(12);
+              height: px2rem(12);
+            }
+          }
+          .total-time {
+            flex: 0 0 px2rem(35);
+            width: px2rem(30);
+            font-size: px2rem(12);
+          }
+        }
+        // 上下首歌
+        .control-wrapper {
+          order: 1;
+          width: px2rem(100);
+          .play-wrapper {
+            box-sizing: border-box;
+            .icon-shangxiashou- {
+              font-size: px2rem(24);
+            }
+            .icon-wrapper {
+              margin: 0 15px;
+              .icon-normal {
+                font-size: px2rem(22);
+              }
+              .icon-zantingtingzhi {
+                font-size: px2rem(22);
+              }
+            }
+            .icon-shangxiashou-1 {
+              font-size: px2rem(24);
+            }
+          }
+          // 切换模式
+          .model {
+            position: absolute;
+            right: 35px;
+            @include center;
+            .iconfont {
+              font-size: 18px;
+            }
+          }
+          // 歌词列表
+          .nameList-wrapper {
+            position: absolute;
+            right: 10px;
+            @include center;
+            top: 50 px;
+            .iconfont {
+              font-size: 24px;
+            }
+          }
+        }
+        .handle-wrapper {
+          order: 3;
+          flex: 0 0 auto;
+          width: px2rem(120);
+          justify-content: flex-start;
+          .iconfont {
+            font-size: 18px;
+            padding: 0 5px;
+          }
+        }
       }
     }
-  }
-  .music-background {
-    width: 100%;
-    height: 100%;
-    z-index: -2;
-    position: absolute;
-    left: 0;
-    top: 0;
-    filter: blur(10px);
-    background: no-repeat center center;
-    background-size: cover;
-  }
-  .music-mask {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    background: rgba(0, 0, 0, 0.35);
   }
 }
 </style>

@@ -2,7 +2,6 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-import axios from "axios"; //引入axios
 import { Button, Form,Input,FormItem } from 'element-ui';
 Vue.use(Button)
 Vue.use(Form)
@@ -13,8 +12,11 @@ import "@/assets/styles/global.scss";
 import "@/assets/styles/fonts/iconfont.css";
 import "./../utils/useCommon.js";
 
-Vue.prototype.router = router;
+import axios from "axios"; //引入axios
+
 Vue.prototype.$axios = axios;
+
+Vue.prototype.router = router;
 Vue.config.productionTip = false;
 
 new Vue({
