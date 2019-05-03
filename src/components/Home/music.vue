@@ -16,6 +16,9 @@
           >{{item}}</li>
         </ul>
       </div>
+      <!-- <div class="loading" v-if="musicLoading">
+        歌曲正在加载中
+      </div>-->
       <!-- 进度条 -->
       <div class="progress-wrapper">
         <div class="prev-time">{{currentTime}}</div>
@@ -64,6 +67,7 @@
           @timeupdate="timeupdate"
           @ended="ended"
           @canplay.once="canplay"
+          preload='auto'
         ></audio>
       </div>
       <!-- 收藏 下载 分享 评论 -->
@@ -103,7 +107,8 @@ export default {
       index: 0, // 当前时间播放到第几个时间戳
       sonIndex: 0, //子组件点击改变音乐
       canshowLyric: false, //可以显示歌曲长度
-      model: false //false为顺序播放,true为随机播放(默认是单曲循环,因为播放结束不跳下一首)
+      model: false, //false为顺序播放,true为随机播放(默认是单曲循环,因为播放结束不跳下一首)
+      musicLoading: false //歌曲正在加载
     };
   },
   watch: {
@@ -122,8 +127,7 @@ export default {
   },
   methods: {
     // 查看评论
-    showComment() {
-    },
+    showComment() {},
     // 下一首
     next() {
       this.restoreLyric();
@@ -185,14 +189,19 @@ export default {
     },
     // 切换歌曲
     changeMusic() {
+      // if(this.currentTime===0){
+      //   this.musicLoading = true
+      // }else{
+      //   this.musicLoading = false;
+      // }
+      this.progress = 0;
+      this.updateProgress();
       this.currentlyric = this.lyricResult[this.musicIndex]; //当前播放歌的歌词
       this.currentMusicTime = this.timeResult[this.musicIndex]; //当前播放歌的时间
       this.totalTime = this.timeFormat(this.$refs.audio.duration);
       this.imgCover = this.imgUrlList[this.musicIndex];
       this.$refs.audio.currentTime = 0;
-      this.progress = 0;
       this.ended();
-      this.updateProgress();
     },
     // 把每句歌词的样式清空
     restoreLyric() {
@@ -234,8 +243,8 @@ export default {
       let now = Math.floor(this.$refs.audio.duration * (this.progress / 100));
       // 2.遍历歌曲时间戳,找到最近的索引并记录
       for (var i = 0; i < this.currentMusicTime.length; i++) {
-      // 4.有个bug就是歌词和时间戳我们是过滤过的,最后一句歌词到结束之间的过渡是没有索引的
-      // 直接跳到最后一句歌词
+        // 4.有个bug就是歌词和时间戳我们是过滤过的,最后一句歌词到结束之间的过渡是没有索引的
+        // 直接跳到最后一句歌词
         if (now > this.currentMusicTime[this.currentMusicTime.length - 1]) {
           this.index = this.currentMusicTime.length;
           this.lyricIndex = this.index - 1;
@@ -368,6 +377,8 @@ export default {
           return this.musicName.push(item.name);
         });
       });
+  },
+  beforeDestroy() {
   }
 };
 </script>
@@ -484,7 +495,7 @@ export default {
           background: #fff;
           border-radius: 50%;
           cursor: pointer;
-          box-shadow: 0 0 px2rem(5) 0 rgba(0, 0, 0, 0.6);
+          box-shadow: 0 0 px2rem(5) 0 rgba(0, 0, 0, 0.9);
         }
       }
     }
