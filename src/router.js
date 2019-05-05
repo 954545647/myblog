@@ -27,7 +27,17 @@ export default new Router({
     {
       path:'/blog',
       name:'blog',
-      component:()=> import('./views/blog/index.vue')
+      component:()=> import('./views/blog/index.vue'),
+    },
+    {
+      path:'/write',
+      name:'write',
+      component:()=>import('@/components/Blog/writeArticle.vue')
+    },
+    {
+      path:'/detail/:id',
+      name:'detail',
+      component:()=>import('@/components/Blog/blogDetail.vue')
     }
   ]
 })

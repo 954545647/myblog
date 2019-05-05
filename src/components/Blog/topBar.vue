@@ -13,19 +13,16 @@
 export default {
   data() {
     return {
-      menu:'',  //菜单组件
-    }
+      menu: "" //菜单组件
+    };
   },
-  methods:{
-    showMenu(){
+  methods: {
+    showMenu() {
       this.menu = this.$createMenuBar({
-        $props:{
-          list:[
-            '首页',
-            '菜单'
-          ]
+        $props: {
+          list: ["首页", "菜单"]
         }
-      })
+      });
       this.menu.show();
     }
   }
@@ -39,10 +36,8 @@ export default {
   width: 100%;
   height: px2rem(50);
   box-sizing: border-box;
-  border-bottom: 1px solid #ccc;
   color: white;
-  background: #F05050;
-  box-shadow: 0 1px 0 0 rgba(58,63,81,.9);
+  background: #f05050;
   .left {
     width: 20%;
     float: left;

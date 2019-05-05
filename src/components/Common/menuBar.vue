@@ -14,21 +14,21 @@
         <div class="navigation">
           <ul class="list">
             <li class="list-title">导航</li>
-            <li>
+            <!-- <li @click="goToBlog">
               <i class="iconfont icon-shouye"></i>
               <span>首页</span>
-            </li>
-            <li>
+            </li>-->
+            <li @click="goToBlog">
               <i class="iconfont icon-wenzhang1"></i>
-              <span>博客</span>
+              <span>文章</span>
             </li>
-            <li>
+            <li @click="goToMusic">
               <i class="iconfont icon-erji"></i>
               <span>听歌</span>
             </li>
-            <li>
+            <li @click="goToWrite">
               <i class="iconfont icon-shuben"></i>
-              <span>看书</span>
+              <span>写博客</span>
             </li>
           </ul>
         </div>
@@ -54,6 +54,27 @@ export default {
     }
   },
   methods: {
+    // 去写博客
+    goToWrite() {
+      this.canshow = false;
+      setTimeout(() => {
+        this.$router.push("/write");
+      }, 0);
+    },
+    // 去博客列表
+    goToBlog() {
+      this.canshow = false;
+      setTimeout(() => {
+        this.$router.push("/blog");
+      }, 0);
+    },
+    // 去听歌
+    goToMusic() {
+      this.canshow = false;
+      setTimeout(() => {
+        this.$router.push("/home");
+      }, 0);
+    },
     show() {
       this.canshow = !this.canshow;
     },
@@ -68,6 +89,7 @@ export default {
 <style lang="scss">
 @import "@/assets/styles/global.scss";
 .menu-wrapper {
+  z-index: 1000;
   position: fixed;
   left: 0;
   top: px2rem(50);
@@ -75,6 +97,7 @@ export default {
   height: 100%;
   display: flex;
   .menu {
+    z-index: 1500;
     width: 75%;
     height: 100%;
     flex: 0 0 75%;

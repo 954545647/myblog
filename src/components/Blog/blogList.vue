@@ -4,7 +4,7 @@
       <div class="blog-content">
         <div class="word">好好学习 天天向上</div>
         <div class="blog-list">
-          <div class="blog" v-for="(item,index) in 4" :key="index">
+          <div class="blog" v-for="(item,index) in 4" :key="index" @click="goTodetail(index)">
             <img src="./../../assets/6.jpg" alt>
             <div class="content-wrapper">
               <!-- 文章内容 -->
@@ -39,7 +39,11 @@ export default {
     scroll
   },
   methods: {
-    onScroll(val) {}
+    onScroll(val) {},
+    // 跳去文章详情页
+    goTodetail(id){
+      this.$router.push({name:'detail',params:{id:id}})
+    }
   }
 };
 </script>
@@ -50,18 +54,13 @@ export default {
 .blog-wrapper {
   width: 100%;
   height: 100%;
-  // overflow-y: hidden;
   margin-top: 0;
   padding: 0 0 px2rem(20) 0;
-  box-sizing: border-box;
   .scroll-wrapper {
-    // height: 100%;
-    margin: 0 0 px2rem(20) 0;
     .blog-content {
-      padding: px2rem(20) px2rem(30);
+      padding: px2rem(20)  px2rem(35) px2rem(30) px2rem(35);
       box-sizing: border-box;
       background-color: #f0f3f4;
-      height: 100%;
       .word {
         height: px2rem(30);
         width: 100%;
@@ -76,7 +75,10 @@ export default {
           width: 100%;
           display: flex;
           flex-direction: column;
-          margin-bottom: px2rem(20);
+          margin-bottom: px2rem(30);
+          &:last-child {
+            margin-bottom: px2rem(0);
+          }
           img {
             flex: 0 0 px2rem(100);
             border-radius: 10px 10px 0 0;

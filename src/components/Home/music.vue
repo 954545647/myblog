@@ -82,6 +82,25 @@
     <div class="music-background" ref="background" :style="{backgroundImage: `url(${imgCover})` }"></div>
     <!-- 音乐蒙版 -->
     <div class="music-mask"></div>
+    <div class="link-wrapper">
+      <ul class="link-list">
+        <li>
+          <i class="iconfont icon-shouye"></i>
+        </li>
+        <li>
+          <i class="iconfont icon-erji"></i>
+        </li>
+        <li>
+          <i class="iconfont icon-wenzhang1"></i>
+        </li>
+        <li>
+          <i class="iconfont icon-wenzhang1"></i>
+        </li>
+      </ul>
+      <div class="link-control">
+        <i class="iconfont icon-shunxubofang"></i>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -141,22 +160,22 @@ export default {
   },
   methods: {
     // 跳去博客页面
-    goto(){
-      this.$router.push('/blog')
+    goto() {
+      this.$router.push("/blog");
     },
     // 查看评论
     showComment() {},
     // 选择动画
     imgAction() {
       if (this.canAction) {
-        this.timer = setInterval(() => {
+        var timer = setInterval(() => {
           if (this.$refs.musicCover) {
             this.deg += 10;
             this.$refs.musicCover.style.transform = `rotate(${this.deg}deg)`;
           }
         }, 1000);
       } else {
-        clearInterval(this.timer);
+        clearInterval(timer);
       }
     },
     // 下一首
@@ -410,6 +429,7 @@ export default {
     position: relative;
     @include center;
     color: #fff;
+    flex-direction: column;
     .music-content {
       @include center;
       flex-direction: column;
@@ -621,6 +641,21 @@ export default {
       height: 100%;
       z-index: -1;
       background: rgba(0, 0, 0, 0.4);
+    }
+    .link-wrapper {
+      position: absolute;
+      right: px2rem(5);
+      bottom: px2rem(5);
+      .link-control {
+        @include center;
+        line-height: 1em;
+        .iconfont {
+          font-size: px2rem(16);
+        }
+      }
+      .link-list {
+        background: red;
+      }
     }
   }
 }
