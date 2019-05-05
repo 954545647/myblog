@@ -10,7 +10,7 @@ Vue.use(FormItem)
 import "element-ui/lib/theme-chalk/index.css";
 import "@/assets/styles/global.scss";
 import "@/assets/styles/fonts/iconfont.css";
-import "./../utils/useCommon.js";
+import "@/utils/useCommon.js";
 
 import axios from "axios"; //引入axios
 

@@ -4,7 +4,7 @@
       <div class="content-bar">
         <!-- 图片 -->
         <div class="img-wrapper">
-          <img :src="imgUrlList[musicIndex]" alt>
+          <img :src="imgUrlList[musicIndex]" ref="musicCover">
         </div>
         <!-- 歌词 -->
         <div class="lyric-wrapper">
@@ -17,9 +17,6 @@
             >{{item}}</li>
           </ul>
         </div>
-        <!-- <div class="loading" v-if="musicLoading">
-        歌曲正在加载中
-        </div>-->
       </div>
 
       <div class="control-bar">
@@ -74,7 +71,7 @@
         </div>
         <!-- 收藏 下载 分享 评论 -->
         <div class="handle-wrapper">
-          <i class="iconfont icon-aixin"></i>
+          <i class="iconfont icon-aixin" @click="goto"></i>
           <i class="iconfont icon-xiazai1"></i>
           <i class="iconfont icon-fenxiang1"></i>
           <i class="iconfont icon-pinglun2" @click="showComment"></i>
@@ -111,7 +108,9 @@ export default {
       sonIndex: 0, //子组件点击改变音乐
       canshowLyric: false, //可以显示歌曲长度
       model: false, //false为顺序播放,true为随机播放(默认是单曲循环,因为播放结束不跳下一首)
-      musicLoading: false //歌曲正在加载
+      musicLoading: false, //歌曲正在加载
+      canAction: false, //图片可以旋转
+      deg: 0 //图片旋转的角度
     };
   },
   watch: {
@@ -126,11 +125,40 @@ export default {
       this.progress =
         (this.$refs.audio.currentTime / this.$refs.audio.duration) * 100;
       this.updateProgress();
+    },
+    // 监听播放状态:
+    playStatus: function(val) {
+      // if (val === 1) {
+      //   // this.$refs.musicCover.className = "action";
+      //   this.canAction = true;
+      //   this.imgAction();
+      // } else {
+      //   this.canAction = false;
+      //   this.imgAction();
+      //   // this.$refs.musicCover.className = "";
+      // }
     }
   },
   methods: {
+    // 跳去博客页面
+    goto(){
+      this.$router.push('/blog')
+    },
     // 查看评论
     showComment() {},
+    // 选择动画
+    imgAction() {
+      if (this.canAction) {
+        this.timer = setInterval(() => {
+          if (this.$refs.musicCover) {
+            this.deg += 10;
+            this.$refs.musicCover.style.transform = `rotate(${this.deg}deg)`;
+          }
+        }, 1000);
+      } else {
+        clearInterval(this.timer);
+      }
+    },
     // 下一首
     next() {
       this.restoreLyric();
@@ -171,20 +199,6 @@ export default {
         : "00:00";
       this.totalTime = this.timeFormat(this.$refs.audio.duration);
       this.canshowLyric = true;
-      // 针对移动端不会自动播放的问题
-      // document.addEventListener("touchstart", function() {
-      //   if (first) {
-      //     vm.$nextTick(function() {
-      //       if (this.currentTime) {
-      //         this.currentTime = this.timeFormat(this.$refs.audio.currentTime)
-      //           ? this.timeFormat(this.$refs.audio.currentTime)
-      //           : "00:00";
-      //         this.totalTime = this.timeFormat(this.$refs.audio.duration);
-      //       }
-      //     });
-      //     first = false;
-      //   }
-      // });
     },
     // 切换播放模式
     changeModel() {
@@ -192,11 +206,6 @@ export default {
     },
     // 切换歌曲
     changeMusic() {
-      // if(this.currentTime===0){
-      //   this.musicLoading = true
-      // }else{
-      //   this.musicLoading = false;
-      // }
       this.progress = 0;
       this.updateProgress();
       this.currentlyric = this.lyricResult[this.musicIndex]; //当前播放歌的歌词
@@ -209,8 +218,10 @@ export default {
     // 把每句歌词的样式清空
     restoreLyric() {
       let item = this.$refs.lyricItem;
-      for (var i = 0; i < item.length; i++) {
-        item[i].style.color = "";
+      if (item) {
+        for (var i = 0; i < item.length; i++) {
+          item[i].style.color = "";
+        }
       }
     },
     // 显示歌曲全部列表,调用列表通用组件
@@ -301,9 +312,11 @@ export default {
           // this.currentMusicTime.shift();
         }
         // 让整个ul上移
-        if (this.lyricIndex && this.$refs.lyricItem[this.lyricIndex]) {
+        if (this.lyricIndex != -1) {
           this.$refs.lyricItem[this.lyricIndex].style.color = "#61C5FA";
-          this.$refs.lyricItem[this.lyricIndex - 1].style.color = "white";
+          if (this.$refs.lyricItem[this.lyricIndex - 1]) {
+            this.$refs.lyricItem[this.lyricIndex - 1].style.color = "white";
+          }
         }
         // 根据歌词跳过的数目将整个ul上移
         if (this.lyricIndex <= 1) return;
@@ -388,12 +401,8 @@ export default {
 
 <style lang="scss">
 @import "@/assets/styles/global.scss";
-// 屏幕小于500px
 
-// // 屏幕大于768px
-// @media screen and (min-width: 769px) {
-
-// }
+// 屏幕大于1px小于500px的时候
 @media screen and (min-width: 100px) {
   .music-wrapper {
     width: 100%;
@@ -404,70 +413,88 @@ export default {
     .music-content {
       @include center;
       flex-direction: column;
-      .img-wrapper {
-        flex: 0 0 px2rem(260);
-        width: px2rem(260);
-        height: px2rem(260);
-        border-radius: 50%;
-        background-color: #272727;
-        margin: 0 0 px2rem(15) 0;
+      .content-bar {
         @include center;
         flex-direction: column;
-        position: relative;
-        img {
-          width: px2rem(200);
-          height: px2rem(200);
+        .img-wrapper {
+          flex: 0 0 px2rem(260);
+          width: px2rem(260);
+          height: px2rem(260);
           border-radius: 50%;
-        }
-        .icon-wrapper {
-          position: absolute;
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%, -50%);
-          width: px2rem(50);
-          height: px2rem(50);
+          background-color: #272727;
+          margin: 0 0 px2rem(15) 0;
           @include center;
-          border: 1px solid #fff;
-          border-radius: 50%;
-          .iconfont {
-            padding-left: px2rem(4);
-            color: #fff;
-            font-size: px2rem(30);
+          flex-direction: column;
+          position: relative;
+          img {
+            width: px2rem(200);
+            height: px2rem(200);
+            border-radius: 50%;
+            transition: all 1s linear;
+            &.action {
+              animation: Myrotate 60s infinite forwards;
+              animation-fill-mode: forwards;
+            }
+          }
+          @keyframes Myrotate {
+            0% {
+              transform: rotate(0deg);
+            }
+            100% {
+              transform: rotate(360deg);
+            }
+          }
+          .icon-wrapper {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: px2rem(50);
+            height: px2rem(50);
+            @include center;
+            border: 1px solid #fff;
+            border-radius: 50%;
+            .iconfont {
+              padding-left: px2rem(4);
+              color: #fff;
+              font-size: px2rem(30);
+            }
+          }
+        }
+        .lyric-wrapper {
+          width: 100%;
+          // height: px2rem(60);
+          height: 90px;
+          margin: 0 0 px2rem(15) 0;
+          position: relative;
+          left: 0;
+          top: 0;
+          overflow: hidden;
+          box-sizing: border-box;
+          .item-wrapper {
+            text-align: center;
+            height: 100%;
+            margin-top: -0px;
+            transition: all 0.2s linear;
+            .lyric-item {
+              padding: 5px 0;
+              list-style: none;
+              width: 100%;
+              // height: px2rem(20);
+              height: 20px;
+              // font-size: px2rem(14);
+              font-size: px2rem(16);
+              color: #fff;
+              // line-height: px2rem(20);
+              line-height: 30px;
+            }
+            &:prev-position {
+              margin-top: 0 !important;
+            }
           }
         }
       }
-      .lyric-wrapper {
-        width: 100%;
-        // height: px2rem(60);
-        height: 90px;
-        margin: 0 0 px2rem(15) 0;
-        position: relative;
-        left: 0;
-        top: 0;
-        overflow: hidden;
-        box-sizing: border-box;
-        .item-wrapper {
-          text-align: center;
-          height: 100%;
-          margin-top: -0px;
-          transition: all 0.2s linear;
-          .lyric-item {
-            padding: 5px 0;
-            list-style: none;
-            width: 100%;
-            // height: px2rem(20);
-            height: 20px;
-            // font-size: px2rem(14);
-            font-size: px2rem(16);
-            color: #fff;
-            // line-height: px2rem(20);
-            line-height: 30px;
-          }
-          &:prev-position {
-            margin-top: 0 !important;
-          }
-        }
-      }
+
       // 进度条
       .progress-wrapper {
         display: flex;
@@ -513,7 +540,7 @@ export default {
 
       .control-wrapper {
         position: relative;
-        flex: 0 0 px2rem(60);
+        flex: 0 0 20%;
         width: 100%;
         height: px2rem(60);
         display: flex;
@@ -554,7 +581,7 @@ export default {
           height: 100%;
           @include center;
           .iconfont {
-            font-size: px2rem(26);
+            font-size: px2rem(28);
           }
         }
         .audio {
@@ -597,7 +624,7 @@ export default {
     }
   }
 }
-// 屏幕大于501px小于768px
+// 屏幕大于501px的时候
 @media screen and (min-width: 501px) {
   .music-wrapper {
     .music-content {
@@ -614,6 +641,7 @@ export default {
         @include center;
         box-sizing: border-box;
         padding: 0 px2rem(50);
+        flex-direction: row;
         .img-wrapper {
           flex: 0 0 50%;
           width: px2rem(150);
@@ -650,7 +678,7 @@ export default {
         .progress-wrapper {
           order: 2;
           flex: 1;
-          margin-right: 10px;
+          margin: 0 px2rem(5);
           .prev-time {
             flex: 0 0 px2rem(35);
             width: px2rem(30);
@@ -671,40 +699,35 @@ export default {
         // 上下首歌
         .control-wrapper {
           order: 1;
-          width: px2rem(100);
+          width: 25%;
+          position: static;
           .play-wrapper {
             box-sizing: border-box;
-            .icon-shangxiashou- {
-              font-size: px2rem(24);
+            .iconfont {
+              font-size: 22px;
             }
             .icon-wrapper {
               margin: 0 15px;
-              .icon-normal {
-                font-size: px2rem(22);
-              }
-              .icon-zantingtingzhi {
-                font-size: px2rem(22);
-              }
-            }
-            .icon-shangxiashou-1 {
-              font-size: px2rem(24);
             }
           }
           // 切换模式
           .model {
             position: absolute;
-            right: 35px;
+            right: 10%;
             @include center;
+            width: 0;
+            height: 0;
             .iconfont {
               font-size: 18px;
             }
           }
           // 歌词列表
           .nameList-wrapper {
+            width: 0;
+            height: 0;
             position: absolute;
-            right: 10px;
+            right: 5%;
             @include center;
-            top: 50 px;
             .iconfont {
               font-size: 24px;
             }
@@ -712,14 +735,96 @@ export default {
         }
         .handle-wrapper {
           order: 3;
-          flex: 0 0 auto;
-          width: px2rem(120);
+          flex: 0 0 30%;
+          width: 30%;
           justify-content: flex-start;
+          padding-right: 10%;
+          box-sizing: border-box;
           .iconfont {
             font-size: 18px;
-            padding: 0 5px;
           }
         }
+      }
+    }
+  }
+}
+
+// 屏幕大于768px的时候
+@media screen and (min-width: 850px) {
+  .music-wrapper {
+    .music-content {
+      // 图片和歌词
+      .content-bar {
+        padding: 0 px2rem(100);
+        .img-wrapper {
+          width: px2rem(180);
+          height: px2rem(180);
+          img {
+            width: px2rem(180);
+            height: px2rem(180);
+          }
+        }
+        .lyric-wrapper {
+          height: px2rem(180);
+        }
+      }
+      // 底部控制条
+      .control-bar {
+        padding: 0 30px;
+        // 进度条
+        .progress-wrapper {
+          margin: 0 px2rem(10);
+        }
+      }
+    }
+  }
+}
+
+// 屏幕大于1000px的时候
+@media screen and (min-width: 1075px) {
+  .music-wrapper {
+    .music-content {
+      // 图片和歌词
+      .content-bar {
+        padding: 0 px2rem(140);
+        .img-wrapper {
+          img {
+            width: px2rem(200);
+            height: px2rem(200);
+          }
+        }
+        .lyric-wrapper {
+          height: px2rem(200);
+        }
+      }
+      // 底部控制条
+      .control-bar {
+        .control-wrapper {
+          .play-wrapper {
+            .iconfont {
+              font-size: 26px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// 屏幕大于1250px的时候
+@media screen and (min-width: 1250px) {
+  .music-content {
+    // 图片和歌词
+    .content-bar {
+      padding: 0 px2rem(180);
+      .img-wrapper {
+        img {
+          width: px2rem(240);
+          height: px2rem(240);
+        }
+      }
+      .lyric-wrapper {
+        height: px2rem(240);
       }
     }
   }

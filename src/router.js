@@ -7,7 +7,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/home'
+      redirect: '/blog'
     },
     {
       path: '/login',
@@ -24,5 +24,10 @@ export default new Router({
       name: 'home',
       component: ()=> import('./views/home/index.vue')
     },
+    {
+      path:'/blog',
+      name:'blog',
+      component:()=> import('./views/blog/index.vue')
+    }
   ]
 })
