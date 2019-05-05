@@ -71,7 +71,7 @@
         </div>
         <!-- 收藏 下载 分享 评论 -->
         <div class="handle-wrapper">
-          <i class="iconfont icon-aixin" @click="goto"></i>
+          <i class="iconfont icon-aixin"></i>
           <i class="iconfont icon-xiazai1"></i>
           <i class="iconfont icon-fenxiang1"></i>
           <i class="iconfont icon-pinglun2" @click="showComment"></i>
@@ -83,22 +83,21 @@
     <!-- 音乐蒙版 -->
     <div class="music-mask"></div>
     <div class="link-wrapper">
-      <ul class="link-list">
-        <li>
-          <i class="iconfont icon-shouye"></i>
-        </li>
-        <li>
-          <i class="iconfont icon-erji"></i>
-        </li>
-        <li>
-          <i class="iconfont icon-wenzhang1"></i>
-        </li>
-        <li>
-          <i class="iconfont icon-wenzhang1"></i>
-        </li>
-      </ul>
-      <div class="link-control">
-        <i class="iconfont icon-shunxubofang"></i>
+      <transition name="fade">
+        <ul class="link-list" v-show="listShow">
+          <li @click="goToBlog">
+            <i class="iconfont icon-shouye"></i>
+          </li>
+          <li @click="goToMusic">
+            <i class="iconfont icon-erji"></i>
+          </li>
+          <li @click="goToWrite">
+            <i class="iconfont icon-xiezi"></i>
+          </li>
+        </ul>
+      </transition>
+      <div class="link-control" @click="showList">
+        <i class="iconfont icon-zhiyin"></i>
       </div>
     </div>
   </div>
@@ -129,7 +128,9 @@ export default {
       model: false, //false为顺序播放,true为随机播放(默认是单曲循环,因为播放结束不跳下一首)
       musicLoading: false, //歌曲正在加载
       canAction: false, //图片可以旋转
-      deg: 0 //图片旋转的角度
+      deg: 0, //图片旋转的角度
+      listShow: false,
+      list: null //音乐组件
     };
   },
   watch: {
@@ -159,9 +160,21 @@ export default {
     }
   },
   methods: {
-    // 跳去博客页面
-    goto() {
+    // 去写博客
+    goToWrite() {
+      this.$router.push("/write");
+    },
+    // 去博客列表
+    goToBlog() {
       this.$router.push("/blog");
+    },
+    // 去听歌
+    goToMusic() {
+      this.$router.push("/home");
+    },
+    // 显示导航菜单
+    showList() {
+      this.listShow = !this.listShow;
     },
     // 查看评论
     showComment() {},
@@ -246,17 +259,17 @@ export default {
     // 显示歌曲全部列表,调用列表通用组件
     showMusicList() {
       let vm = this;
-      let list = this.$createList({
+      this.list = this.$createList({
         $props: {
           listdata: this.musicName
         }
       });
-      list.show();
-      list.$on("change", index => {
+      this.list.show();
+      this.list.$on("change", index => {
         this.musicIndex = index; //改变音乐
         this.changeMusic(); //切歌
         this.restoreLyric(); //重置歌词样式
-        list.hide(); //隐藏列表
+        this.list.hide(); //隐藏列表
       });
     },
     // 拖动进度条后根据进度progress更新唱歌的进度
@@ -413,7 +426,12 @@ export default {
         });
       });
   },
-  beforeDestroy() {}
+  beforeDestroy() {
+    if (this.list) {
+      console.log(this.list)
+      this.list.remove();
+    }
+  }
 };
 </script>
 
@@ -644,17 +662,31 @@ export default {
     }
     .link-wrapper {
       position: absolute;
-      right: px2rem(5);
-      bottom: px2rem(5);
+      right: 0;
+      bottom: 0;
       .link-control {
         @include center;
         line-height: 1em;
+        position: absolute;
+        right: px2rem(10);
+        bottom: px2rem(10);
         .iconfont {
-          font-size: px2rem(16);
+          font-size: px2rem(18);
         }
       }
       .link-list {
-        background: red;
+        background: transparent;
+        position: absolute;
+        right: px2rem(10);
+        bottom: px2rem(50);
+        // font-size: px2rem(18);
+        li {
+          padding: px2rem(5) 0;
+          font-size: px2rem(20);
+          .icon-shouye {
+            font-size: px2rem(22);
+          }
+        }
       }
     }
   }

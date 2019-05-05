@@ -35,3 +35,16 @@
 .menu-enter-active, .menu-leave-active{
   transition: all .2s linear;
 }
+
+// 列表菜单动画
+.list-up-enter, .list-list-up-leave-to{
+  opacity: 0;
+  transform: translate(0,100%);
+}
+.list-up-leave, .list-up-enter-to{
+  opacity: 1;
+  transform: translate(0,0);
+}
+.list-up-enter-active, .list-up-leave-active{
+  transition: all .2s linear;
+}

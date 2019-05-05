@@ -56,6 +56,7 @@ export default {
   padding: px2rem(20) px2rem(50);
   box-sizing: border-box;
   overflow: hidden;
+  margin-top: px2rem(50);
   .w-e-toolbar {
     width: 100%;
     display: -webkit-box; // 不正规属性

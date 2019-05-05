@@ -1,6 +1,6 @@
 <template>
   <div class="blog-wrapper">
-    <scroll :top="0" :bottom="50" @onScroll="onScroll" ref="scroll">
+    <scroll :top="0" :bottom="0" @onScroll="onScroll" ref="scroll">
       <div class="blog-content">
         <div class="word">好好学习 天天向上</div>
         <div class="blog-list">
@@ -10,7 +10,14 @@
               <!-- 文章内容 -->
               <div class="content">
                 <h2 class="title">1.第一篇</h2>
-                <p class="article">adawdawdadwadawdawdadwadawdawdadwadawdawdadwadawdawdadw</p>
+                <p class="article">
+                  adawdaellipsis2awdawdadwadawdawdadw
+                  adawdaellipsis2awdawdadwadawdawdadw
+                  adawdaellipsis2awdawdadwadawdawdadw
+                  adawdaellipsis2awdawdadwadawdawdadw
+                  adawdaellipsis2awdawdadwadawdawdadw
+                  adawdaellipsis2awdawdadwadawdawdadw
+                  </p>
               </div>
               <!-- 作者时间信息 -->
               <div class="author-info">
@@ -35,14 +42,20 @@
 <script>
 import scroll from "@/components/Common/scroll.vue";
 export default {
+  data() {
+    return {
+      width: 0
+    };
+  },
+  watch: {},
   components: {
     scroll
   },
   methods: {
     onScroll(val) {},
     // 跳去文章详情页
-    goTodetail(id){
-      this.$router.push({name:'detail',params:{id:id}})
+    goTodetail(id) {
+      this.$router.push({ name: "detail", params: { id: id } });
     }
   }
 };
@@ -55,10 +68,9 @@ export default {
   width: 100%;
   height: 100%;
   margin-top: 0;
-  padding: 0 0 px2rem(20) 0;
   .scroll-wrapper {
     .blog-content {
-      padding: px2rem(20)  px2rem(35) px2rem(30) px2rem(35);
+      padding: px2rem(20) px2rem(35) px2rem(30) px2rem(35);
       box-sizing: border-box;
       background-color: #f0f3f4;
       .word {
@@ -120,7 +132,6 @@ export default {
               .author {
                 float: left;
                 margin-right: px2rem(10);
-                height: 100%;
                 span {
                   margin-left: px2rem(5);
                   vertical-align: 1px;

@@ -1,6 +1,6 @@
 <template>
   <transition name="menu">
-    <div class="menu-wrapper" v-if="canshow">
+    <div class="menu-wrapper">
       <div class="menu">
         <!-- 作者信息 -->
         <div class="auth">
@@ -33,7 +33,6 @@
           </ul>
         </div>
       </div>
-      <div class="mask" @click="hide"></div>
     </div>
   </transition>
 </template>
@@ -47,14 +46,6 @@ export default {
       canshow: false,
       width: 0
     };
-  },
-  watch: {
-  },
-  props: {
-    list: {
-      type: Array,
-      default: () => []
-    }
   },
   methods: {
     // 去写博客
@@ -77,16 +68,7 @@ export default {
       setTimeout(() => {
         this.$router.push("/home");
       }, 0);
-    },
-    show() {
-      this.canshow = !this.canshow;
-    },
-    hide() {
-      this.canshow = false;
     }
-  },
-  mounted() {
-    this.width = window.innerWidth;
   }
 };
 </script>
@@ -164,11 +146,6 @@ export default {
         }
       }
     }
-  }
-  .mask {
-    background-color: transparent;
-    width: 25%;
-    flex: 0 0 25%;
   }
 }
 </style>

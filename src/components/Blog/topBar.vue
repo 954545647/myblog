@@ -13,7 +13,7 @@
 export default {
   data() {
     return {
-      menu: "" //菜单组件
+      menu: null //菜单组件
     };
   },
   methods: {
@@ -24,6 +24,11 @@ export default {
         }
       });
       this.menu.show();
+    }
+  },
+  beforeDestroy() {
+    if (this.menu) {
+      this.menu.remove();
     }
   }
 };
@@ -38,6 +43,10 @@ export default {
   box-sizing: border-box;
   color: white;
   background: #f05050;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
   .left {
     width: 20%;
     float: left;
