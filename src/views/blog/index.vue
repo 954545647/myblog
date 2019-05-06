@@ -35,10 +35,18 @@ export default {
     height: 100%;
     .blog-wrapper {
       .blog {
+        height: 100%;
         background-image: url("./../../assets/6.jpg");
         background-size: cover;
         background-repeat: no-repeat;
         min-width: 260px;
+          border-radius: 10px 10px 0 0!important;
+        .content-img {
+          border-radius: 10px 10px 0 0!important;
+          display: block;
+          width: 100%;
+          height: 100%;
+        }
         .content-wrapper {
           .content {
             .article {
@@ -69,6 +77,10 @@ export default {
   .index-wrapper {
     .blog-wrapper {
       .blog {
+        background-image: url("./../../assets/6.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        min-width: 260px;
         .content-wrapper {
           .content {
             .article {
@@ -140,6 +152,9 @@ export default {
             box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
             background-color: rgba(255, 255, 255, 0.9);
             transition: all 0.2s linear;
+            .content-img {
+              display: none;
+            }
             &:hover {
               box-shadow: 1px 1px 5px 5px rgba(0, 0, 0, 0.3);
               background-color: #edf1f2;
@@ -154,6 +169,7 @@ export default {
               top: 0;
               box-sizing: border-box;
               transition: all 0.2s linear;
+
               &:hover {
                 .content .title {
                   top: -80px;

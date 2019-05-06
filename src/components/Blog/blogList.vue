@@ -4,6 +4,7 @@
       <div class="word">好好学习 天天向上</div>
       <div class="blog-list">
         <div class="blog" v-for="(item,index) in 4" :key="index" @click="goTodetail(index)">
+          <img src="./../../assets/6.jpg" alt="" class="content-img">
           <div class="content-wrapper">
             <!-- 文章内容 -->
             <div class="content">
@@ -87,7 +88,7 @@ export default {
         &:last-child {
           margin-bottom: px2rem(0);
         }
-        img {
+        .content-img {
           flex: 0 0 px2rem(100);
           border-radius: 10px 10px 0 0;
           width: 100%;
@@ -96,7 +97,7 @@ export default {
         .content-wrapper {
           width: 100%;
           height: 100%;
-          border-radius: 0 0 10px 10px;
+          // border-radius: 0 0 10px 10px;
           background-color: #fff;
           padding: px2rem(15);
           box-sizing: border-box;
