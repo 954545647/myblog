@@ -33,6 +33,21 @@ export default {
     width: 100%;
     background-color: #f0f3f4;
     height: 100%;
+    .blog-wrapper {
+      .blog {
+        min-width: 260px;
+        img {
+          max-height: 200px;
+        }
+        .content-wrapper {
+          .content {
+            .article {
+              @include ellipsis2(2);
+            }
+          }
+        }
+      }
+    }
     .topbar-wrapper {
       height: px2rem(50);
     }
@@ -52,6 +67,20 @@ export default {
 // 隐藏左右两侧栏目,头部导航栏宽度为200,隐藏搜索栏
 @media screen and (min-width: 501px) {
   .index-wrapper {
+    .blog-wrapper {
+      .blog {
+        img {
+          max-height: 200px;
+        }
+        .content-wrapper {
+          .content {
+            .article {
+              @include ellipsis2(3);
+            }
+          }
+        }
+      }
+    }
     .topbar-wrapper {
       height: 50px;
       width: 100%;
@@ -101,6 +130,9 @@ export default {
     .blog-wrapper {
       .blog-content {
         .blog-list {
+          max-width: 800px;
+          margin-left: auto;
+          margin-right: auto;
           .blog {
             border-radius: 10px;
             height: 300px;
