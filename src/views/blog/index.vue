@@ -145,6 +145,7 @@ export default {
             transition: all 0.2s linear;
             &:hover {
               box-shadow: 1px 1px 5px 5px rgba(0, 0, 0, 0.3);
+              background-color: #000;
               img {
                 transform: scale(1.1);
                 filter: blur(2px);

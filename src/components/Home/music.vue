@@ -668,7 +668,7 @@ export default {
         line-height: 1em;
         position: absolute;
         right: px2rem(10);
-        bottom: px2rem(10);
+        bottom: px2rem(5);
         .iconfont {
           font-size: px2rem(18);
         }
@@ -677,7 +677,7 @@ export default {
         background: transparent;
         position: absolute;
         right: px2rem(10);
-        bottom: px2rem(50);
+        bottom: px2rem(40);
         // font-size: px2rem(18);
         li {
           padding: px2rem(5) 0;
@@ -808,6 +808,44 @@ export default {
           box-sizing: border-box;
           .iconfont {
             font-size: 18px;
+          }
+        }
+      }
+    }
+    .link-wrapper {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 50px;
+      height: 50px;
+      .link-control {
+        @include center;
+        line-height: 1em;
+        position: absolute;
+        right: px2rem(10);
+        top: px2rem(10);
+        .iconfont {
+          font-size: px2rem(18);
+        }
+      }
+      .link-list {
+        background: transparent;
+        position: absolute;
+        right: px2rem(10);
+        top: px2rem(30);
+        &:first-child{
+          padding-top: 0;
+        }
+        li {
+          padding: px2rem(5) 0;
+          .icon-shouye {
+            font-size: px2rem(20);
+          }
+          .icon-erji {
+            font-size: px2rem(18);
+          }
+          .icon-xiezi {
+            font-size: px2rem(18);
           }
         }
       }
