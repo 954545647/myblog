@@ -1,6 +1,7 @@
 <template>
   <div class="detail-wrapper" @click="goBack">
     <top-bar></top-bar>
+    <menu-bar-big class="menu-bar-big"></menu-bar-big>
     <my-article></my-article>
   </div>
 </template>
@@ -9,11 +10,13 @@
 import MyArticle from "@/components/Common/article.vue";
 import TopBar from "@/components/Blog/topBar.vue";
 import scroll from "@/components/Common/scroll.vue";
+import MenuBarBig from "@/components/Blog/menuBar1.vue";
 export default {
   components: {
     MyArticle,
     scroll,
-    TopBar
+    TopBar,
+    MenuBarBig
   },
   methods: {
     goBack() {}

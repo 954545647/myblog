@@ -4,7 +4,7 @@ Vue.use(CreateAPI);
 
 import Toast from "@/components/Common/toast.vue";
 import List from "@/components/Common/list.vue";
-import MenuBar from "@/components/Common/menuBar.vue";
+import MenuBar from "@/components/Blog/menuBar.vue";
 // 第一个参数是组件的名称
 Vue.createAPI(Toast, true);
 Vue.createAPI(List, true);

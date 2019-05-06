@@ -1,6 +1,6 @@
 <template>
   <transition name="menu">
-    <div class="menu-wrapper" v-if="canshow">
+    <div class="menu-bar-big">
       <div class="menu">
         <!-- 作者信息 -->
         <div class="auth">
@@ -14,10 +14,6 @@
         <div class="navigation">
           <ul class="list">
             <li class="list-title">导航</li>
-            <!-- <li @click="goToBlog">
-              <i class="iconfont icon-shouye"></i>
-              <span>首页</span>
-            </li>-->
             <li @click="goToBlog">
               <i class="iconfont icon-wenzhang1"></i>
               <span>文章</span>
@@ -33,7 +29,6 @@
           </ul>
         </div>
       </div>
-      <div class="mask" @click="hide"></div>
     </div>
   </transition>
 </template>
@@ -47,14 +42,6 @@ export default {
       canshow: false,
       width: 0
     };
-  },
-  watch: {
-  },
-  props: {
-    list: {
-      type: Array,
-      default: () => []
-    }
   },
   methods: {
     // 去写博客
@@ -77,16 +64,7 @@ export default {
       setTimeout(() => {
         this.$router.push("/home");
       }, 0);
-    },
-    show() {
-      this.canshow = !this.canshow;
-    },
-    hide() {
-      this.canshow = false;
     }
-  },
-  mounted() {
-    this.width = window.innerWidth;
   }
 };
 </script>
@@ -94,11 +72,11 @@ export default {
 
 <style lang="scss">
 @import "@/assets/styles/global.scss";
-.menu-wrapper {
+.menu-bar-big {
   position: fixed;
   z-index: 1000;
   left: 0;
-  top: px2rem(50);
+  top: 50px;
   bottom: 0;
   width: 100%;
   height: 100%;
@@ -111,64 +89,61 @@ export default {
     background-color: #3a3f51;
     .auth {
       width: 100%;
-      height: 35%;
+      height: 40%;
       display: flex;
       @include center;
       box-sizing: border-box;
       flex-direction: column;
+      border-bottom: 1px solid #2e3344;
       .author-cover {
         width: 100%;
         display: flex;
         justify-content: center;
         align-items: flex-start;
-        padding: 0 0 px2rem(15) 0;
+        padding: 0 0 15px 0;
         img {
           border-radius: 50%;
-          width: px2rem(120);
-          height: px2rem(120);
+          width: 150px;
+          height: 150px;
         }
       }
       .name {
         color: rgb(234, 235, 237);
-        font-size: px2rem(16);
-        margin-bottom: px2rem(10);
+        font-size: 16px;
+        margin-bottom: 10px;
       }
       .brief {
         color: rgb(139, 142, 153);
-        font-size: px2rem(14);
+        font-size: 14px;
       }
     }
     .navigation {
       flex: 0 0 60%;
-      padding: px2rem(10) px2rem(10) 0 px2rem(10);
+      padding: 10px 10px 0 10px;
       .list {
         list-style: none;
         color: rgb(180, 182, 189);
-        font-size: px2rem(16);
+        font-size: 16px;
         .list-title {
-          font-size: px2rem(14);
+          font-size: 14px;
         }
         li {
-          height: px2rem(40);
-          line-height: px2rem(40);
-          box-sizing: border-box;
+          display: flex;
+          justify-content: flex-start;
+          height: 40px;
+          line-height: 40px;
           .iconfont {
-            font-size: px2rem(16);
-            padding: 0 px2rem(20) 0 px2rem(10);
+            font-size: 16px;
+            padding: 0 20px 0 10px;
           }
           .icon-shouye {
-            font-size: px2rem(22);
+            font-size: 22px;
             vertical-align: -2px;
-            padding: 0 px2rem(14) 0 px2rem(8);
+            padding: 0 14px 0 8px;
           }
         }
       }
     }
-  }
-  .mask {
-    background-color: transparent;
-    width: 25%;
-    flex: 0 0 25%;
   }
 }
 </style>

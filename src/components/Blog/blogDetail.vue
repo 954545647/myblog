@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <top-bar></top-bar>
+  <div class="detail-wrapper">
+    <top-bar ref="topbar"></top-bar>
     {{$route.params.id}}
   </div>
 </template>
@@ -11,7 +11,10 @@ import TopBar from "@/components/Blog/topBar.vue";
 
 export default {
   components:{
-    TopBar
+    TopBar,
+  },
+  beforeDestroy(){
+    console.log(this.$refs.topbar)
   }
 }
 </script>

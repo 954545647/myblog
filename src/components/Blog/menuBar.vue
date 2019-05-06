@@ -1,6 +1,6 @@
 <template>
   <transition name="menu">
-    <div class="menu-wrapper">
+    <div class="menu-bar-samll" v-if="canshow">
       <div class="menu">
         <!-- 作者信息 -->
         <div class="auth">
@@ -33,6 +33,7 @@
           </ul>
         </div>
       </div>
+      <div class="mask" @click="hide"></div>
     </div>
   </transition>
 </template>
@@ -46,6 +47,14 @@ export default {
       canshow: false,
       width: 0
     };
+  },
+  watch: {
+  },
+  props: {
+    list: {
+      type: Array,
+      default: () => []
+    }
   },
   methods: {
     // 去写博客
@@ -68,7 +77,16 @@ export default {
       setTimeout(() => {
         this.$router.push("/home");
       }, 0);
+    },
+    show() {
+      this.canshow = !this.canshow;
+    },
+    hide() {
+      this.canshow = false;
     }
+  },
+  mounted() {
+    this.width = window.innerWidth;
   }
 };
 </script>
@@ -76,11 +94,11 @@ export default {
 
 <style lang="scss">
 @import "@/assets/styles/global.scss";
-.menu-wrapper {
+.menu-bar-samll {
   position: fixed;
   z-index: 1000;
   left: 0;
-  top: px2rem(50);
+  top: 50px;
   bottom: 0;
   width: 100%;
   height: 100%;
@@ -146,6 +164,11 @@ export default {
         }
       }
     }
+  }
+  .mask {
+    background-color: transparent;
+    width: 25%;
+    flex: 0 0 25%;
   }
 }
 </style>

@@ -117,8 +117,8 @@ export default {
       playStatus: 0, //播放状态 0:未播放 1:正在播放 2:暂停中
       imgCover: [], // 当前音乐封面
       progress: 0, // 音乐播放进度
-      currentTime: 0, //歌曲当前时间
-      totalTime: 0, //歌曲总时长
+      currentTime: null, //歌曲当前时间
+      totalTime: null, //歌曲总时长
       lyricIndex: -1, //高亮的歌词
       currentlyric: [], //当前歌曲的歌词
       currentMusicTime: [], //当前歌曲的时间
@@ -428,7 +428,6 @@ export default {
   },
   beforeDestroy() {
     if (this.list) {
-      console.log(this.list)
       this.list.remove();
     }
   }

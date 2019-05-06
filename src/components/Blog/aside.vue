@@ -17,11 +17,12 @@ export default {
 .aside-wrapper{
   position: fixed;
   right: 0;
-  top: px2rem(50);
+  top: 50px;
   width: 200px;
   height: 100%;
   bottom: 0;
-  background-color: red;
+  background-color: white;
+  opacity: .5;
   .aside{
     width: 100%;
     height: 100%;
