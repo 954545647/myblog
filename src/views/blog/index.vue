@@ -35,10 +35,10 @@ export default {
     height: 100%;
     .blog-wrapper {
       .blog {
+        background-image: url("./../../assets/6.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
         min-width: 260px;
-        img {
-          max-height: 200px;
-        }
         .content-wrapper {
           .content {
             .article {
@@ -69,9 +69,6 @@ export default {
   .index-wrapper {
     .blog-wrapper {
       .blog {
-        img {
-          max-height: 200px;
-        }
         .content-wrapper {
           .content {
             .article {
@@ -145,15 +142,8 @@ export default {
             transition: all 0.2s linear;
             &:hover {
               box-shadow: 1px 1px 5px 5px rgba(0, 0, 0, 0.3);
-              background-color: #000;
-              img {
-                transform: scale(1.1);
-                filter: blur(2px);
-              }
-            }
-            // 图片
-            img {
-              opacity: 0.5;
+              background-color: #edf1f2;
+              transform: scale(1.05);
             }
             // 内容
             .content-wrapper {

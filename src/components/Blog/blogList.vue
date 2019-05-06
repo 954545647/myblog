@@ -4,7 +4,6 @@
       <div class="word">好好学习 天天向上</div>
       <div class="blog-list">
         <div class="blog" v-for="(item,index) in 4" :key="index" @click="goTodetail(index)">
-          <img src="./../../assets/6.jpg" alt>
           <div class="content-wrapper">
             <!-- 文章内容 -->
             <div class="content">
