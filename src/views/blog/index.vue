@@ -50,6 +50,7 @@ export default {
         .content-wrapper {
           .content {
             .article {
+              line-height: 1em;
               @include ellipsis2(2);
             }
           }

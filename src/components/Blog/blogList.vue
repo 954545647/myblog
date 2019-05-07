@@ -10,12 +10,8 @@
             <div class="content">
               <h2 class="title">1.第一篇</h2>
               <p class="article">
-                adawdaellipsis2awdawdadwadawdawdadw
-                adawdaellipsis2awdawdadwadawdawdadw
-                adawdaellipsis2awdawdadwadawdawdadw
-                adawdaellipsis2awdawdadwadawdawdadw
-                adawdaellipsis2awdawdadwadawdawdadw
-                adawdaellipsis2awdawdadwadawdawdadw
+                wadaw你好吗哈哈
+                5dwadwadaw打我晚点
               </p>
             </div>
             <!-- 作者时间信息 -->

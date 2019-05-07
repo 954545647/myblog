@@ -53,14 +53,14 @@ export default {
 @media screen and (min-width: 10px) {
   #app .topbar-wrapper {
     width: 100%;
-    height: 50px;
+    height: px2rem(50);
     box-sizing: border-box;
     color: white;
     background: #f05050;
     position: fixed;
     left: 0;
     top: 0;
-    z-index: 100;
+    z-index: 1000;
     .left {
       width: 20%;
       float: left;

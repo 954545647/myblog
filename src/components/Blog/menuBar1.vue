@@ -1,5 +1,4 @@
 <template>
-  <transition name="menu">
     <div class="menu-bar-big">
       <div class="menu">
         <!-- 作者信息 -->
@@ -30,7 +29,6 @@
         </div>
       </div>
     </div>
-  </transition>
 </template>
 
 
@@ -74,9 +72,9 @@ export default {
 @import "@/assets/styles/global.scss";
 .menu-bar-big {
   position: fixed;
-  z-index: 1000;
+  z-index: 100;
   left: 0;
-  top: 50px;
+  top: 0;
   bottom: 0;
   width: 100%;
   height: 100%;
@@ -87,6 +85,7 @@ export default {
     height: 100%;
     flex: 0 0 75%;
     background-color: #3a3f51;
+    padding-top: 50px;
     .auth {
       width: 100%;
       height: 40%;
