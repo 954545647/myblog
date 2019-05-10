@@ -3,7 +3,7 @@
     <top-bar></top-bar>
     <menu-bar-small></menu-bar-small>
     <menu-bar-big></menu-bar-big>
-    <my-article></my-article>
+    <my-article class="my-article"></my-article>
   </div>
 </template>
 
@@ -29,11 +29,15 @@ export default {
 <style lang="scss">
 @import "@/assets/styles/global.scss";
 @media screen and (min-width: 100px) {
+  .menu-bar-samll {
+    top: px2rem(50);
+  }
   .detail-wrapper {
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
+    height: 100%;
     .menu-bar-big {
       display: none;
       .menu {
@@ -41,6 +45,7 @@ export default {
         flex: 0 0 100%;
       }
     }
+
   }
 }
 

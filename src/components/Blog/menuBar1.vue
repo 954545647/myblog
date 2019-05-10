@@ -72,7 +72,7 @@ export default {
 @import "@/assets/styles/global.scss";
 .menu-bar-big {
   position: fixed;
-  z-index: 100;
+  z-index: 1000;
   left: 0;
   top: 0;
   bottom: 0;
