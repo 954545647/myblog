@@ -1,5 +1,6 @@
 <template>
   <div class="music-wrapper">
+    <!-- 音乐 -->
     <div class="music-content">
       <div class="content-bar">
         <!-- 图片 -->
@@ -82,6 +83,7 @@
     <div class="music-background" ref="background" :style="{backgroundImage: `url(${imgCover})` }"></div>
     <!-- 音乐蒙版 -->
     <div class="music-mask"></div>
+    <!-- 路由菜单 -->
     <div class="link-wrapper">
       <transition name="fade">
         <ul class="link-list" v-show="listShow">
@@ -100,8 +102,21 @@
         <i class="iconfont icon-zhiyin"></i>
       </div>
     </div>
+    <!-- 过渡效果 -->
+    <!-- <transition name="fade">
+      <div class="loading-wrapper" ref="loading">
+        <div class="loading">
+          <i></i>
+          <i></i>
+          <i></i>
+          <i></i>
+          <i></i>
+        </div>
+      </div>
+    </transition> -->
   </div>
 </template>
+
 <script>
 export default {
   data() {
@@ -382,7 +397,14 @@ export default {
     }
   },
   mounted() {
+    // let loading = document.getElementsByClassName("loading-wrapper");
+    // document.addEventListener("readystatechange", function() {
+    //   if (document.readyState == "complete") {
+    //     loading[0].style.display = "none";
+    //   }
+    // });
     this.musicIndex = new Date().getDay(); //根据周几来播放歌曲
+    console.log(this.musicIndex)
     this.updateProgress(); //更新初步样式 progress此时为0
     // 监听微信加载完毕
     document.addEventListener("WeixinJSBridgeReady", function() {});
@@ -391,6 +413,7 @@ export default {
       .get(`${process.env.VUE_APP_MUSIC_URL}/home/music`)
       .then(res => {
         this.musicList = res.data.result.musicList; //音乐数据列表
+        console.log(this.musicList)
         // 音乐MP3链接
         this.musicList.map((item, index) => {
           return this.musicUrlList.push(item.url);
@@ -411,6 +434,7 @@ export default {
             }
           })
           .then(res => {
+            console.log(res.data)
             this.lyricResult = res.data.lyricResult; //所有歌的歌词集合
             this.timeResult = res.data.timesResult; //所有歌的时间戳的集合
             this.currentlyric = this.lyricResult[this.musicIndex]; //当前播放歌的歌词
@@ -688,6 +712,79 @@ export default {
         }
       }
     }
+    .loading-wrapper {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      z-index: 1000;
+      .loading {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 100px;
+        height: 100px;
+        text-align: center;
+        border: 1px solid red;
+        display: flex;
+        align-items: center;
+        i {
+          width: 16px;
+          height: 50px;
+          float: left;
+          display: block;
+          background-color: #399;
+          margin: 0 2px;
+          -webkit-animation: loading 1.2s infinite;
+          animation: loading 1.2s infinite;
+          &:nth-child(2) {
+            -webkit-animation-delay: 0.1s;
+            animation-delay: 0.1s;
+          }
+          &:nth-child(3) {
+            -webkit-animation-delay: 0.2s;
+            animation-delay: 0.2s;
+          }
+          &:nth-child(4) {
+            -webkit-animation-delay: 0.3s;
+            animation-delay: 0.3s;
+          }
+          &:nth-child(5) {
+            -webkit-animation-delay: 0.4s;
+            animation-delay: 0.4s;
+          }
+        }
+        @-webkit-keyframes loading {
+          0%,
+          40%,
+          100% {
+            -webkit-transform: scaleY(0.4);
+            transform: scaleY(0.4);
+          }
+          20% {
+            -webkit-transform: scaleY(1);
+            transform: scaleY(1);
+          }
+        }
+        @keyframes loading {
+          0%,
+          40%,
+          100% {
+            -webkit-transform: scaleY(0.4);
+            transform: scaleY(0.4);
+          }
+          20% {
+            -webkit-transform: scaleY(1);
+            transform: scaleY(1);
+          }
+        }
+      }
+    }
   }
 }
 // 屏幕大于501px的时候
@@ -833,7 +930,7 @@ export default {
         position: absolute;
         right: px2rem(10);
         top: px2rem(30);
-        &:first-child{
+        &:first-child {
           padding-top: 0;
         }
         li {

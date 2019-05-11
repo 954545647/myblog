@@ -76,7 +76,7 @@
             <div class="youxiang">
               <span class="iconfont icon-youxiang1"></span>
             </div>
-            <div class="youke">
+            <div class="youke" @click="youkeLogin">
               <span class="iconfont icon-youke"></span>
             </div>
           </div>
@@ -131,6 +131,10 @@ export default {
     };
   },
   methods: {
+    // 游客免密登录
+    youkeLogin(){
+      this.router.push('/blog');
+    },
     // 跳转到注册页面
     goToRegister() {
       this.router.push("/register");

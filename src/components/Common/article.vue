@@ -73,6 +73,7 @@ export default {
       // 第一步.将图片上传到服务器.
       var formData = new FormData();
       formData.append("file", $file);
+      console.log(`${process.env.VUE_APP_BASE_URL}/blog/upload`)
       this.$axios({
         url: `${process.env.VUE_APP_BASE_URL}/blog/upload`,
         method: "post",
@@ -85,6 +86,7 @@ export default {
          * 1. 通过引入对象获取: `import {mavonEditor} from ...` 等方式引入后，`$vm`为`mavonEditor`
          * 2. 通过$refs获取: html声明ref : `<mavon-editor ref=md ></mavon-editor>，`$vm`为 `this.$refs.md`
          */
+        console.log(url)
         this.$refs.md.$img2Url(pos, url.data.url);
       });
     },
@@ -93,10 +95,8 @@ export default {
     }
   },
   mounted() {
-    console.log(666);
   },
   beforeDestroy() {
-    console.log("done");
   }
 };
 </script>

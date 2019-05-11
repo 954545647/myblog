@@ -45,10 +45,13 @@ export default {
         flex: 0 0 100%;
       }
     }
-
   }
 }
-
+@media screen and (min-width: 501px) {
+  .menu-bar-samll {
+    top: 50px;
+  }
+}
 @media screen and (min-width: 765px) {
   .detail-wrapper {
     padding-left: 200px;
