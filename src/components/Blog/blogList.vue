@@ -3,12 +3,17 @@
     <div class="blog-content">
       <div class="word">好好学习 天天向上</div>
       <div class="blog-list">
-        <div class="blog" v-for="(item,index) in 4" :key="index" @click="goTodetail(index)">
-          <img src="./../../assets/6.jpg" alt="" class="content-img">
+        <div
+          class="blog"
+          v-for="(item,index) in blogData"
+          :key="index"
+          @click="goTodetail(index,item.HtmlContent,item.OriginalContent)"
+        >
+          <img src="./../../assets/6.jpg" alt class="content-img">
           <div class="content-wrapper">
             <!-- 文章内容 -->
             <div class="content">
-              <h2 class="title">1.第一篇</h2>
+              <h2 class="title">{{index}}</h2>
               <p class="article">
                 wadaw你好吗哈哈
                 5dwadwadaw打我晚点
@@ -18,11 +23,11 @@
             <div class="author-info">
               <div class="author">
                 <i class="iconfont icon-zuozhe"></i>
-                <span>rex</span>
+                <span>{{item.author}}</span>
               </div>
               <div class="createtime">
                 <i class="iconfont icon-shijian"></i>
-                <span>2019年05月04日</span>
+                <span>{{item.data}}</span>
               </div>
             </div>
           </div>
@@ -38,7 +43,8 @@ import scroll from "@/components/Common/scroll.vue";
 export default {
   data() {
     return {
-      width: 0
+      width: 0,
+      blogData: []
     };
   },
   watch: {},
@@ -48,9 +54,28 @@ export default {
   methods: {
     onScroll(val) {},
     // 跳去文章详情页
-    goTodetail(id) {
-      this.$router.push({ name: "detail", params: { id: id } });
+    goTodetail(id, HtmlContent,OriginalContent) {
+      this.$router.push({
+        name: "detail",
+        params: {
+          id,
+          HtmlContent,
+          OriginalContent
+        }
+      });
     }
+  },
+  mounted() {
+    this.$axios
+      .get(`${process.env.VUE_APP_BASE_URL}/blog/getBlog`, {
+        params: {
+          keyword: ""
+        }
+      })
+      .then(res => {
+        console.log(res);
+        this.blogData = res.data.blog;
+      });
   }
 };
 </script>

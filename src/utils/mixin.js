@@ -2,9 +2,9 @@ import {mapGetters,mapActions} from 'vuex';
 
 export const blogMixin = {
   computed: {
-    ...mapGetters(['blogpageWidth'])
+    ...mapGetters(['blogpageWidth','preLoadImages'])
   },
   methods: {
-    ...mapActions(['setBlogPageWidth'])
+    ...mapActions(['setBlogPageWidth','setPreLoadImages'])
   },
 }

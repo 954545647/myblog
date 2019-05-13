@@ -57,7 +57,8 @@ export default {
         /* 2.2.1 */
         subfield: true, // 单双栏模式
         preview: true // 预览
-      }
+      },
+      imgList:[]
     };
   },
   watch: {},
@@ -65,15 +66,22 @@ export default {
     // ctrl+s 和点击保存触发
     // value是我们输入的原字符串,render是解析出来的html代码
     save(value, render) {
-      console.log(value);
-      console.log(render);
+      // 发起请求,把数据传到后端并保存到数据库
+      this.$axios
+        .post(`${process.env.VUE_APP_BASE_URL}/blog/saveBlog`, {
+          value,
+          render
+        })
+        .then(res => {
+          console.log(res);
+        });
     },
     // 绑定@imgAdd event
     $imgAdd(pos, $file) {
       // 第一步.将图片上传到服务器.
       var formData = new FormData();
       formData.append("file", $file);
-      console.log(`${process.env.VUE_APP_BASE_URL}/blog/upload`)
+      console.log(`${process.env.VUE_APP_BASE_URL}/blog/upload`);
       this.$axios({
         url: `${process.env.VUE_APP_BASE_URL}/blog/upload`,
         method: "post",
@@ -86,7 +94,7 @@ export default {
          * 1. 通过引入对象获取: `import {mavonEditor} from ...` 等方式引入后，`$vm`为`mavonEditor`
          * 2. 通过$refs获取: html声明ref : `<mavon-editor ref=md ></mavon-editor>，`$vm`为 `this.$refs.md`
          */
-        console.log(url)
+        console.log(url);
         this.$refs.md.$img2Url(pos, url.data.url);
       });
     },
@@ -96,15 +104,14 @@ export default {
   },
   mounted() {
   },
-  beforeDestroy() {
-  }
+  beforeDestroy() {}
 };
 </script>
 
 
 <style lang="scss">
 @import "@/assets/styles/global.scss";
-@media screen and (min-width: 100px){
+@media screen and (min-width: 100px) {
   .article-wrapper {
     width: 100%;
     background-color: #fff;
@@ -155,6 +162,20 @@ export default {
             transform: translate(0, -50%);
             margin-right: px2rem(1);
           }
+          .fa-mavon-header {
+            @include center;
+            flex-direction: column;
+            .op-header {
+              left: 0 !important;
+            }
+          }
+          .fa-mavon-picture-o {
+            @include center;
+            flex-direction: column;
+            .popup-dropdown {
+              left: 0 !important;
+            }
+          }
         }
         // 右侧控制条
         .v-right-item {
@@ -176,9 +197,9 @@ export default {
         }
       }
     }
-    .fullscreen{
-      width: 100%!important;
-      height: 100%!important;
+    .fullscreen {
+      width: 100% !important;
+      height: 100% !important;
     }
   }
 }

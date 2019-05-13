@@ -8,24 +8,20 @@
   </head>
   <body>
     <script>
-      var arr = [1, 4, 3, 2, 5, 6];
-      for (var i = 0; i < arr.length; i++) {
-        if (arr[i] % 2 === 0) {
-          arr.push(arr.splice(i, 1)[0]);
+      var images = new Array();
+      function preload(arr) {
+        for (var i = 0; i < arr.length; i++) {
+          images[i] = new Image();
+          images[i].src =arr[i];
         }
       }
-
-      var str = "davdavdwadawfwfb";
-      for (var i = 0; i < str.length; i++) {
-        let first = str.slice(i + 1); //后面的
-        let end = str.slice(0, i); //前面的
-        if (first.indexOf(str[i]) == -1 && end.indexOf(str[i]) == -1) {
-          console.log(str[i]);
-        } else {
-          continue;
-        }
-      }
-      console.log(document.compatMode)
+      preload(
+        ["https://t11.baidu.com/it/u=1796938090,3667909335&fm=76",
+        "https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=252143353,1804510195&fm=85&app=52&f=JPEG?w=121&h=75&s=4AAC3C62099B4CC848DDD0C3000080B1",
+        "https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=2316774048,1306281408&fm=58"]
+      );
+      console.log(images);
+      window.onload
       /*
         性能优化:
         1. 文件体积压缩,可以对html文件,css文件,js文件进行压缩,

@@ -404,7 +404,6 @@ export default {
     //   }
     // });
     this.musicIndex = new Date().getDay(); //根据周几来播放歌曲
-    console.log(this.musicIndex)
     this.updateProgress(); //更新初步样式 progress此时为0
     // 监听微信加载完毕
     document.addEventListener("WeixinJSBridgeReady", function() {});
@@ -413,7 +412,6 @@ export default {
       .get(`${process.env.VUE_APP_MUSIC_URL}/home/music`)
       .then(res => {
         this.musicList = res.data.result.musicList; //音乐数据列表
-        console.log(this.musicList)
         // 音乐MP3链接
         this.musicList.map((item, index) => {
           return this.musicUrlList.push(item.url);
@@ -434,7 +432,6 @@ export default {
             }
           })
           .then(res => {
-            console.log(res.data)
             this.lyricResult = res.data.lyricResult; //所有歌的歌词集合
             this.timeResult = res.data.timesResult; //所有歌的时间戳的集合
             this.currentlyric = this.lyricResult[this.musicIndex]; //当前播放歌的歌词

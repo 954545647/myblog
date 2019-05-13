@@ -65,14 +65,17 @@ export default {
       width: 20%;
       float: left;
       height: 100%;
+      @include center;
+      position: absolute;
       .iconfont {
         font-size: px2rem(20);
       }
     }
     .content {
       height: 100%;
-      width: 80%;
+      width: 100%;
       text-align: center;
+      @include center;
       .iconfont {
         font-size: px2rem(20);
       }
