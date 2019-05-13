@@ -3,7 +3,7 @@
     <top-bar></top-bar>
     <blog-list></blog-list>
     <menu-bar-small></menu-bar-small>
-    <menu-bar-big class="menu-bar-big"></menu-bar-big>
+    <menu-bar-big></menu-bar-big>
     <right-aside class="right-aside"></right-aside>
   </div>
 </template>
@@ -40,9 +40,9 @@ export default {
         background-size: cover;
         background-repeat: no-repeat;
         min-width: 260px;
-          border-radius: 10px 10px 0 0!important;
+        border-radius: 10px 10px 0 0 !important;
         .content-img {
-          border-radius: 10px 10px 0 0!important;
+          border-radius: 10px 10px 0 0 !important;
           display: block;
           width: 100%;
           height: 100%;
@@ -104,9 +104,12 @@ export default {
       }
     }
   }
+  .menu-bar-samll{
+    top: 50px;
+  }
 }
 // 大于765小于996px:
-// 显示左侧作者信息,右侧文章目录
+// 显示左侧作者信息,右侧文章目录隐藏
 @media screen and (min-width: 765px) {
   .index-wrapper {
     .blog-wrapper {
@@ -122,7 +125,7 @@ export default {
     }
   }
 }
-
+// 左右两侧目录都显示
 @media screen and (min-width: 996px) {
   .index-wrapper {
     .blog-wrapper {

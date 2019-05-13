@@ -7,7 +7,7 @@
           class="blog"
           v-for="(item,index) in blogData"
           :key="index"
-          @click="goTodetail(index,item.HtmlContent,item.OriginalContent)"
+          @click="goTodetail(index,item['_id'])"
         >
           <img src="./../../assets/6.jpg" alt class="content-img">
           <div class="content-wrapper">
@@ -54,26 +54,19 @@ export default {
   methods: {
     onScroll(val) {},
     // 跳去文章详情页
-    goTodetail(id, HtmlContent,OriginalContent) {
+    goTodetail(index, id) {
       this.$router.push({
         name: "detail",
         params: {
-          id,
-          HtmlContent,
-          OriginalContent
+          id
         }
       });
     }
   },
   mounted() {
     this.$axios
-      .get(`${process.env.VUE_APP_BASE_URL}/blog/getBlog`, {
-        params: {
-          keyword: ""
-        }
-      })
+      .get(`${process.env.VUE_APP_BASE_URL}/blog/getAllBlog`)
       .then(res => {
-        console.log(res);
         this.blogData = res.data.blog;
       });
   }
@@ -87,10 +80,11 @@ export default {
   width: 100%;
   height: 100%;
   padding-top: 50px;
+  box-sizing: border-box;
   .blog-content {
+    background-color: #f0f3f4;
     padding: px2rem(0) px2rem(35) px2rem(30) px2rem(35);
     box-sizing: border-box;
-    background-color: #f0f3f4;
     .word {
       height: px2rem(30);
       width: 100%;

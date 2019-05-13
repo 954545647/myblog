@@ -1,4 +1,6 @@
 $base: 37.5;
+$blue: #31BBEE;
+$black: #393E50;
 @function px2rem($px) {
   @return $px / $base + rem;
 }

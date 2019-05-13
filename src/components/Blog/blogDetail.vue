@@ -15,25 +15,26 @@
         style="{z-index:10}"
       />
     </div>
+    <right-aside class="right-aside"></right-aside>
   </div>
 </template>
 
 
 <script>
 import MenuBarSmall from "@/components/Blog/menuBar.vue";
-import MenuBarBig from "@/components/Blog/menuBar1.vue";
 import { mavonEditor } from "mavon-editor";
 export default {
   data() {
     return {
-      value: ""
+      value: "11"
     };
   },
   components: {
     mavonEditor,
     TopBar: () => import("@/components/Blog/topBar.vue"),
+    RightAside: () => import("@/components/Blog/aside.vue"),
     MenuBarSmall,
-    MenuBarBig
+    MenuBarBig: () => import("@/components/Blog/menuBar1.vue")
   },
   props: {
     content: {
@@ -43,7 +44,14 @@ export default {
   },
   beforeDestroy() {},
   mounted() {
-    this.value = this.$route.params.HtmlContent;
+    let id = this.$route.params.id;
+    this.$axios.get(`${process.env.VUE_APP_BASE_URL}/blog/getBlog`,{
+      params:{
+        id
+      }
+    }).then((res)=>{
+      this.value = res.data.blog[0].HtmlContent
+    })
   }
 };
 </script>
@@ -68,6 +76,9 @@ export default {
         flex: 0 0 100%;
       }
     }
+    .right-aside {
+      display: none;
+    }
     .blod-detail {
       .v-note-wrapper {
         padding: px2rem(30) px2rem(20);
@@ -88,11 +99,54 @@ export default {
   }
 }
 
+// 左侧作者信息出现,
 @media screen and (min-width: 765px) {
   .detail-wrapper {
     .menu-bar-big {
       width: 200px;
       display: block;
+    }
+    .blod-detail {
+      padding-left: 200px;
+      @include center;
+    }
+    .right-aside {
+      display: none;
+    }
+  }
+}
+
+// 右侧目录评论模块出现
+@media screen and (min-width: 996px) {
+  .detail-wrapper {
+    .blod-detail {
+      padding-right: 200px;
+    }
+    .right-aside {
+      display: block;
+      height: 100%;
+    }
+  }
+}
+
+// 大屏的时候
+@media screen and (min-width: 1200px) {
+  .detail-wrapper {
+    .blod-detail {
+      .markdown-body{
+        min-width: 800px;
+      }
+    }
+  }
+}
+
+// 最大屏的时候
+@media screen and (min-width: 1200px) {
+  .detail-wrapper {
+    .blod-detail {
+      .markdown-body{
+        min-width: 900px;
+      }
     }
   }
 }

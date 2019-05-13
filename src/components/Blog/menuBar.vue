@@ -5,7 +5,7 @@
         <!-- 作者信息 -->
         <div class="auth">
           <div class="author-cover">
-            <img src="@/assets/author.jpg" alt>
+            <img src="author.jpg" alt>
           </div>
           <strong class="name">Rex</strong>
           <span class="brief">不想切图的切图仔</span>
@@ -98,7 +98,7 @@ export default {
   position: fixed;
   z-index: 1000;
   left: 0;
-  top: 50px;
+  top: px2rem(50);
   bottom: 0;
   width: 100%;
   height: 100%;

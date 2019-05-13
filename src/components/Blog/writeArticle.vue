@@ -61,5 +61,8 @@ export default {
       display: block;
     }
   }
+  .myToast{
+    display: none;
+  }
 }
 </style>

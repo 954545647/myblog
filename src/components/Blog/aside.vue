@@ -24,11 +24,14 @@ export default {};
   height: 100%;
   bottom: 0;
   background-color: #fff;
+  border: 1px solid blue;
   .aside {
     width: 100%;
     height: 100%;
     font-size: 100px;
     font-size: 18px;
+    @include center;
+    flex-direction: column;
   }
 }
 </style>
