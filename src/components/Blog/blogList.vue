@@ -67,7 +67,6 @@ export default {
       .get(`${process.env.VUE_APP_BASE_URL}/blog/getAllBlog`)
       .then(res => {
         this.blogData = res.data.blog;
-        console.log(this.blogData)
       });
   }
 };
@@ -112,7 +111,6 @@ export default {
         .content-wrapper {
           width: 100%;
           height: 100%;
-          // border-radius: 0 0 10px 10px;
           background-color: #fff;
           padding: px2rem(15);
           box-sizing: border-box;

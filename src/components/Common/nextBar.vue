@@ -89,7 +89,6 @@ export default {
   methods: {
     // 关闭表单
     closeForm() {
-      // this.inputVisible = false;
       this.setNextBar(false);
     },
     // 提交表单,将数据保存到数据中
@@ -99,9 +98,9 @@ export default {
           this.$axios
             .post(`${process.env.VUE_APP_BASE_URL}/blog/saveBlog`, {
               state: 1,
-              title:this.ruleForm.title,
+              title: this.ruleForm.title,
               desc: this.ruleForm.desc,
-              username:this.ruleForm.username,
+              username: this.ruleForm.username,
               keyword: this.dynamicTags,
               value: this.blogValue,
               render: this.blogRender
@@ -116,10 +115,11 @@ export default {
                 });
               }
             });
+          // 将下一步弹窗关闭并且清空编辑区的内容
           this.setNextBar(false);
-          console.log(this.ruleForm, this.dynamicTags);
+          this.setBlogValue('');
+          this.setBlogRender('');
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
@@ -154,7 +154,7 @@ export default {
 @media screen and (min-width: 100px) {
   .next-bar-wrapper {
     position: absolute;
-    z-index: 1000;
+    z-index: 1800;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -166,7 +166,7 @@ export default {
     background-color: white;
     border-radius: 15px;
     color: white;
-    min-width: 300px;
+    max-width: 300px;
     .demo-ruleForm {
       color: white;
       display: flex;

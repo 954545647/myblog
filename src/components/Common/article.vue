@@ -1,21 +1,24 @@
 <template>
   <div class="article-wrapper">
-    <mavon-editor
-      class="mavon-wrapper"
-      v-model="file"
-      :ishljs="true"
-      :toolbars="toolbars"
-      :subfield="false"
-      @imgAdd="$imgAdd"
-      @imgDel="$imgDel"
-      @save="save"
-      ref="md"
-      style="{z-index:10}"
-      @change="change"
-    />
-    <div class="next-wrapper" @click="click">
-      <div class="next">下一步</div>
+    <div class="article">
+      <mavon-editor
+        class="mavon-wrapper"
+        v-model="file"
+        :ishljs="true"
+        :toolbars="toolbars"
+        :subfield="false"
+        @imgAdd="$imgAdd"
+        @imgDel="$imgDel"
+        @save="save"
+        ref="md"
+        style="{z-index:10}"
+        @change="change"
+      />
+      <div class="next-wrapper" @click="click">
+        <div class="next">下一步</div>
+      </div>
     </div>
+
     <next-bar v-if="canshowNextBar" ref="nextBar"></next-bar>
   </div>
 </template>
@@ -158,7 +161,9 @@ export default {
     }
   },
   mounted() {},
-  beforeDestroy() {}
+  beforeDestroy() {
+    console.log();
+  }
 };
 </script>
 
@@ -166,7 +171,7 @@ export default {
 <style lang="scss">
 @import "@/assets/styles/global.scss";
 // 针对小屏手机让编辑区域变小
-@media screen and (min-width: 100px) and (min-height: 100px) {
+@media screen and (min-width: 100px) {
   .article-wrapper {
     width: 100%;
     background-color: #fff;
@@ -178,118 +183,119 @@ export default {
     flex-direction: column;
     justify-content: center;
     position: relative;
-    .mavon-wrapper {
-      // margin: px2rem(30) 0 px2rem(20) 0;
-      margin: px2rem(30) 0 px2rem(0) 0;
-      margin-left: auto;
-      margin-right: auto;
-      z-index: 100;
-      height: 100%;
-      min-height: 350px;
-      min-width: 0;
-      // 编辑模块
-      .v-note-op {
-        // 左侧控制条
+    .article {
+      .mavon-wrapper {
+        margin: px2rem(30) 0 px2rem(0) 0;
+        z-index: 100;
+        height: 100%;
+        min-width: 0;
+        min-height: 320px;
+        // 编辑模块
+        .v-note-op {
+          // 左侧控制条
+          width: 100%;
+          display: flex;
+          .v-left-item {
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            height: 100%;
+            width: 70%;
+            flex: 0 0 70%;
+            padding-left: 0;
+            border-right: 1px solid #eee;
+            .op-icon {
+              flex: 0 0 20%;
+              box-sizing: border-box;
+            }
+            .op-icon-divider {
+              display: none;
+            }
+            &:after {
+              background: #eeeeee;
+              // content: "";
+              height: 80%;
+              position: absolute;
+              top: 50%;
+              right: 0;
+              width: 1px;
+              transform: translate(0, -50%);
+              margin-right: px2rem(1);
+            }
+            .fa-mavon-header {
+              @include center;
+              flex-direction: column;
+              .op-header {
+                width: 100%;
+                left: 0 !important;
+              }
+            }
+            .fa-mavon-picture-o {
+              @include center;
+              flex-direction: column;
+              .popup-dropdown {
+                min-width: 0;
+                width: 100%;
+                left: 0 !important;
+              }
+            }
+          }
+          // 右侧控制条
+          .v-right-item {
+            width: 30%;
+            flex: 0 0 30%;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-content: flex-end;
+            height: 100%;
+            padding-right: 0;
+            .op-icon {
+              flex: 0 0 33.3%;
+              box-sizing: border-box;
+            }
+            .op-icon-divider {
+              display: none;
+            }
+          }
+        }
+      }
+      // 下一步模块
+      .next-wrapper {
         width: 100%;
-        display: flex;
-        .v-left-item {
-          position: relative;
-          display: flex;
-          flex-direction: row;
-          flex-wrap: wrap;
-          align-content: flex-start;
-          height: 100%;
-          width: 70%;
-          flex: 0 0 70%;
-          padding-left: 0;
-          border-right: 1px solid #eee;
-          .op-icon {
-            flex: 0 0 20%;
-            box-sizing: border-box;
-          }
-          .op-icon-divider {
-            display: none;
-          }
-          &:after {
-            background: #eeeeee;
-            // content: "";
-            height: 80%;
-            position: absolute;
-            top: 50%;
-            right: 0;
-            width: 1px;
-            transform: translate(0, -50%);
-            margin-right: px2rem(1);
-          }
-          .fa-mavon-header {
-            @include center;
-            flex-direction: column;
-            .op-header {
-              width: 100%;
-              left: 0 !important;
-            }
-          }
-          .fa-mavon-picture-o {
-            @include center;
-            flex-direction: column;
-            .popup-dropdown {
-              min-width: 0;
-              width: 100%;
-              left: 0 !important;
-            }
-          }
-        }
-        // 右侧控制条
-        .v-right-item {
-          width: 30%;
-          flex: 0 0 30%;
-          display: flex;
-          flex-direction: row;
-          flex-wrap: wrap;
-          align-content: flex-end;
-          height: 100%;
-          padding-right: 0;
-          .op-icon {
-            flex: 0 0 33.3%;
-            box-sizing: border-box;
-          }
-          .op-icon-divider {
-            display: none;
-          }
+        height: 40px;
+        @include center;
+        margin-left: auto;
+        margin-right: auto;
+        // background-color: $blue;
+        background-color: $black;
+        color: white;
+        box-shadow: 0 0px 5px rgba(0, 0, 0, 0.457),
+          0 0px 3px rgba(0, 0, 0, 0.227);
+        .next {
+          font-size: 16px;
         }
       }
-    }
-    // 下一步模块
-    .next-wrapper {
-      width: 100%;
-      height: 40px;
-      @include center;
-      margin-left: auto;
-      margin-right: auto;
-      // background-color: $blue;
-      background-color: $black;
-      color: white;
-      box-shadow: 0 0px 5px rgba(0, 0, 0, 0.457), 0 0px 3px rgba(0, 0, 0, 0.227);
-      .next {
-        font-size: 16px;
+      .fullscreen {
+        width: 100% !important;
+        height: 100% !important;
       }
-    }
-    .fullscreen {
-      width: 100% !important;
-      height: 100% !important;
     }
   }
   .myToast {
     max-width: 300px;
     min-width: 0;
     width: 80%;
-    position: absolute;
+    position: fixed;
     @include center;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     box-sizing: border-box;
     height: 50px;
+    margin-left: 100px;
     .el-message__icon {
       display: none;
     }
@@ -299,9 +305,11 @@ export default {
 // 针对i6这种竖屏比较大的手机编辑区域变大
 @media screen and (min-width: 100px) and (min-height: 600px) {
   .article-wrapper {
-    .mavon-wrapper {
-      box-sizing: border-box;
-      min-height: 480px;
+    .article {
+      .mavon-wrapper {
+        box-sizing: border-box;
+        min-height: 480px;
+      }
     }
   }
 }
@@ -310,29 +318,39 @@ export default {
 @media screen and (min-width: 500px) {
   .article-wrapper {
     margin-top: 50px;
+    .article {
+      padding: 0 30px;
+    }
   }
   .myToast {
     max-width: 480px;
   }
 }
 
-@media screen and (min-width: 500px) and (min-height: 600px) {
-  .article-wrapper {
-    margin-top: 50px;
-    .mavon-wrapper {
-      min-height: 520px;
-    }
-  }
-}
 @media screen and (min-width: 1000px) {
   .article-wrapper {
-    .mavon-wrapper {
-      // 控制条
-      width: 80%;
+    .article {
+      padding: 0 50px;
     }
     .next-wrapper {
       width: 80%;
       height: px2rem(30);
+    }
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .article-wrapper {
+    .article {
+      padding: 0 80px;
+    }
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  .article-wrapper {
+    .article {
+      padding: 0 100px;
     }
   }
 }

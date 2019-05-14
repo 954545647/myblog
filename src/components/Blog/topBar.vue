@@ -57,7 +57,7 @@ export default {
     box-sizing: border-box;
     color: white;
     background: #f05050;
-    position: fixed;
+    position: fixed!important;
     left: 0;
     top: 0;
     z-index: 2000;
@@ -88,7 +88,7 @@ export default {
 
 // 大于500小于765:
 // 隐藏左右两侧栏目,头部导航栏宽度为200,隐藏搜索栏
-@media screen and (min-width: 501px) {
+@media screen and (min-width: 375px) {
   #app .topbar-wrapper {
     height: 50px;
     width: 100%;

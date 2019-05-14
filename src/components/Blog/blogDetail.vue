@@ -15,7 +15,6 @@
         style="{z-index:10}"
       />
     </div>
-    <right-aside class="right-aside"></right-aside>
   </div>
 </template>
 
@@ -26,13 +25,12 @@ import { mavonEditor } from "mavon-editor";
 export default {
   data() {
     return {
-      value: "11"
+      value: ""
     };
   },
   components: {
     mavonEditor,
     TopBar: () => import("@/components/Blog/topBar.vue"),
-    RightAside: () => import("@/components/Blog/aside.vue"),
     MenuBarSmall,
     MenuBarBig: () => import("@/components/Blog/menuBar1.vue")
   },
@@ -45,13 +43,15 @@ export default {
   beforeDestroy() {},
   mounted() {
     let id = this.$route.params.id;
-    this.$axios.get(`${process.env.VUE_APP_BASE_URL}/blog/getBlog`,{
-      params:{
-        id
-      }
-    }).then((res)=>{
-      this.value = res.data.blog[0].HtmlContent
-    })
+    this.$axios
+      .get(`${process.env.VUE_APP_BASE_URL}/blog/getBlog`, {
+        params: {
+          id
+        }
+      })
+      .then(res => {
+        this.value = res.data.blog[0].HtmlContent;
+      });
   }
 };
 </script>
@@ -66,7 +66,9 @@ export default {
   .detail-wrapper {
     width: 100%;
     height: 100%;
-    padding-top: px2rem(50);
+    position: absolute;
+    left: 0;
+    top: 0;
     font-size: 16px;
     box-sizing: border-box;
     .menu-bar-big {
@@ -80,6 +82,7 @@ export default {
       display: none;
     }
     .blod-detail {
+      padding-top: px2rem(50);
       .v-note-wrapper {
         padding: px2rem(30) px2rem(20);
         box-sizing: border-box;
@@ -90,12 +93,14 @@ export default {
   }
 }
 
-@media screen and (min-width: 501px) {
-  .detail-wrapper {
-    padding-top: 50px;
-  }
+@media screen and (min-width: 500px) {
   .menu-bar-samll {
     top: 50px;
+  }
+  .detail-wrapper {
+    .blod-detail {
+      padding-top: 50px;
+    }
   }
 }
 
@@ -109,9 +114,23 @@ export default {
     .blod-detail {
       padding-left: 200px;
       @include center;
+      .v-note-wrapper {
+        min-width: 520px;
+      }
     }
     .right-aside {
       display: none;
+    }
+  }
+}
+
+// 左侧作者信息出现,
+@media screen and (min-width: 900px) {
+  .detail-wrapper {
+    .blod-detail {
+      .v-note-wrapper {
+        min-width: 600px;
+      }
     }
   }
 }
@@ -120,7 +139,9 @@ export default {
 @media screen and (min-width: 996px) {
   .detail-wrapper {
     .blod-detail {
-      padding-right: 200px;
+      .v-note-wrapper {
+        min-width: 720px;
+      }
     }
     .right-aside {
       display: block;
@@ -130,10 +151,13 @@ export default {
 }
 
 // 大屏的时候
-@media screen and (min-width: 1200px) {
+@media screen and (min-width: 1100px) {
   .detail-wrapper {
     .blod-detail {
-      .markdown-body{
+      .v-note-wrapper {
+        min-width: 900px;
+      }
+      .markdown-body {
         min-width: 800px;
       }
     }
@@ -144,8 +168,8 @@ export default {
 @media screen and (min-width: 1200px) {
   .detail-wrapper {
     .blod-detail {
-      .markdown-body{
-        min-width: 900px;
+      .markdown-body {
+        min-width: 1000px;
       }
     }
   }

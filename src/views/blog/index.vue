@@ -77,15 +77,21 @@ export default {
 @media screen and (min-width: 501px) {
   .index-wrapper {
     .blog-wrapper {
-      .blog {
-        background-image: url("./../../assets/6.jpg");
-        background-size: cover;
-        background-repeat: no-repeat;
-        min-width: 260px;
-        .content-wrapper {
-          .content {
-            .article {
-              @include ellipsis2(3);
+      .blog-content {
+        .blog {
+          background-image: url("./../../assets/6.jpg");
+          background-size: cover;
+          background-repeat: no-repeat;
+          min-width: 260px;
+          .content-wrapper {
+            .content {
+              .title {
+                font-size: 18px;
+              }
+              .article {
+                font-size: 16px;
+                @include ellipsis2(3);
+              }
             }
           }
         }
@@ -104,7 +110,7 @@ export default {
       }
     }
   }
-  .menu-bar-samll{
+  .menu-bar-samll {
     top: 50px;
   }
 }

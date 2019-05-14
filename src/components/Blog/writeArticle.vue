@@ -54,15 +54,14 @@ export default {
 }
 @media screen and (min-width: 765px) {
   .detail-wrapper {
-    padding-left: 200px;
+    .article-wrapper{
+      padding: 0 0 0 200px;
+    }
     box-sizing: border-box;
     .menu-bar-big {
       width: 200px;
       display: block;
     }
-  }
-  .myToast{
-    display: none;
   }
 }
 </style>

@@ -5,87 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
+    <style>
+      header {
+        height: 300px;
+        background-color: red;
+        width: 100%;
+      }
+      main {
+        height: 300px;
+        background-color: blue;
+        width: 100%;
+      }
+      nav {
+        height: 300px;
+        background-color: blue;
+        width: 100%;
+      }
+      footer {
+        height: 300px;
+        background-color: blue;
+        width: 100%;
+      }
+      aside {
+        height: 300px;
+        background-color: blue;
+        width: 100%;
+      }
+    </style>
   </head>
   <body>
-    <script>
-      var images = new Array();
-      function preload(arr) {
-        for (var i = 0; i < arr.length; i++) {
-          images[i] = new Image();
-          images[i].src =arr[i];
-        }
-      }
-      preload(
-        ["https://t11.baidu.com/it/u=1796938090,3667909335&fm=76",
-        "https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=252143353,1804510195&fm=85&app=52&f=JPEG?w=121&h=75&s=4AAC3C62099B4CC848DDD0C3000080B1",
-        "https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=2316774048,1306281408&fm=58"]
-      );
-      console.log(images);
-      window.onload
-      /*
-        性能优化:
-        1. 文件体积压缩,可以对html文件,css文件,js文件进行压缩,
-            如果没有使用打包工具的话,可以有在线网站进行压缩,
-            使用打包工具如webpack的插件来进行文件压缩,如UglifyJS等
-
-        2. 可以对图片进行优化,图片压缩,把网站用到的小图片整合到一张单独的图片,
-            通过调整background-position进行位移
-           雪碧图可以减少发起http请求的次数,把小图片转成base64格式也可以减少发起网络请求
-
-        3. 通过webpack打包工具开启gzip进行算法压缩,nginx也可以开启gzip压缩,
-            对一些静态资源文件进行压缩,减少请求,CDN技术或者使用静态资源服务器也可以起到优化
-
-        4. 文件加载顺序,先加载css,后加载js,css的渲染会阻塞js的执行,但不会阻塞外部脚本的加载,
-            对于一些尚未展示的图片和文件可以进行懒加载处理,先加载首屏和需要提前加载的资源
-
-        5. 代码层面,css可以合并一些公共样式,或者使用scss这些css预处理器,定义变量和抽离公共样式代码(mixin)
-            在js方面尽量少操作DOM,操作DOM样式的时候可以直接通过添加一个类名来一次性添加多个样式,而不是一个一个样式添加,
-            还有对于多次修改的时候,可以先把DOM元素进行离线(display:none),这样就只会有一次重排,
-            不要把DOM节点当成一个变量放在for循环里,应该在for循环外面提前声明! 避免引发多次的重绘和回流 ,
-            还有js的防抖和节流,对于类型监听滚动条事件这种,就可以通过定时器进行防抖处理,在一定时间内多次触发同一事件只执行一次
-            .
-        6. 缓存,浏览器缓存可以通过cookie存放LocalStroage和SessionStroage存放一些基本信息,
-           服务端缓存可以设置last-modified或者etag返回304状态码,这样浏览器就不会进行请求,而是直接走缓存,可以缓存一些不经常变化的静态资源
-        7. 服务端提前渲染SSR,将页面通过服务器生成的html字符串直接发送到浏览器端,提升首屏渲染的速度
-        7. 提升用户体验,使用预加载和一些等待动画,例如监听页面渲染 onreadystatechange ,当页面加载完成把等待动画去掉,提示用户体验
-      */
-
-      /*
-        输入url的过程:
-
-        首页用户输入一个url,会先进行域名解析,先到浏览器查看是否有域名对应的ip地址,如果没有就到系统查找,域名商一般都会对常用域名和对应ip的缓存
-        最后才会向dns服务器发起请求.
-
-        浏览器拿到ip地址后就会开始发起http请求,三次握手是保证双方使用的通信协议是相同的,四次挥手是确保通信双方断开连接,不会一边苦苦等待,浪费资源,
-        服务器接收到请求之后就开始进行处理，把需要返回给前端的数据打包成一个http数据包，通过网络返回给浏览器,
-
-        浏览器开始解析http报文,解析生成DOM树,请求过程会发起相关静态资源的请求,解析生成CSS树和DOM树接着合并成Render Tree,最后渲染到页面上去
-      */
-      /*
-      document.compatMode
-        怪异模式和标准模式
-        怪异模式是 BackCompat 和IE盒子模式 border-box 
-        怪异模式可以在行级元素设置宽高
-      */
-
-      /*
-        字符串找出第一个的
-        var first  = str.slice(i+1);
-        var end = str.slice(0,1)
-        indexof
-        数组左奇数右偶数
-        if(i %2 === 0 ){
-          // 如果是偶数把当前项删除并添加到末尾
-          arr.push(arr.splice(i,1)[0])
-        }
-
-        css居中:
-        父级 display:table
-        子: display: table-cell vertical-align:middle
-
-        display:flex
-        align-items: center
-      */
-    </script>
+    <header>头部</header>
+    <main>主题内容</main>
+    <nav>111</nav>
+    <footer>222</footer>
+    <aside>333</aside>
+    <script></script>
   </body>
 </html>
