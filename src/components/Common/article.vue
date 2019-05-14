@@ -11,10 +11,12 @@
       @save="save"
       ref="md"
       style="{z-index:10}"
+      @change="change"
     />
     <div class="next-wrapper" @click="click">
       <div class="next">下一步</div>
     </div>
+    <next-bar v-if="canshowNextBar" ref="nextBar"></next-bar>
   </div>
 </template>
 
@@ -23,26 +25,15 @@
 import { blogMixin } from "@/utils/mixin.js";
 import { Message } from "element-ui";
 import axios from "axios";
-import { setTimeout, clearTimeout } from "timers";
+import NextBar from "@/components/Common/nextBar.vue";
 
-// debounce函数
-function debounce(fn, delay) {
-  let timer = null;
-  return function() {
-    if (timer) {
-      clearTimeout(timer);
-      timer = setTimeout(fn, delay);
-    } else {
-      timer = setTimeout(fn, delay);
-    }
-  };
-}
 export default {
   mixins: [blogMixin],
   data() {
     return {
       file: "",
-      delayTime: 3000,  //防抖的延迟时间
+      delayTime: 3000, //防抖的延迟时间
+      // canshowNextBar:false, //是否可以显示下一步弹窗
       toolbars: {
         bold: true, // 粗体
         italic: false, // 斜体
@@ -62,7 +53,7 @@ export default {
         fullscreen: true, // 全屏编辑
         readmodel: true, // 沉浸式阅读
         htmlcode: true, // 展示html源码
-        help: true, // 帮助
+        help: false, // 帮助
         /* 1.3.5 */
         undo: true, // 上一步
         redo: true, // 下一步
@@ -81,15 +72,35 @@ export default {
       imgList: []
     };
   },
+  components: {
+    NextBar
+  },
   watch: {},
   methods: {
     // 点击下一步,弹出输入框,填入标题,作者,关键词标签
-    click(e) {},
+    click(e) {
+      // 通过vuex设置下一步弹窗为true;
+      this.setNextBar(true);
+    },
+    change(value, render) {
+      if (this.timer2) {
+        clearTimeout(this.timer2);
+      }
+      this.timer2 = setTimeout(() => {
+        this.setBlogValue(value);
+        this.setBlogRender(render);
+      }, 3000);
+    },
     // ctrl+s 和点击保存触发
     // value是我们输入的原字符串,render是解析出来的html代码
     // 为避免用户多次点击保存,进行防抖(2秒内只会执行一次)
     save(value, render) {
-      // 发起请求,把数据传到后端并保存到数据库
+      // 如果输入内容为空,不保存
+      if (!value && !render) {
+        return false;
+      }
+      this.setBlogValue(value);
+      this.setBlogRender(render);
       let that = this;
       function saveBlog() {
         that.$axios
@@ -111,13 +122,14 @@ export default {
             }
           });
       }
+      // 发起请求,把数据传到后端并保存到数据库
       if (this.timer) {
         // 如果进入这个分支,代表当前正在进行一个分支,并且又触发了同一事件
         // 先取消当前计时,再重新计时
         clearTimeout(this.timer);
-        this.timer = setTimeout(saveBlog,this.delayTime);
+        this.timer = setTimeout(saveBlog, this.delayTime);
       } else {
-        this.timer = setTimeout(saveBlog,this.delayTime);
+        this.timer = setTimeout(saveBlog, this.delayTime);
       }
     },
     // 绑定@imgAdd event

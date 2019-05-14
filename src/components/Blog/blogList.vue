@@ -13,10 +13,9 @@
           <div class="content-wrapper">
             <!-- 文章内容 -->
             <div class="content">
-              <h2 class="title">{{index}}</h2>
+              <h2 class="title">{{item.title}}</h2>
               <p class="article">
-                wadaw你好吗哈哈
-                5dwadwadaw打我晚点
+                {{item.desc}}
               </p>
             </div>
             <!-- 作者时间信息 -->
@@ -68,6 +67,7 @@ export default {
       .get(`${process.env.VUE_APP_BASE_URL}/blog/getAllBlog`)
       .then(res => {
         this.blogData = res.data.blog;
+        console.log(this.blogData)
       });
   }
 };

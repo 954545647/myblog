@@ -1,10 +1,22 @@
-import {mapGetters,mapActions} from 'vuex';
+import { mapGetters, mapActions } from "vuex";
 
 export const blogMixin = {
   computed: {
-    ...mapGetters(['blogpageWidth','preLoadImages'])
+    ...mapGetters([
+      "blogpageWidth",
+      "preLoadImages",
+      "canshowNextBar",
+      "blogRender",
+      "blogValue"
+    ])
   },
   methods: {
-    ...mapActions(['setBlogPageWidth','setPreLoadImages'])
-  },
-}
+    ...mapActions([
+      "setBlogPageWidth",
+      "setPreLoadImages",
+      "setNextBar",
+      "setBlogValue",
+      "setBlogRender"
+    ])
+  }
+};

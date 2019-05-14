@@ -24,9 +24,6 @@
             <div class="iconfont-wrapper-one">
               <span class="iconfont icon-yonghu"></span>
             </div>
-            <!-- <div class="iconfont-wrapper-two">
-              <span class="iconfont icon-fasongyanzhengma"></span>
-            </div>-->
             <el-input
               v-model="ruleForm.email"
               class="email"

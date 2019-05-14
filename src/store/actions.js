@@ -4,6 +4,15 @@ const actions = {
   },
   setPreLoadImages({commit},newImages){
     return commit('setPreLoadImages',newImages);
+  },
+  setNextBar({commit},newValue){
+    return commit('setNextBar',newValue);
+  },
+  setBlogValue({commit},newValue){
+    return commit('setBlogValue',newValue);
+  },
+  setBlogRender({commit},newRender){
+    return commit('setBlogRender',newRender);
   }
 }
 
