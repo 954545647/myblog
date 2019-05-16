@@ -13,7 +13,13 @@ const actions = {
   },
   setBlogRender({commit},newRender){
     return commit('setBlogRender',newRender);
-  }
+  },
+  Login({commit},newToken){
+    return commit('Login',newToken)
+  },
+  Logout({commit},newToken){
+    return commit('Logout',newToken)
+  },
 }
 
 export default actions;

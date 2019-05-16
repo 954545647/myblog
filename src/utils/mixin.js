@@ -20,3 +20,12 @@ export const blogMixin = {
     ])
   }
 };
+
+export const userMixin = {
+  computed: {
+    ...mapGetters(['token'])
+  },
+  methods: {
+    ...mapActions(['Login','Logout'])
+  },
+}

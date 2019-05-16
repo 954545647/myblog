@@ -22,17 +22,26 @@ export default new Router({
     {
       path: '/home',
       name: 'home',
-      component: ()=> import('./views/home/index.vue')
+      component: ()=> import('./views/home/index.vue'),
+      meta:{
+        requireAuth:true  //需要登录
+      }
     },
     {
       path:'/blog',
       name:'blog',
       component:()=> import('./views/blog/index.vue'),
+      meta:{
+        requireAuth:true  //需要登录
+      }
     },
     {
       path:'/write',
       name:'write',
-      component:()=>import('@/components/Blog/writeArticle.vue')
+      component:()=>import('@/components/Blog/writeArticle.vue'),
+      meta:{
+        requireAuth:true  //需要登录
+      }
     },
     {
       path:'/detail/:id',
@@ -41,3 +50,6 @@ export default new Router({
     }
   ]
 })
+
+
+

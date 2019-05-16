@@ -29,7 +29,11 @@
                 <el-input v-model="ruleForm.email" class="username" placeholder="输入用户名" ref="email"></el-input>
               </el-form-item>
               <!-- 输入密码 -->
-              <el-form-item prop="pass" class="pass-wrapper">
+              <el-form-item
+                prop="pass"
+                class="pass-wrapper"
+                @keyup.enter.native="submitForm('ruleForm')"
+              >
                 <div class="iconfont-wrapper">
                   <span class="iconfont icon-mima-copy"></span>
                 </div>
@@ -39,14 +43,15 @@
                   autocomplete="off"
                   type="password"
                   placeholder="输入密码"
+                  ref="pass"
                 ></el-input>
               </el-form-item>
               <!-- 警告信息,邮箱倒计时 -->
-              <transition name="fade">
+              <!-- <transition name="fade">
                 <div class="warning-wrapper" v-show="warningText">
                   <span class="warning-text">{{warningText}}</span>
                 </div>
-              </transition>
+              </transition>-->
             </el-form>
           </div>
         </div>
@@ -88,7 +93,11 @@
 
 
 <script>
+import { Message } from "element-ui";
+import { setTimeout } from "timers";
+import {userMixin} from '@/utils/mixin.js';
 export default {
+  mixins:[userMixin],
   data() {
     var validateEmail = (rule, value, callback) => {
       const mailReg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
@@ -109,7 +118,7 @@ export default {
       }
     };
     return {
-      warningText: "",  //警告信息
+      warningText: "", //警告信息
       ruleForm: {
         email: "",
         pass: ""
@@ -132,8 +141,8 @@ export default {
   },
   methods: {
     // 游客免密登录
-    youkeLogin(){
-      this.router.push('/blog');
+    youkeLogin() {
+      this.router.push("/blog");
     },
     // 跳转到注册页面
     goToRegister() {
@@ -150,18 +159,37 @@ export default {
               password: this.ruleForm.pass
             })
             .then(res => {
-              if(res.data.code ===0 && res.status === 200){
-                this.warningText = ''
-                this.$router.push({
-                  path:'/home'
-                })
-              }
               this.warningText = res.data.result;
+              if (res.data.code === 0 && res.status === 200) {
+                this.Login(Math.random())
+                Message.success({
+                  message: this.warningText,
+                  duration: 1000
+                });
+                setTimeout(() => {
+                  this.$router.push({
+                    path: "/home"
+                  });
+                }, 1000);
+              } else {
+                // 如果是用户不存在或者密码错误的
+                Message.error({
+                  message: this.warningText,
+                  duration: 1000
+                });
+              }
             });
         } else {
           return false;
         }
       });
+    }
+  },
+  mounted() {
+    if (this.ruleForm.email === "") {
+      this.$refs.email.focus();
+    } else if (this.ruleForm.pass === "") {
+      this.$refs.pass.focus();
     }
   }
 };
@@ -294,7 +322,7 @@ export default {
               font-size: px2rem(14);
               width: 100%;
               height: 100%;
-              color: #B6B6C8;
+              color: #b6b6c8;
             }
           }
         }
@@ -414,6 +442,18 @@ export default {
         }
       }
     }
+  }
+}
+.el-message {
+  width: 60%;
+  box-sizing: border-box;
+  min-width: 0;
+  max-height: px2rem(50);
+  .el-message__icon {
+    font-size: 16px;
+  }
+  .el-message__content {
+    font-size: 14px;
   }
 }
 </style>
