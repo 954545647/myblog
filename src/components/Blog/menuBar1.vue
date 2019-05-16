@@ -1,34 +1,34 @@
 <template>
-    <div class="menu-bar-big">
-      <div class="menu">
-        <!-- 作者信息 -->
-        <div class="auth">
-          <div class="author-cover">
-            <img src="@/assets/author.jpg" alt>
-          </div>
-          <strong class="name">Rex</strong>
-          <span class="brief">不想切图的切图仔</span>
+  <div class="menu-bar-big">
+    <div class="menu">
+      <!-- 作者信息 -->
+      <div class="auth">
+        <div class="author-cover">
+          <img class="author-cover-img" src="@/assets/author.jpg" alt>
         </div>
-        <!-- 导航栏菜单 -->
-        <div class="navigation">
-          <ul class="list">
-            <li class="list-title">导航</li>
-            <li @click="goToBlog">
-              <i class="iconfont icon-wenzhang1"></i>
-              <span>文章</span>
-            </li>
-            <li @click="goToMusic">
-              <i class="iconfont icon-erji"></i>
-              <span>听歌</span>
-            </li>
-            <li @click="goToWrite">
-              <i class="iconfont icon-shuben"></i>
-              <span>写博客</span>
-            </li>
-          </ul>
-        </div>
+        <strong class="name">Rex</strong>
+        <span class="brief">不想切图的切图仔</span>
+      </div>
+      <!-- 导航栏菜单 -->
+      <div class="navigation">
+        <ul class="list">
+          <li class="list-title">导航</li>
+          <li @click="goToBlog">
+            <i class="iconfont icon-wenzhang1"></i>
+            <span>文章</span>
+          </li>
+          <li @click="goToMusic">
+            <i class="iconfont icon-erji"></i>
+            <span>听歌</span>
+          </li>
+          <li @click="goToWrite">
+            <i class="iconfont icon-shuben"></i>
+            <span>写博客</span>
+          </li>
+        </ul>
       </div>
     </div>
+  </div>
 </template>
 
 
@@ -100,10 +100,14 @@ export default {
         justify-content: center;
         align-items: flex-start;
         padding: 0 0 15px 0;
-        img {
+        .author-cover-img {
           border-radius: 50%;
-          width: 150px;
-          height: 150px;
+          width: px2rem(120);
+          height: px2rem(120);
+          &:hover {
+            transform: rotate(360deg);
+            transition: 0.4s all ease-in-out;
+          }
         }
       }
       .name {

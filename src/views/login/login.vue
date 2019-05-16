@@ -95,9 +95,9 @@
 <script>
 import { Message } from "element-ui";
 import { setTimeout } from "timers";
-import {userMixin} from '@/utils/mixin.js';
+import { userMixin } from "@/utils/mixin.js";
 export default {
-  mixins:[userMixin],
+  mixins: [userMixin],
   data() {
     var validateEmail = (rule, value, callback) => {
       const mailReg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
@@ -161,7 +161,9 @@ export default {
             .then(res => {
               this.warningText = res.data.result;
               if (res.data.code === 0 && res.status === 200) {
-                this.Login(Math.random())
+                // this.Login(Math.random())
+                // 把后端返回的token保存到 localStorage中去
+                window.localStorage["token"] = JSON.stringify(res.data.token);
                 Message.success({
                   message: this.warningText,
                   duration: 1000

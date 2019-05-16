@@ -90,6 +90,7 @@
 
 
 <script>
+import { Message } from "element-ui";
 export default {
   data() {
     var validateEmail = (rule, value, callback) => {
@@ -170,14 +171,25 @@ export default {
                 clearInterval(this.timer);
               }
               if (res.status === 200 && res.data.code === 0) {
-                this.warningText = "";
-                this.$router.push({
-                  path: "/login"
+                Message.success({
+                  message: res.data.result,
+                  duration: 1000
                 });
+                // setTimeout(() => {
+                //   this.$router.push({
+                //     path: "/login"
+                //   });
+                // }, 1000);
                 return;
+              } else {
+                this.warningText = res.data.result;
+                Message.error({
+                  message: res.data.result,
+                  duration: 1000
+                });
               }
               // 注册不成功提示错误信息
-              this.warningText = res.data.result;
+              // this.warningText = res.data.result;
             });
         } else {
           return false;
@@ -186,11 +198,15 @@ export default {
     },
     // 发送邮件
     sendEmail(email) {
-      if(this.timer){
+      if (this.timer) {
         clearInterval(this.timer);
-        this.warningText = '正在发送验证码'
+        // this.warningText = "正在发送验证码";
         this.remainTime = 90;
       }
+      Message.success({
+        message: "验证码已发送,请注意查收",
+        duration: 1000
+      });
       this.emailAdress = email;
       this.$axios({
         method: "post",
@@ -200,7 +216,6 @@ export default {
         }
       }).then(res => {
         // 因为用的是qq邮箱发送过去,所以腾讯会自动检测qq.com结尾邮箱的真实性
-        console.log(res);
         if (res.data.code === 0 && res.status === 200) {
           this.timer = setInterval(() => {
             this.remainTime--;

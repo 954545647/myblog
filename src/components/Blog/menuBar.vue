@@ -5,7 +5,7 @@
         <!-- 作者信息 -->
         <div class="auth">
           <div class="author-cover">
-            <img src="author.jpg" alt>
+            <img class="author-cover-img" src="author.jpg" alt>
           </div>
           <strong class="name">Rex</strong>
           <span class="brief">不想切图的切图仔</span>
@@ -122,11 +122,16 @@ export default {
         justify-content: center;
         align-items: flex-start;
         padding: 0 0 px2rem(15) 0;
-        img {
+        .author-cover-img {
           border-radius: 50%;
           width: px2rem(120);
           height: px2rem(120);
+          &:hover{
+            transform: rotate(360deg);
+            transition: .4s all ease-in-out; 
+          }
         }
+
       }
       .name {
         color: rgb(234, 235, 237);
