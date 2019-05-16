@@ -59,7 +59,7 @@
           <!-- 警告信息,邮箱倒计时 -->
           <transition name="fade">
             <div class="warning-wrapper" v-show="warningText">
-              <span class="warning-text">{{warningText}}</span>
+              <span class="warning-text" ref="warningText">{{warningText}}</span>
             </div>
           </transition>
         </el-form>
@@ -126,6 +126,7 @@ export default {
       }
     };
     return {
+      timer: null, //时间定时器
       emailAdress: "", //用来判断失去焦点后用户输入的邮箱是否改变
       warningText: "", //警告信息
       remainTime: 90, //邮箱可重新获取剩余时间
@@ -165,31 +166,29 @@ export default {
               pass: this.ruleForm.pass
             })
             .then(res => {
-              // 如果注册成功就跳转到首页
-              // 清除定时器
-              if (this.timer) {
-                clearInterval(this.timer);
-              }
+              // 如果注册成功就跳转到登录页面
               if (res.status === 200 && res.data.code === 0) {
                 Message.success({
                   message: res.data.result,
                   duration: 1000
                 });
-                // setTimeout(() => {
-                //   this.$router.push({
-                //     path: "/login"
-                //   });
-                // }, 1000);
+                setTimeout(() => {
+                  // 清除定时器
+                  if (this.timer) {
+                    clearInterval(this.timer);
+                  }
+                  // 跳转登录页面
+                  this.$router.push({
+                    path: "/login"
+                  });
+                }, 1000);
                 return;
               } else {
-                this.warningText = res.data.result;
                 Message.error({
                   message: res.data.result,
-                  duration: 1000
+                  duration: 2000
                 });
               }
-              // 注册不成功提示错误信息
-              // this.warningText = res.data.result;
             });
         } else {
           return false;
@@ -200,13 +199,8 @@ export default {
     sendEmail(email) {
       if (this.timer) {
         clearInterval(this.timer);
-        // this.warningText = "正在发送验证码";
         this.remainTime = 90;
       }
-      Message.success({
-        message: "验证码已发送,请注意查收",
-        duration: 1000
-      });
       this.emailAdress = email;
       this.$axios({
         method: "post",
@@ -217,19 +211,25 @@ export default {
       }).then(res => {
         // 因为用的是qq邮箱发送过去,所以腾讯会自动检测qq.com结尾邮箱的真实性
         if (res.data.code === 0 && res.status === 200) {
+          Message.success({
+            message: "验证码已发送,请注意查收",
+            duration: 2000
+          });
           this.timer = setInterval(() => {
             this.remainTime--;
             this.warningText = `验证码已发送${this.remainTime}秒后可重新获取`;
             if (this.remainTime === 0) {
               this.remainTime = 90;
-              this.warningText = "";
               this.CanSend = true;
               clearInterval(this.timer);
               return;
             }
           }, 1000);
         } else {
-          this.warningText = "邮箱不存在";
+          Message.error({
+            message: "邮箱不存在",
+            duration: 2000
+          });
         }
       });
     },
@@ -313,6 +313,9 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
+        box-sizing: border-box;
+        @include center;
+        flex-direction: column;
         .email-wrapper {
           // flex: 0 0 px2rem(50);
           // height: px2rem(50);
@@ -431,7 +434,7 @@ export default {
           flex: 0 0 px2rem(40);
           height: px2rem(40);
           width: 65%;
-          margin-bottom: 0;
+          margin-bottom: px2rem(5);
           .el-form-item__content {
             width: 100%;
             margin-left: 0 !important;
@@ -545,6 +548,18 @@ export default {
         }
       }
     }
+  }
+}
+.el-message {
+  width: 60%;
+  box-sizing: border-box;
+  min-width: 0;
+  max-height: px2rem(50);
+  .el-message__icon {
+    font-size: 16px;
+  }
+  .el-message__content {
+    font-size: 14px;
   }
 }
 </style>

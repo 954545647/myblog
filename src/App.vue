@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <transition name="fade">
+    <!-- 先离开后进,默认一起 -->
+    <transition name="el-zoom-in-center" mode="out-in">
       <router-view/>
     </transition>
   </div>

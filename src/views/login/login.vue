@@ -170,7 +170,7 @@ export default {
                 });
                 setTimeout(() => {
                   this.$router.push({
-                    path: "/home"
+                    path: "/blog"
                   });
                 }, 1000);
               } else {

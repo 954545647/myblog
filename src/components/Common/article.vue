@@ -137,7 +137,7 @@ export default {
     },
     // 绑定@imgAdd event
     $imgAdd(pos, $file) {
-      // 第一步.将图片上传到服务器.
+      // 第一步.将图片上传到后端
       var formData = new FormData();
       formData.append("file", $file);
       console.log(`${process.env.VUE_APP_BASE_URL}/blog/upload`);
