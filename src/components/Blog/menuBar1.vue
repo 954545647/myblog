@@ -60,7 +60,7 @@ export default {
     goToMusic() {
       this.canshow = false;
       setTimeout(() => {
-        this.$router.push("/home");
+        this.$router.push("/music");
       }, 0);
     }
   }

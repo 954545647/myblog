@@ -185,7 +185,7 @@ export default {
     },
     // 去听歌
     goToMusic() {
-      this.$router.push("/home");
+      this.$router.push("/music");
     },
     // 显示导航菜单
     showList() {
@@ -409,7 +409,7 @@ export default {
     document.addEventListener("WeixinJSBridgeReady", function() {});
     // 发起请求,获取music.json文件的数据
     let data = this.$axios
-      .get(`${process.env.VUE_APP_MUSIC_URL}/home/music`)
+      .get(`${process.env.VUE_APP_MUSIC_URL}/music/getMusicDate`)
       .then(res => {
         this.musicList = res.data.result.musicList; //音乐数据列表
         // 音乐MP3链接
@@ -423,7 +423,7 @@ export default {
         });
         // 发起请求,单独获取每首歌的歌词的真正数据
         this.$axios
-          .get(`${process.env.VUE_APP_MUSIC_URL}/home/getLyric`, {
+          .get(`${process.env.VUE_APP_MUSIC_URL}/music/getLyric`, {
             params: {
               // 两种数组降维的方式
               // 1: [].concat(...this.lyricList)

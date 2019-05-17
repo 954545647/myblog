@@ -1,12 +1,12 @@
 <template>
-  <div class="home">
+  <div class="music">
     <music></music>
   </div>
 </template>
 
 
 <script>
-import music from '@/components/Home/music.vue';
+import music from '@/components/Music/music.vue';
 export default {
   components:{
     music
@@ -16,7 +16,7 @@ export default {
 
 
 <style lang="scss">
-.home{
+.music{
   width: 100%;
   height: 100%;
 }

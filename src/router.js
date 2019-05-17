@@ -9,20 +9,23 @@ export default new Router({
       path: '/',
       redirect: '/login'
     },
+    // 登录
     {
       path: '/login',
       name: 'login',
       component: ()=> import('./views/login/login.vue')
     },
+    // 注册
     {
       path: '/register',
       name: 'register',
       component: ()=> import('./views/login/register.vue')
     },
+    // 
     {
-      path: '/home',
-      name: 'home',
-      component: ()=> import('./views/home/index.vue'),
+      path: '/music',
+      name: 'music',
+      component: ()=> import('./views/music/index.vue'),
       meta:{
         requireAuth:true  //需要登录
       }

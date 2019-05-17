@@ -14,10 +14,6 @@
         <div class="navigation">
           <ul class="list">
             <li class="list-title">导航</li>
-            <!-- <li @click="goToBlog">
-              <i class="iconfont icon-shouye"></i>
-              <span>首页</span>
-            </li>-->
             <li @click="goToBlog">
               <i class="iconfont icon-wenzhang1"></i>
               <span>文章</span>
@@ -29,6 +25,10 @@
             <li @click="goToWrite">
               <i class="iconfont icon-shuben"></i>
               <span>写博客</span>
+            </li>
+            <li @click="goPerson">
+              <i class="iconfont icon-shuben"></i>
+              <span>个人中心</span>
             </li>
           </ul>
         </div>
@@ -48,8 +48,7 @@ export default {
       width: 0
     };
   },
-  watch: {
-  },
+  watch: {},
   props: {
     list: {
       type: Array,
@@ -57,6 +56,10 @@ export default {
     }
   },
   methods: {
+    // 用户个人中心
+    goPerson(){
+      this.$router.push('/person');
+    },
     // 去写博客
     goToWrite() {
       this.canshow = false;
@@ -75,7 +78,7 @@ export default {
     goToMusic() {
       this.canshow = false;
       setTimeout(() => {
-        this.$router.push("/home");
+        this.$router.push("/music");
       }, 0);
     },
     show() {
@@ -126,12 +129,11 @@ export default {
           border-radius: 50%;
           width: px2rem(120);
           height: px2rem(120);
-          &:hover{
+          &:hover {
             transform: rotate(360deg);
-            transition: .4s all ease-in-out; 
+            transition: 0.4s all ease-in-out;
           }
         }
-
       }
       .name {
         color: rgb(234, 235, 237);
