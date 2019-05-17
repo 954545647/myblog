@@ -40,7 +40,8 @@ export default {
       default: ""
     }
   },
-  beforeDestroy() {},
+  beforeDestroy() {
+  },
   mounted() {
     let id = this.$route.params.id;
     this.$axios

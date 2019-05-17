@@ -4,7 +4,7 @@
       <!-- 作者信息 -->
       <div class="auth">
         <div class="author-cover">
-          <img class="author-cover-img" src="@/assets/author.jpg" alt>
+          <img class="author-cover-img" src="./../../assets/author.jpg" alt>
         </div>
         <strong class="name">Rex</strong>
         <span class="brief">不想切图的切图仔</span>
@@ -25,6 +25,10 @@
             <i class="iconfont icon-shuben"></i>
             <span>写博客</span>
           </li>
+          <li @click="goPerson">
+            <i class="iconfont icon-shuben"></i>
+            <span>个人中心</span>
+          </li>
         </ul>
       </div>
     </div>
@@ -42,6 +46,9 @@ export default {
     };
   },
   methods: {
+    goPerson(){
+      this.$router.push('/user');
+    },
     // 去写博客
     goToWrite() {
       this.canshow = false;

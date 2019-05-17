@@ -1,58 +1,67 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-Vue.use(Router)
+import Vue from "vue";
+import Router from "vue-router";
+Vue.use(Router);
 
 export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/',
-      redirect: '/login'
+      path: "/",
+      redirect: "/login"
     },
     // 登录
     {
-      path: '/login',
-      name: 'login',
-      component: ()=> import('./views/login/login.vue')
+      path: "/login",
+      name: "login",
+      component: () => import("./views/login/login.vue")
     },
     // 注册
     {
-      path: '/register',
-      name: 'register',
-      component: ()=> import('./views/login/register.vue')
+      path: "/register",
+      name: "register",
+      component: () => import("./views/login/register.vue")
     },
-    // 
+    // 音乐首页
     {
-      path: '/music',
-      name: 'music',
-      component: ()=> import('./views/music/index.vue'),
-      meta:{
-        requireAuth:true  //需要登录
+      path: "/music",
+      name: "music",
+      component: () => import("./views/music/index.vue"),
+      meta: {
+        requireAuth: true //需要登录
       }
     },
+    // 博客首页
     {
-      path:'/blog',
-      name:'blog',
-      component:()=> import('./views/blog/index.vue'),
-      meta:{
-        requireAuth:true  //需要登录
+      path: "/blog",
+      name: "blog",
+      component: () => import("./views/blog/index.vue"),
+      meta: {
+        requireAuth: true //需要登录
       }
     },
+    // 博客详情
     {
-      path:'/write',
-      name:'write',
-      component:()=>import('@/components/Blog/writeArticle.vue'),
-      meta:{
-        requireAuth:true  //需要登录
+      path: "/detail/:id",
+      name: "detail",
+      component: () => import("@/components/Blog/blogDetail.vue")
+    },
+    // 写博客
+    {
+      path: "/write",
+      name: "write",
+      component: () => import("@/components/Blog/writeArticle.vue"),
+      meta: {
+        requireAuth: true //需要登录
       }
     },
+    // 用户中心
     {
-      path:'/detail/:id',
-      name:'detail',
-      component:()=>import('@/components/Blog/blogDetail.vue')
+      path:'/user',
+      name:'user',
+      component:()=> import('@/components/User/user.vue'),
+      meta:{
+        requireAuth: true
+      }
     }
   ]
-})
-
-
-
+});

@@ -96,6 +96,9 @@
           <li @click="goToWrite">
             <i class="iconfont icon-xiezi"></i>
           </li>
+                    <li @click="goToUser">
+            <i class="iconfont icon-yonghu"></i>
+          </li>
         </ul>
       </transition>
       <div class="link-control" @click="showList">
@@ -151,9 +154,10 @@ export default {
   watch: {
     // 避免mounted还没获取到数据,此时值为undefined
     imgUrlList: function(val) {
+      console.log(this.imgUrlList[this.musicIndex])
       this.imgCover = this.imgUrlList[this.musicIndex]
         ? this.imgUrlList[this.musicIndex]
-        : "";
+        : "http://47.105.52.134/music/%E6%9E%97%E5%B3%AF%20-%20%E5%BD%B1%E5%AD%90%E7%9A%84%E7%88%B1%E6%83%85%E6%95%85%E4%BA%8B%20(Live).jpg";
     },
     // 监听当前时间的变化,然后去改变进度条
     currentTime: function(val) {
@@ -175,6 +179,10 @@ export default {
     }
   },
   methods: {
+    // 去用户中心
+    goToUser(){
+      this.$router.push('/user');
+    },
     // 去写博客
     goToWrite() {
       this.$router.push("/write");
@@ -404,6 +412,7 @@ export default {
     //   }
     // });
     this.musicIndex = new Date().getDay(); //根据周几来播放歌曲
+    console.log(this.musicIndex)
     this.updateProgress(); //更新初步样式 progress此时为0
     // 监听微信加载完毕
     document.addEventListener("WeixinJSBridgeReady", function() {});
