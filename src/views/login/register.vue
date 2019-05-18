@@ -360,6 +360,7 @@ export default {
               }
             }
             .email {
+              @include placeholder;
               .el-input__inner {
                 padding: 0 px2rem(20);
               }
@@ -393,6 +394,7 @@ export default {
               }
             }
             .code {
+              @include placeholder;
               .el-input__inner {
                 padding: 0 px2rem(20);
               }
@@ -424,6 +426,7 @@ export default {
               }
             }
             .pass {
+              @include placeholder;
               .el-input__inner {
                 padding: 0 px2rem(20);
               }

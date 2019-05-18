@@ -154,12 +154,11 @@ export default {
   watch: {
     // 避免mounted还没获取到数据,此时值为undefined
     imgUrlList: function(val) {
-      console.log(this.imgUrlList[this.musicIndex])
       this.imgCover = this.imgUrlList[this.musicIndex]
         ? this.imgUrlList[this.musicIndex]
         : "http://47.105.52.134/music/%E6%9E%97%E5%B3%AF%20-%20%E5%BD%B1%E5%AD%90%E7%9A%84%E7%88%B1%E6%83%85%E6%95%85%E4%BA%8B%20(Live).jpg";
     },
-    // 监听当前时间的变化,然后去改变进度条
+    // 监听当前时间的变化,然后去改变进度条 
     currentTime: function(val) {
       this.progress =
         (this.$refs.audio.currentTime / this.$refs.audio.duration) * 100;

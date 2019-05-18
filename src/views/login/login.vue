@@ -163,7 +163,6 @@ export default {
               if (res.data.code === 0 && res.status === 200) {
                 // this.Login(Math.random())
                 // 把后端返回的token保存到 localStorage中去
-                window.localStorage["token"] = JSON.stringify(res.data.token);
                 Message.success({
                   message: this.warningText,
                   duration: 1000
@@ -278,6 +277,11 @@ export default {
                 padding-left: px2rem(2);
               }
               .el-input {
+                input::-webkit-input-placeholder {
+                  color: #aab2bd;
+                  font-size: 12px;
+                  text-indent: 2px;
+                }
                 .el-input__inner {
                   padding: 0 px2rem(20);
                 }
@@ -302,6 +306,7 @@ export default {
                 padding-left: px2rem(2);
               }
               .el-input {
+                @include placeholder;
                 .el-input__inner {
                   padding: 0 px2rem(20);
                 }
@@ -459,3 +464,5 @@ export default {
   }
 }
 </style>
+
+

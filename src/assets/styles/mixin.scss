@@ -1,6 +1,6 @@
 $base: 37.5;
-$blue: #31BBEE;
-$black: #393E50;
+$blue: #31bbee;
+$black: #393e50;
 @function px2rem($px) {
   @return $px / $base + rem;
 }
@@ -25,4 +25,12 @@ $black: #393E50;
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-all; // 强制换行
+}
+
+@mixin placeholder {
+  input::-webkit-input-placeholder {
+    color: #aab2bd;
+    font-size: 12px;
+    text-indent: 2px;
+  }
 }
