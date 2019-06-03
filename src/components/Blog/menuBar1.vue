@@ -11,25 +11,44 @@
       </div>
       <!-- 导航栏菜单 -->
       <div class="navigation">
-        <ul class="list">
-          <li class="list-title">导航</li>
-          <li @click="goToBlog">
+        <el-menu default-active="2" class="el-menu-vertical-demo">
+          <el-menu-item index="1" @click="goToBlog">
             <i class="iconfont icon-wenzhang1"></i>
-            <span>文章</span>
-          </li>
-          <li @click="goToMusic">
+            <span slot="title">首页</span>
+          </el-menu-item>
+          <el-menu-item index="2" @click="goToWrite">
+            <i class="iconfont icon-shuben"></i>
+            <span slot="title">写博客</span>
+          </el-menu-item>
+          <el-menu-item index="3" @click="goToMusic">
             <i class="iconfont icon-erji"></i>
-            <span>听歌</span>
-          </li>
-          <li @click="goToWrite">
-            <i class="iconfont icon-shuben"></i>
-            <span>写博客</span>
-          </li>
-          <li @click="goPerson">
-            <i class="iconfont icon-shuben"></i>
-            <span>个人中心</span>
-          </li>
-        </ul>
+            <span slot="title">听歌</span>
+          </el-menu-item>
+          <el-menu-item index="4" @click="goToPerson">
+            <i class="iconfont icon-yonghu"></i>
+            <span slot="title">个人中心</span>
+          </el-menu-item>
+          <!-- <el-submenu index="4" @click="goToPerson">
+            <template slot="title">
+              <i class="iconfont icon-shuben"></i>
+              <span>个人中心</span>
+            </template>
+            <el-menu-item-group>
+              <el-menu-item index="1-1" @click="goToPerson">
+                <i class="iconfont icon-xiugai"></i>
+                修改资料
+              </el-menu-item>
+              <el-menu-item index="1-2">
+                <i class="iconfont icon-xiugai"></i>
+                修改资料
+              </el-menu-item>
+              <el-menu-item index="1-3">
+                <i class="iconfont icon-web-icon-"></i>
+                退出登录
+              </el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>-->
+        </el-menu>
       </div>
     </div>
   </div>
@@ -46,8 +65,8 @@ export default {
     };
   },
   methods: {
-    goPerson(){
-      this.$router.push('/user');
+    goToPerson() {
+      this.$router.push("/user");
     },
     // 去写博客
     goToWrite() {
@@ -130,28 +149,62 @@ export default {
     .navigation {
       flex: 0 0 60%;
       padding: 10px 10px 0 10px;
-      .list {
-        list-style: none;
-        color: rgb(180, 182, 189);
-        font-size: 16px;
-        .list-title {
-          font-size: 14px;
-        }
-        li {
+      .el-menu {
+        border-right: none;
+        background-color: $black;
+        .el-menu-item {
           display: flex;
-          justify-content: flex-start;
-          height: 40px;
-          line-height: 40px;
-          .iconfont {
-            font-size: 16px;
-            padding: 0 20px 0 10px;
+          @include center;
+          &:hover {
+            background-color: #2e3344;
           }
-          .icon-shouye {
-            font-size: 22px;
-            vertical-align: -2px;
-            padding: 0 14px 0 8px;
+          &:focus {
+            background-color: #2e3344;
+          }
+          i {
+            flex: 0 0 40%;
+          }
+          span {
+            display: flex;
+            flex: 1;
+            justify-content: flex-start;
+            color: rgb(180, 182, 189);
           }
         }
+        .el-menu-item.is-active i {
+          color: rgb(180, 182, 189);
+        }
+        // 有子菜单的
+        // .el-submenu {
+        //   display: flex;
+        //   flex-direction: column;
+        //   .el-submenu__title {
+        //     display: flex;
+        //     flex: 1;
+        //     i {
+        //       flex: 0 0 40%;
+        //     }
+        //     &:hover {
+        //       background-color: #2e3344;
+        //     }
+        //   }
+        //   // 下拉菜单
+        //   .el-menu--inline {
+        //     .el-menu-item-group {
+        //       ul {
+        //         width: 100%;
+        //         .el-menu-item {
+        //           min-width: 0;
+        //           width: 100%;
+        //           color: rgb(180, 182, 189);
+        //         }
+        //       }
+        //     }
+        //   }
+        //   span {
+        //     color: rgb(180, 182, 189);
+        //   }
+        // }
       }
     }
   }

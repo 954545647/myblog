@@ -1,16 +1,55 @@
 <template>
   <div class="aside-wrapper">
     <div class="aside">
-      <h1>标题</h1>
-      <h2>目录</h2>
-      <h3>内容</h3>
+      <ul class="aside-lists-wrapper">
+        <li class="aside-component-lists">
+          <i
+            class="iconfont icon-remen"
+            :class="{'isHotBlog': currentView == 'HotBlog'}"
+            @click="currentView='HotBlog'"
+          ></i>
+          <i
+            class="iconfont icon-fenxi"
+            :class="{'isBlogInfo': currentView == 'BlogInfo'}"
+            @click="currentView='BlogInfo'"
+          ></i>
+        </li>
+      </ul>
+      <keep-alive>
+        <component :is="currentView" :blogTitles="blogTitles"></component>
+      </keep-alive>
     </div>
   </div>
 </template>
 
 
 <script>
-export default {};
+import HotBlog from "@/components/Blog/hotBlog.vue";
+import BlogInfo from "@/components/Blog/blogInfo.vue";
+export default {
+  data() {
+    return {
+      currentView: "HotBlog",
+      blogTitles: []
+    };
+  },
+  components: {
+    BlogInfo,
+    HotBlog
+  },
+  methods: {
+    handleClick(tab, event) {
+      console.log(tab, event);
+    }
+  },
+  mounted() {
+    this.$axios
+      .get(`${process.env.VUE_APP_BASE_URL}/blog/getAllBlog`)
+      .then(res => {
+        this.blogTitles = res.data.blogTitles;
+      });
+  }
+};
 </script>
 
 
@@ -29,8 +68,27 @@ export default {};
     height: 100%;
     font-size: 100px;
     font-size: 18px;
-    @include center;
     flex-direction: column;
+    align-items: center;
+    .aside-lists-wrapper {
+      height: 50px;
+      margin-bottom: 20px;
+      .aside-component-lists {
+        height: 50px;
+        display: flex;
+        .isHotBlog {
+          border-bottom: 1px solid #23b7e5;
+        }
+        .isBlogInfo {
+          border-bottom: 1px solid #23b7e5;
+        }
+        i {
+          flex: 1;
+          @include center;
+          font-size: 24px;
+        }
+      }
+    }
   }
 }
 </style>

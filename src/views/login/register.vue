@@ -85,6 +85,15 @@
         </div>
       </div>
     </div>
+    <div class="bar">
+      <i
+        class="iconfont icon-shouye_huaban_huaban"
+        @click="toHome"
+        :class="{active: activeName == 'blog'}"
+      ></i>
+      <i class="iconfont icon-MusicAcc" @click="toMusic" :class="{active: activeName == 'music'}"></i>
+      <i class="iconfont icon-yonghu" @click="toRegister" :class="{active: activeName == 'register'}"></i>
+    </div>
   </div>
 </template>
 
@@ -131,6 +140,7 @@ export default {
       warningText: "", //警告信息
       remainTime: 90, //邮箱可重新获取剩余时间
       CanSend: false,
+      activeName: "register",
       ruleForm: {
         email: "",
         code: "",
@@ -147,7 +157,25 @@ export default {
       }
     };
   },
+  computed: {
+    currentRouter() {
+      this.activeName = this.$route.name;
+    }
+  },
   methods: {
+    // 去博客首页
+    toHome() {
+      this.activeName = "blog";
+      this.$router.push('/blog');
+    },
+    toMusic() {
+      this.activeName = "music";
+      this.$router.push('/music');
+    },
+    toRegister() {
+      this.activeName = "register";
+      this.$router.push('/login');
+    },
     // 跳转到注册页面
     goToLogin() {
       this.router.push({
@@ -550,6 +578,26 @@ export default {
           }
         }
       }
+    }
+  }
+  .bar {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    width: 50px;
+    .iconfont {
+      height: 50px;
+      font-size: 22px;
+      @include center;
+    }
+    .icon-yonghu {
+      font-size: 24px;
+    }
+    .active {
+      color: $blue;
+      font-weight: 700;
     }
   }
 }

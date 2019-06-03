@@ -25,19 +25,13 @@ export default new Router({
     {
       path: "/music",
       name: "music",
-      component: () => import("./views/music/index.vue"),
-      meta: {
-        requireAuth: true //需要登录
-      }
+      component: () => import("./views/music/index.vue")
     },
     // 博客首页
     {
       path: "/blog",
       name: "blog",
       component: () => import("./views/blog/index.vue"),
-      meta: {
-        requireAuth: true //需要登录
-      }
     },
     // 博客详情
     {
@@ -54,14 +48,25 @@ export default new Router({
         requireAuth: true //需要登录
       }
     },
+    {
+      path:'/test',
+      name:'test',
+      component:()=> import('./views/test/test.vue')
+    },
     // 用户中心
     {
       path:'/user',
       name:'user',
-      component:()=> import('@/components/User/user.vue'),
+      component:()=> import('./views/user/index.vue'),
       meta:{
         requireAuth: true
-      }
+      },
+      children:[
+        {
+          path:'modify',
+          component:()=>import('@/components/User/modify.vue')
+        }
+      ]
     }
   ]
 });

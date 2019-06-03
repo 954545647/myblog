@@ -5,7 +5,7 @@
       <div class="content-bar">
         <!-- 图片 -->
         <div class="img-wrapper">
-          <img :src="imgUrlList[musicIndex]" ref="musicCover">
+          <img :src="imgCover" ref="musicCover">
         </div>
         <!-- 歌词 -->
         <div class="lyric-wrapper">
@@ -84,39 +84,25 @@
     <!-- 音乐蒙版 -->
     <div class="music-mask"></div>
     <!-- 路由菜单 -->
-    <div class="link-wrapper">
-      <transition name="fade">
-        <ul class="link-list" v-show="listShow">
-          <li @click="goToBlog">
-            <i class="iconfont icon-shouye"></i>
-          </li>
-          <li @click="goToMusic">
-            <i class="iconfont icon-erji"></i>
-          </li>
-          <li @click="goToWrite">
-            <i class="iconfont icon-xiezi"></i>
-          </li>
-                    <li @click="goToUser">
-            <i class="iconfont icon-yonghu"></i>
-          </li>
-        </ul>
-      </transition>
-      <div class="link-control" @click="showList">
-        <i class="iconfont icon-zhiyin"></i>
-      </div>
+    <transition name="fade">
+      <ul class="link-list" v-show="listShow">
+        <li @click="goToBlog">
+          <i class="iconfont icon-shouye"></i>
+        </li>
+        <li @click="goToMusic">
+          <i class="iconfont icon-erji"></i>
+        </li>
+        <li @click="goToWrite">
+          <i class="iconfont icon-xiezi"></i>
+        </li>
+        <li @click="goToUser">
+          <i class="iconfont icon-yonghu"></i>
+        </li>
+      </ul>
+    </transition>
+    <div class="link-control" @click="showList">
+      <i class="iconfont icon-zhiyin"></i>
     </div>
-    <!-- 过渡效果 -->
-    <!-- <transition name="fade">
-      <div class="loading-wrapper" ref="loading">
-        <div class="loading">
-          <i></i>
-          <i></i>
-          <i></i>
-          <i></i>
-          <i></i>
-        </div>
-      </div>
-    </transition> -->
   </div>
 </template>
 
@@ -152,13 +138,14 @@ export default {
     };
   },
   watch: {
+    musicIndex:function(val){
+      this.imgCover = this.imgUrlList[this.musicIndex];
+    },
     // 避免mounted还没获取到数据,此时值为undefined
     imgUrlList: function(val) {
-      this.imgCover = this.imgUrlList[this.musicIndex]
-        ? this.imgUrlList[this.musicIndex]
-        : "http://47.105.52.134/music/%E6%9E%97%E5%B3%AF%20-%20%E5%BD%B1%E5%AD%90%E7%9A%84%E7%88%B1%E6%83%85%E6%95%85%E4%BA%8B%20(Live).jpg";
+      this.imgCover = this.imgUrlList[this.musicIndex];
     },
-    // 监听当前时间的变化,然后去改变进度条 
+    // 监听当前时间的变化,然后去改变进度条
     currentTime: function(val) {
       this.progress =
         (this.$refs.audio.currentTime / this.$refs.audio.duration) * 100;
@@ -179,8 +166,8 @@ export default {
   },
   methods: {
     // 去用户中心
-    goToUser(){
-      this.$router.push('/user');
+    goToUser() {
+      this.$router.push("/user");
     },
     // 去写博客
     goToWrite() {
@@ -233,6 +220,16 @@ export default {
       this.musicIndex--;
       this.changeMusic();
     },
+    // 切换歌曲
+    changeMusic() {
+      this.progress = 0;
+      this.updateProgress();
+      this.currentlyric = this.lyricResult[this.musicIndex]; //当前播放歌的歌词
+      this.currentMusicTime = this.timeResult[this.musicIndex]; //当前播放歌的时间
+      this.totalTime = this.timeFormat(this.$refs.audio.duration);
+      this.$refs.audio.currentTime = 0;
+      this.ended();
+    },
     // 转换时间格式
     timeFormat(time) {
       let result = "";
@@ -257,17 +254,6 @@ export default {
     // 切换播放模式
     changeModel() {
       this.model = !this.model;
-    },
-    // 切换歌曲
-    changeMusic() {
-      this.progress = 0;
-      this.updateProgress();
-      this.currentlyric = this.lyricResult[this.musicIndex]; //当前播放歌的歌词
-      this.currentMusicTime = this.timeResult[this.musicIndex]; //当前播放歌的时间
-      this.totalTime = this.timeFormat(this.$refs.audio.duration);
-      this.imgCover = this.imgUrlList[this.musicIndex];
-      this.$refs.audio.currentTime = 0;
-      this.ended();
     },
     // 把每句歌词的样式清空
     restoreLyric() {
@@ -404,14 +390,7 @@ export default {
     }
   },
   mounted() {
-    // let loading = document.getElementsByClassName("loading-wrapper");
-    // document.addEventListener("readystatechange", function() {
-    //   if (document.readyState == "complete") {
-    //     loading[0].style.display = "none";
-    //   }
-    // });
     this.musicIndex = new Date().getDay(); //根据周几来播放歌曲
-    console.log(this.musicIndex)
     this.updateProgress(); //更新初步样式 progress此时为0
     // 监听微信加载完毕
     document.addEventListener("WeixinJSBridgeReady", function() {});
@@ -688,105 +667,110 @@ export default {
       z-index: -1;
       background: rgba(0, 0, 0, 0.4);
     }
-    .link-wrapper {
+    // 导航控制开关
+    .link-control {
+      @include center;
       position: absolute;
       right: 0;
       bottom: 0;
-      .link-control {
-        @include center;
-        line-height: 1em;
-        position: absolute;
-        right: px2rem(10);
-        bottom: px2rem(5);
-        .iconfont {
-          font-size: px2rem(18);
-        }
+      width: 40px;
+      height: 30px;
+      .iconfont {
+        font-size: px2rem(18);
       }
-      .link-list {
-        background: transparent;
-        position: absolute;
-        right: px2rem(10);
-        bottom: px2rem(40);
-        // font-size: px2rem(18);
-        li {
-          padding: px2rem(5) 0;
-          font-size: px2rem(20);
-          .icon-shouye {
-            font-size: px2rem(22);
-          }
+    }
+    // 路由列表
+    .link-list {
+      background: transparent;
+      position: absolute;
+      right: 0;
+      bottom: 30px;
+      width: 40px;
+      li {
+        @include center;
+        height: 30px;
+        box-sizing: border-box;
+        .iconfont {
+          font-size: 18px;
+        }
+        .icon-yonghu {
+          font-size: 16px;
+        }
+        .icon-erji {
+          font-size: 14px;
         }
       }
     }
-    .loading-wrapper {
-      position: fixed;
-      left: 0;
+  }
+  .loading-wrapper {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    z-index: 1000;
+    .loading {
+      position: absolute;
       top: 0;
-      width: 100%;
-      height: 100%;
-      background: #fff;
-      z-index: 1000;
-      .loading {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        margin: auto;
-        width: 100px;
-        height: 100px;
-        text-align: center;
-        border: 1px solid red;
-        display: flex;
-        align-items: center;
-        i {
-          width: 16px;
-          height: 50px;
-          float: left;
-          display: block;
-          background-color: #399;
-          margin: 0 2px;
-          -webkit-animation: loading 1.2s infinite;
-          animation: loading 1.2s infinite;
-          &:nth-child(2) {
-            -webkit-animation-delay: 0.1s;
-            animation-delay: 0.1s;
-          }
-          &:nth-child(3) {
-            -webkit-animation-delay: 0.2s;
-            animation-delay: 0.2s;
-          }
-          &:nth-child(4) {
-            -webkit-animation-delay: 0.3s;
-            animation-delay: 0.3s;
-          }
-          &:nth-child(5) {
-            -webkit-animation-delay: 0.4s;
-            animation-delay: 0.4s;
-          }
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      width: 100px;
+      height: 100px;
+      text-align: center;
+      border: 1px solid red;
+      display: flex;
+      align-items: center;
+      i {
+        width: 16px;
+        height: 50px;
+        float: left;
+        display: block;
+        background-color: #399;
+        margin: 0 2px;
+        -webkit-animation: loading 1.2s infinite;
+        animation: loading 1.2s infinite;
+        &:nth-child(2) {
+          -webkit-animation-delay: 0.1s;
+          animation-delay: 0.1s;
         }
-        @-webkit-keyframes loading {
-          0%,
-          40%,
-          100% {
-            -webkit-transform: scaleY(0.4);
-            transform: scaleY(0.4);
-          }
-          20% {
-            -webkit-transform: scaleY(1);
-            transform: scaleY(1);
-          }
+        &:nth-child(3) {
+          -webkit-animation-delay: 0.2s;
+          animation-delay: 0.2s;
         }
-        @keyframes loading {
-          0%,
-          40%,
-          100% {
-            -webkit-transform: scaleY(0.4);
-            transform: scaleY(0.4);
-          }
-          20% {
-            -webkit-transform: scaleY(1);
-            transform: scaleY(1);
-          }
+        &:nth-child(4) {
+          -webkit-animation-delay: 0.3s;
+          animation-delay: 0.3s;
+        }
+        &:nth-child(5) {
+          -webkit-animation-delay: 0.4s;
+          animation-delay: 0.4s;
+        }
+      }
+      @-webkit-keyframes loading {
+        0%,
+        40%,
+        100% {
+          -webkit-transform: scaleY(0.4);
+          transform: scaleY(0.4);
+        }
+        20% {
+          -webkit-transform: scaleY(1);
+          transform: scaleY(1);
+        }
+      }
+      @keyframes loading {
+        0%,
+        40%,
+        100% {
+          -webkit-transform: scaleY(0.4);
+          transform: scaleY(0.4);
+        }
+        20% {
+          -webkit-transform: scaleY(1);
+          transform: scaleY(1);
         }
       }
     }
@@ -914,41 +898,39 @@ export default {
         }
       }
     }
-    .link-wrapper {
+    // 导航控制开关
+    .link-control {
       position: absolute;
       right: 0;
       top: 0;
       width: 50px;
       height: 50px;
-      .link-control {
-        @include center;
-        line-height: 1em;
-        position: absolute;
-        right: px2rem(10);
-        top: px2rem(10);
-        .iconfont {
-          font-size: px2rem(18);
-        }
+      .iconfont {
+        font-size: 24px;
       }
-      .link-list {
-        background: transparent;
-        position: absolute;
-        right: px2rem(10);
-        top: px2rem(30);
-        &:first-child {
-          padding-top: 0;
+    }
+    // 路由列表
+    .link-list {
+      background: transparent;
+      position: absolute;
+      right: 0;
+      top: 50px;
+      width: 50px;
+      li {
+        @include center;
+        height: 50px;
+        box-sizing: border-box;
+        .iconfont {
+          font-size: 24px;
         }
-        li {
-          padding: px2rem(5) 0;
-          .icon-shouye {
-            font-size: px2rem(20);
-          }
-          .icon-erji {
-            font-size: px2rem(18);
-          }
-          .icon-xiezi {
-            font-size: px2rem(18);
-          }
+        .icon-yonghu {
+          font-size: 26px;
+        }
+        .icon-erji {
+          font-size: 24px;
+        }
+        .icon-shouye {
+          font-size: 28px;
         }
       }
     }

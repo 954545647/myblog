@@ -2,7 +2,20 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-import { Button, Form, Input, FormItem, Upload, Tag } from "element-ui";
+import {
+  Button,
+  Form,
+  Input,
+  FormItem,
+  Upload,
+  Tag,
+  Menu,
+  Submenu,
+  MenuItem,
+  MenuItemGroup,
+  Tabs,
+  TabPane
+} from "element-ui";
 import mavonEditor from "mavon-editor"; //markdown编辑器
 import "mavon-editor/dist/css/index.css";
 Vue.use(Button);
@@ -12,13 +25,19 @@ Vue.use(FormItem);
 Vue.use(mavonEditor);
 Vue.use(Upload);
 Vue.use(Tag);
+Vue.use(Menu);
+Vue.use(Submenu);
+Vue.use(MenuItem);
+Vue.use(MenuItemGroup);
+Vue.use(Tabs);
+Vue.use(TabPane);
 import "element-ui/lib/theme-chalk/index.css";
 import "@/assets/styles/global.scss";
 import "@/assets/styles/fonts/iconfont.css";
 import "@/utils/useCommon.js";
 
 import axios from "axios"; //引入axios
-axios.defaults.withCredentials = true;  //允许携带cookie
+axios.defaults.withCredentials = true; //允许携带cookie
 Vue.prototype.$axios = axios;
 
 Vue.prototype.router = router;
@@ -40,7 +59,7 @@ router.beforeEach((to, from, next) => {
         next();
       } else {
         next({
-          path: "/login",
+          path: "/login"
           // query: { redirect: to.fullPath } // 将跳转的路由path作为参数，登录成功后跳转到该路由
         });
       }

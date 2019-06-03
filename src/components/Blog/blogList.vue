@@ -38,17 +38,12 @@
 
 
 <script>
-import scroll from "@/components/Common/scroll.vue";
 export default {
   data() {
     return {
       width: 0,
       blogData: []
     };
-  },
-  watch: {},
-  components: {
-    scroll
   },
   methods: {
     onScroll(val) {},

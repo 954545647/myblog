@@ -113,6 +113,7 @@ export default {
                   customClass: "myToast", //自定义类名
                   duration: 2000
                 });
+                this.$router.push('/blog')
               }
             });
           // 将下一步弹窗关闭并且清空编辑区的内容
@@ -153,7 +154,7 @@ export default {
 @import "@/assets/styles/global.scss";
 @media screen and (min-width: 100px) {
   .next-bar-wrapper {
-    position: absolute;
+    position: fixed;
     z-index: 1800;
     left: 50%;
     top: 50%;

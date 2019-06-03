@@ -15,24 +15,29 @@
         style="{z-index:10}"
       />
     </div>
+    <blog-catalog :catalogsNames="catalogsNames" :catalogsIds="catalogsIds"></blog-catalog>
   </div>
 </template>
 
 
 <script>
 import MenuBarSmall from "@/components/Blog/menuBar.vue";
+import BlogCatalog from "@/components/Blog/blogCatalog.vue";
 import { mavonEditor } from "mavon-editor";
 export default {
   data() {
     return {
-      value: ""
+      value: "",
+      catalogsNames: [],
+      catalogsIds:[]
     };
   },
   components: {
     mavonEditor,
     TopBar: () => import("@/components/Blog/topBar.vue"),
     MenuBarSmall,
-    MenuBarBig: () => import("@/components/Blog/menuBar1.vue")
+    MenuBarBig: () => import("@/components/Blog/menuBar1.vue"),
+    BlogCatalog
   },
   props: {
     content: {
@@ -40,8 +45,7 @@ export default {
       default: ""
     }
   },
-  beforeDestroy() {
-  },
+  beforeDestroy() {},
   mounted() {
     let id = this.$route.params.id;
     this.$axios
@@ -52,6 +56,23 @@ export default {
       })
       .then(res => {
         this.value = res.data.blog[0].HtmlContent;
+        let catalogs = this.value.split("\n"); //把html代码变成数组
+        // 进行正则匹配，找出标题文段（h1）
+        let catalogsList = [];
+        catalogs.forEach(item => {
+          if (item.match(/<h.>/)) {
+            catalogsList.push(item);
+          }
+        });
+        let catalogsId = [];
+        catalogsList.forEach(item => {
+          // 所有标题集合
+          catalogsId.push(item.split('id="')[1].split('>')[0].split('"')[0])
+          this.catalogsNames.push(item.split("</a>")[1].split("</")[0]);
+        });
+        catalogsId.forEach((item)=>{
+          this.catalogsIds.push('#' + item)
+        })
       });
   }
 };
@@ -79,7 +100,7 @@ export default {
         flex: 0 0 100%;
       }
     }
-    .right-aside {
+    .blog-catalog {
       display: none;
     }
     .blod-detail {
@@ -119,7 +140,7 @@ export default {
         min-width: 520px;
       }
     }
-    .right-aside {
+    .blog-catalog {
       display: none;
     }
   }
@@ -140,11 +161,12 @@ export default {
 @media screen and (min-width: 996px) {
   .detail-wrapper {
     .blod-detail {
+      padding-right: 200px;
       .v-note-wrapper {
-        min-width: 720px;
+        min-width: 650px;
       }
     }
-    .right-aside {
+    .blog-catalog {
       display: block;
       height: 100%;
     }
@@ -156,10 +178,10 @@ export default {
   .detail-wrapper {
     .blod-detail {
       .v-note-wrapper {
-        min-width: 900px;
+        min-width: 700px;
       }
       .markdown-body {
-        min-width: 800px;
+        min-width: 700px;
       }
     }
   }
@@ -170,7 +192,7 @@ export default {
   .detail-wrapper {
     .blod-detail {
       .markdown-body {
-        min-width: 1000px;
+        min-width: 800px;
       }
     }
   }
