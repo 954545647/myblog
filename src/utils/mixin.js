@@ -23,9 +23,9 @@ export const blogMixin = {
 
 export const userMixin = {
   computed: {
-    ...mapGetters(['token'])
+    ...mapGetters(['token','currentView'])
   },
   methods: {
-    ...mapActions(['Login','Logout'])
+    ...mapActions(['Login','Logout','changeView'])
   },
 }

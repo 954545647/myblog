@@ -14,31 +14,32 @@
 export default {
   name: "HotBlog",
   data() {
-    return {
-    };
+    return {};
   },
-  props:{
-    blogTitles:{
-      type:Array,
-      default:()=>[]
+  props: {
+    blogTitles: {
+      type: Array,
+      default: () => []
     }
   },
-  mounted() {
-  }
+  mounted() {}
 };
 </script>
 
 
 <style lang="scss">
-.hot-blog{
-    .blog-list{
-      .blog-item{
-        height: 50px;
-        line-height: 50px;
-        .iconfont{
-          color: #FF7D7D;
-        }
+.hot-blog {
+  .blog-list {
+    .blog-item {
+      height: 50px;
+      line-height: 50px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      .iconfont {
+        color: #ff7d7d;
       }
     }
+  }
 }
 </style>

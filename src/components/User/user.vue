@@ -3,7 +3,9 @@
     <my-header></my-header>
     <my-setting></my-setting>
     <my-footer></my-footer>
-    <router-view></router-view>
+    <keep-alive>
+      <component :is="currentView"></component>
+    </keep-alive>
   </div>
 </template>
 
@@ -11,12 +13,30 @@
 import myHeader from "@/components/User/header.vue";
 import mySetting from "@/components/User/setting.vue";
 import myFooter from "@/components/User/footer.vue";
+import Modify from '@/components/User/modify.vue';
+import UserCenter from '@/components/User/userCenter.vue';
+import {userMixin} from '@/utils/mixin.js';
 export default {
+  mixins:[userMixin],
+  data() {
+    return {
+    }
+  },
+  watch: {
+    currentView:function(){
+      console.log(this.currentView)
+    }
+  },
   components: {
     myHeader,
     mySetting,
-    myFooter
-  }
+    myFooter,
+    UserCenter,
+    Modify
+  },
+  mounted() {
+    console.log(this.currentView)
+  },
 };
 </script>
 
@@ -32,6 +52,9 @@ export default {
     width: 100%;
     box-sizing: border-box;
     background-color: #f9f9f9;
+    .header-img-wrapper{
+      width: 100%;
+    }
   }
 }
 @media screen and (min-width: 500px) {
@@ -96,10 +119,10 @@ export default {
               .iconfont {
                 font-size: 24px;
               }
-              .icon-xiugai{
+              .icon-xiugai {
                 font-size: 30px;
               }
-              .icon-web-icon-{
+              .icon-web-icon- {
                 font-size: 30px;
               }
               span {

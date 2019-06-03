@@ -1,6 +1,7 @@
 const user = {
   state:{
-    token: ''
+    token: '',
+    currentView:'UserCenter',  //当前组件
   },
   mutations:{
     Login(state,newToken){
@@ -10,6 +11,9 @@ const user = {
     Logout(state,newToken){
       sessionStorage.removeItem("token", newToken);
       state.token = newToken;
+    },
+    changeView(state,newView){
+      state.currentView = newView;
     }
   }
 }

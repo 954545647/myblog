@@ -20,6 +20,9 @@ const actions = {
   Logout({commit},newToken){
     return commit('Logout',newToken)
   },
+  changeView({commit},newView){
+    return commit('changeView',newView)
+  }
 }
 
 export default actions;

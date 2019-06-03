@@ -7,25 +7,29 @@
       <section class="manage">
         <ul class="list">
           <li>
-            <router-link :to="{ path: '/user/modify' }" tag="i" class="iconfont icon-xiugai"></router-link>
+            <i class="iconfont icon-yonghu"></i>
+            <span @click="goToPerson">个人中心</span>
+          </li>
+          <li>
+            <i class="iconfont icon-xiugai"></i>
             <span @click="goToModify">修改资料</span>
           </li>
           <li>
-            <router-link :to="{ path: '/blog' }" tag="i" class="iconfont icon-wenzhang1"></router-link>
+            <i class="iconfont icon-wenzhang1"></i>
             <span @click="goToBlog">个人文章</span>
           </li>
-          <li>
+          <!-- <li>
             <i class="iconfont icon-aixin"></i>
             <span>个人收藏</span>
           </li>
           <li>
             <i class="iconfont icon-xiangce"></i>
             <span>个人相册</span>
-          </li>
-          <li>
+          </li> -->
+          <!-- <li>
             <i class="iconfont icon-tongzhi"></i>
             <span>系统通知</span>
-          </li>
+          </li> -->
           <li @click="logout">
             <i class="iconfont icon-web-icon-"></i>
             <span>退出登录</span>
@@ -38,7 +42,9 @@
 
 
 <script>
+import {userMixin} from '@/utils/mixin.js';
 export default {
+  mixins:[userMixin],
   methods: {
     // 退出登录
     logout() {
@@ -53,11 +59,15 @@ export default {
     },
     // 修改资料
     goToModify(){
-      this.$router.push('/modify')
+      // this.$router.push('/modify')
+      this.changeView('Modify')
+      console.log(this.currentView);
     },
     // 用户个人中心
-    goPerson(){
-       this.$router.push('/user');
+    goToPerson(){
+      this.changeView('UserCenter')
+      //  this.$router.push('/user');
+      console.log(this.currentView);
     },
     // 去写博客
     goToWrite() {

@@ -1,5 +1,6 @@
 <template>
   <div class="modify">
+    <span>敬请期待~</span>
   </div>
 </template>
 
@@ -10,9 +11,12 @@ export default {};
 
 <style lang="scss">
 .modify {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  span{
+    font-size: 20px;
+  }
 }
 </style>
