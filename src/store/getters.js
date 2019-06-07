@@ -6,6 +6,7 @@ const getters = {
   blogRender: state=> state.blog.blogRender,
   token:state=>state.user.token,
   currentView:state=>state.user.currentView,
+  username:state=>state.user.username,
 };
 
 // 不使用 getters:

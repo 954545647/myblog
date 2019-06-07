@@ -22,6 +22,9 @@ const actions = {
   },
   changeView({commit},newView){
     return commit('changeView',newView)
+  },
+  setUserName({commit},newView){
+    return commit('setUserName',newView)
   }
 }
 

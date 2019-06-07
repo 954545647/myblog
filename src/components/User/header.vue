@@ -15,7 +15,7 @@
       <i class="iconfont icon-yonghu"></i>
     </el-upload>
     <div class="user-info">
-      <span class="username">rex</span>
+      <span class="username">{{username}}</span>
       <span class="desc">好好学习天天向上</span>
     </div>
   </div>
@@ -27,6 +27,12 @@ export default {
     return {
       imageUrl: ""
     };
+  },
+  props:{
+    username:{
+      type:String,
+      default:''
+    }
   },
   methods: {
     handleAvatarSuccess() {},

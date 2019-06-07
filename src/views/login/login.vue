@@ -25,7 +25,7 @@
               <div class="iconfont-wrapper">
                 <span class="iconfont icon-yonghu"></span>
               </div>
-              <el-input v-model="ruleForm.email" class="username" placeholder="输入用户名" ref="email"></el-input>
+              <el-input v-model="ruleForm.email" class="username" placeholder="请输入邮箱" ref="email"></el-input>
             </el-form-item>
             <!-- 输入密码 -->
             <el-form-item
@@ -41,7 +41,7 @@
                 class="pass"
                 autocomplete="off"
                 type="password"
-                placeholder="输入密码"
+                placeholder="请输入密码"
                 ref="pass"
               ></el-input>
             </el-form-item>
@@ -159,15 +159,15 @@ export default {
     // 去博客首页
     toHome() {
       this.activeName = "blog";
-      // this.$router.push('/blog');
+      this.$router.push("/blog");
     },
     toMusic() {
       this.activeName = "music";
-      // this.$router.push('/music');
+      this.$router.push("/music");
     },
     toLogin() {
       this.activeName = "login";
-      // this.$router.push('/login');
+      this.$router.push("/login");
     },
     // 跳转到注册页面
     goToRegister() {
@@ -186,12 +186,11 @@ export default {
             .then(res => {
               this.warningText = res.data.result;
               if (res.data.code === 0 && res.status === 200) {
-                // this.Login(Math.random())
-                // 把后端返回的token保存到 localStorage中去
                 Message.success({
                   message: this.warningText,
                   duration: 1000
                 });
+                this.setUserName(res.data.username)
                 setTimeout(() => {
                   this.$router.push({
                     path: "/blog"
@@ -203,6 +202,15 @@ export default {
                   message: this.warningText,
                   duration: 1000
                 });
+                if (res.data.code === 1) {
+                  setTimeout(() => {
+                    this.$router.push("/register");
+                  }, 1000);
+                } else if (res.data.code === 2) {
+                  this.ruleForm.email = "";
+                  this.ruleForm.pass = "";
+                  this.$refs.email.focus();
+                }
               }
             });
         } else {
@@ -211,13 +219,6 @@ export default {
       });
     }
   },
-  mounted() {
-    if (this.ruleForm.email === "") {
-      this.$refs.email.focus();
-    } else if (this.ruleForm.pass === "") {
-      this.$refs.pass.focus();
-    }
-  }
 };
 </script>
 

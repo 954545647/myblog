@@ -5,6 +5,7 @@
     <menu-bar-small></menu-bar-small>
     <menu-bar-big></menu-bar-big>
     <right-aside class="right-aside"></right-aside>
+    <navigation-bar></navigation-bar>
   </div>
 </template>
 
@@ -14,14 +15,20 @@ import BlogList from "@/components/Blog/blogList.vue";
 import MenuBarSmall from "@/components/Blog/menuBar.vue";
 import MenuBarBig from "@/components/Blog/menuBar1.vue";
 import RightAside from "@/components/Blog/aside.vue";
+import NavigationBar from '@/components/Common/navigationBar';
 export default {
+  data() {
+    return {
+    }
+  },
   components: {
     TopBar,
     BlogList,
     MenuBarBig,
     MenuBarSmall,
-    RightAside
-  }
+    RightAside,
+    NavigationBar
+  },
 };
 </script>
 
@@ -178,7 +185,7 @@ export default {
               left: 0;
               top: 0;
               box-sizing: border-box;
-              transition: all 0.2s linear;
+              // transition: all 0.2s linear;
 
               &:hover {
                 .content .title {

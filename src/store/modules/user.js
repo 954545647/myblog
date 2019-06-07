@@ -2,6 +2,7 @@ const user = {
   state:{
     token: '',
     currentView:'UserCenter',  //当前组件
+    username:'',
   },
   mutations:{
     Login(state,newToken){
@@ -14,6 +15,9 @@ const user = {
     },
     changeView(state,newView){
       state.currentView = newView;
+    },
+    setUserName(state,newName){
+      state.username = newName;
     }
   }
 }

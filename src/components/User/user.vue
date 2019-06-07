@@ -1,6 +1,6 @@
 <template>
   <div class="user-center">
-    <my-header></my-header>
+    <my-header :username="username"></my-header>
     <my-setting></my-setting>
     <my-footer></my-footer>
     <keep-alive>
@@ -13,18 +13,19 @@
 import myHeader from "@/components/User/header.vue";
 import mySetting from "@/components/User/setting.vue";
 import myFooter from "@/components/User/footer.vue";
-import Modify from '@/components/User/modify.vue';
-import UserCenter from '@/components/User/userCenter.vue';
-import {userMixin} from '@/utils/mixin.js';
+import Modify from "@/components/User/modify.vue";
+import UserCenter from "@/components/User/userCenter.vue";
+import { userMixin } from "@/utils/mixin.js";
 export default {
-  mixins:[userMixin],
+  mixins: [userMixin],
   data() {
     return {
-    }
+      username:''
+    };
   },
   watch: {
-    currentView:function(){
-      console.log(this.currentView)
+    currentView: function() {
+      console.log(this.currentView);
     }
   },
   components: {
@@ -35,8 +36,16 @@ export default {
     Modify
   },
   mounted() {
-    console.log(this.currentView)
-  },
+    this.$axios.get(`${process.env.VUE_APP_BASE_URL}/ifLogin`).then(res => {
+      this.$axios
+        .post(`${process.env.VUE_APP_BASE_URL}/user/checkRule`, {
+          email: res.data.sessionId
+        })
+        .then(res => {
+          this.username = res.data.username;
+        });
+    });
+  }
 };
 </script>
 
@@ -52,7 +61,7 @@ export default {
     width: 100%;
     box-sizing: border-box;
     background-color: #f9f9f9;
-    .header-img-wrapper{
+    .header-img-wrapper {
       width: 100%;
     }
   }

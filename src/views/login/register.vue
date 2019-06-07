@@ -27,7 +27,7 @@
             <el-input
               v-model="ruleForm.email"
               class="email"
-              placeholder="输入邮箱"
+              placeholder="请输入邮箱"
               @blur="startSend()"
               ref="email"
             ></el-input>
@@ -49,7 +49,7 @@
               class="pass"
               autocomplete="off"
               type="password"
-              placeholder="输入密码"
+              placeholder="请输入密码"
             ></el-input>
           </el-form-item>
           <!-- 注册按钮 -->

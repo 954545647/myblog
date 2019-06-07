@@ -1,7 +1,7 @@
 <template>
   <div class="detail-wrapper">
     <top-bar ref="topbar"></top-bar>
-    <menu-bar-small></menu-bar-small>
+    <!-- <menu-bar-small></menu-bar-small> -->
     <menu-bar-big></menu-bar-big>
     <div class="blod-detail">
       <mavon-editor
@@ -115,7 +115,7 @@ export default {
   }
 }
 
-@media screen and (min-width: 500px) {
+@media screen and (min-width: 375px) {
   .menu-bar-samll {
     top: 50px;
   }

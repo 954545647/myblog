@@ -7,13 +7,11 @@
           <div class="author-cover">
             <img class="author-cover-img" src="./../../assets/author.jpg" alt>
           </div>
-          <strong class="name">Rex</strong>
-          <span class="brief">不想切图的切图仔</span>
+          <strong class="name">{{username}}</strong>
         </div>
         <!-- 导航栏菜单 -->
         <div class="navigation">
           <ul class="list">
-            <li class="list-title">导航</li>
             <li @click="goToBlog">
               <i class="iconfont icon-wenzhang1"></i>
               <span>文章</span>
@@ -40,26 +38,24 @@
 
 
 <script>
+// import { userMixin } from "@/utils/mixin.js";
 export default {
   name: "MenuBar",
+  // mixins: [userMixin],
   data() {
     return {
+      routes: [],
+      username: "",
       canshow: false,
       width: 0
     };
   },
   watch: {},
-  props: {
-    list: {
-      type: Array,
-      default: () => []
-    }
-  },
   methods: {
     // 用户个人中心
-    goPerson(){
+    goPerson() {
       this.canshow = false;
-       this.$router.push('/user');
+      this.$router.push("/user");
     },
     // 去写博客
     goToWrite() {
@@ -91,6 +87,16 @@ export default {
   },
   mounted() {
     this.width = window.innerWidth;
+    this.$axios.get(`${process.env.VUE_APP_BASE_URL}/ifLogin`).then(res => {
+      this.$axios
+        .post(`${process.env.VUE_APP_BASE_URL}/user/checkRule`, {
+          email: res.data.sessionId
+        })
+        .then(res => {
+          this.routes = res.data.routes;
+          this.username = res.data.username;
+        });
+    });
   }
 };
 </script>
@@ -125,7 +131,7 @@ export default {
         display: flex;
         justify-content: center;
         align-items: flex-start;
-        padding: 0 0 px2rem(15) 0;
+        padding: 0 0 px2rem(20) 0;
         .author-cover-img {
           border-radius: 50%;
           width: px2rem(120);
@@ -138,12 +144,8 @@ export default {
       }
       .name {
         color: rgb(234, 235, 237);
-        font-size: px2rem(16);
+        font-size: px2rem(18);
         margin-bottom: px2rem(10);
-      }
-      .brief {
-        color: rgb(139, 142, 153);
-        font-size: px2rem(14);
       }
     }
     .navigation {
@@ -177,6 +179,11 @@ export default {
     background-color: transparent;
     width: 25%;
     flex: 0 0 25%;
+  }
+}
+@media screen and (min-width: 375px) {
+  .menu-bar-samll {
+    top: 50px;
   }
 }
 </style>
