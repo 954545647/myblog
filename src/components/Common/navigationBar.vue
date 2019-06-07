@@ -1,13 +1,32 @@
 <template>
   <div class="nav-bar">
-    <div class="changeModel"></div>
-    <div class="toTop"></div>
+    <div class="changeModel" @click="changeModel" title="换肤功能还没做~">
+      <i v-if="model" class="iconfont icon-taiyang"></i>
+      <i v-else class="iconfont icon-yejianmoshi"></i>
+    </div>
+    <div class="toTop" @click="toTop">
+      <i class="iconfont icon-fanhuidingbu"></i>
+    </div>
   </div>
 </template>
 
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      model: true
+    };
+  },
+  methods: {
+    changeModel() {
+      this.model = !this.model;
+    },
+    toTop() {
+      window.scrollTo(0, 0);
+    }
+  }
+};
 </script>
 
 
@@ -16,52 +35,45 @@ export default {};
 @media screen and (min-width: 100px) {
   .nav-bar {
     position: fixed;
-    right: px2rem(50);
-    bottom: px2rem(50);
-    width: px2rem(50);
-    height: px2rem(100);
+    right: px2rem(15);
+    bottom: px2rem(15);
+    width: 35px;
+    height: 75px;
+    @include center;
+    flex-direction: column;
     .changeModel {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: px2rem(30);
-      height: px2rem(30);
-      background-color: red;
+      @include center;
+      flex: 1;
+      width: 35px;
+      height: 35px;
+      background-color: #f0f3f4;
+      margin-bottom: 5px;
+      cursor: pointer;
+      .iconfont {
+        font-size: 20px;
+      }
+      .icon-taiyang{
+        font-size: 22px;
+      }
     }
     .toTop {
-      position: absolute;
-      left: 0;
-      top: px2rem(30);
-      width: px2rem(30);
-      height: px2rem(30);
-      background-color: blue;
+      @include center;
+      flex: 1;
+      width: 35px;
+      height: 35px;
+      background-color: #f0f3f4;
+      cursor: pointer;
+      .iconfont {
+        font-size: 20px;
+      }
     }
   }
 }
 
 @media screen and (min-width: 500px) {
   .nav-bar {
-    position: fixed;
     right: 35px;
     bottom: 35px;
-    width: 35px;
-    height: 70px;
-    .changeModel {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 35px;
-      height: 35px;
-      background-color: red;
-    }
-    .toTop {
-      position: absolute;
-      left: 0;
-      top: 35px;
-      width: 35px;
-      height: 35px;
-      background-color: blue;
-    }
   }
 }
 </style>

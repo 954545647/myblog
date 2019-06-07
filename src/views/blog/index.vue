@@ -2,8 +2,8 @@
   <div class="index-wrapper">
     <top-bar></top-bar>
     <blog-list></blog-list>
-    <menu-bar-small></menu-bar-small>
-    <menu-bar-big></menu-bar-big>
+    <menu-bar-small ></menu-bar-small>
+    <menu-bar-big ></menu-bar-big>
     <right-aside class="right-aside"></right-aside>
     <navigation-bar></navigation-bar>
   </div>
@@ -15,11 +15,11 @@ import BlogList from "@/components/Blog/blogList.vue";
 import MenuBarSmall from "@/components/Blog/menuBar.vue";
 import MenuBarBig from "@/components/Blog/menuBar1.vue";
 import RightAside from "@/components/Blog/aside.vue";
-import NavigationBar from '@/components/Common/navigationBar';
+import NavigationBar from "@/components/Common/navigationBar";
 export default {
   data() {
     return {
-    }
+    };
   },
   components: {
     TopBar,

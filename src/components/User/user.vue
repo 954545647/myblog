@@ -1,6 +1,6 @@
 <template>
   <div class="user-center">
-    <my-header :username="username"></my-header>
+    <my-header :username="name"></my-header>
     <my-setting></my-setting>
     <my-footer></my-footer>
     <keep-alive>
@@ -20,7 +20,7 @@ export default {
   mixins: [userMixin],
   data() {
     return {
-      username:''
+      name:''
     };
   },
   watch: {
@@ -42,7 +42,7 @@ export default {
           email: res.data.sessionId
         })
         .then(res => {
-          this.username = res.data.username;
+          this.name = res.data.username;
         });
     });
   }

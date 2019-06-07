@@ -52,7 +52,6 @@ export default {
         .then(res => {
           this.routes = res.data.routes;
           this.username = res.data.username;
-          console.log("我执行了，大的");
         });
     });
   }

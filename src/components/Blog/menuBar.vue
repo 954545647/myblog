@@ -12,21 +12,9 @@
         <!-- 导航栏菜单 -->
         <div class="navigation">
           <ul class="list">
-            <li @click="goToBlog">
-              <i class="iconfont icon-wenzhang1"></i>
-              <span>文章</span>
-            </li>
-            <li @click="goToMusic">
-              <i class="iconfont icon-erji"></i>
-              <span>听歌</span>
-            </li>
-            <li @click="goToWrite">
-              <i class="iconfont icon-shuben"></i>
-              <span>写博客</span>
-            </li>
-            <li @click="goPerson">
-              <i class="iconfont icon-yonghu"></i>
-              <span>个人中心</span>
+            <li v-for="(item,index) in routes" :key="index" @click="jump(index)">
+              <i class="iconfont" :class="item.icon"></i>
+              <span>{{item.alias}}</span>
             </li>
           </ul>
         </div>
@@ -50,33 +38,13 @@ export default {
       width: 0
     };
   },
+
   watch: {},
   methods: {
-    // 用户个人中心
-    goPerson() {
+    jump(index) {
       this.canshow = false;
-      this.$router.push("/user");
-    },
-    // 去写博客
-    goToWrite() {
-      this.canshow = false;
-      setTimeout(() => {
-        this.$router.push("/write");
-      }, 0);
-    },
-    // 去博客列表
-    goToBlog() {
-      this.canshow = false;
-      setTimeout(() => {
-        this.$router.push("/blog");
-      }, 0);
-    },
-    // 去听歌
-    goToMusic() {
-      this.canshow = false;
-      setTimeout(() => {
-        this.$router.push("/music");
-      }, 0);
+      let routerName = this.routes[index].name;
+      this.$router.push(`/${routerName}`);
     },
     show() {
       this.canshow = !this.canshow;
@@ -86,7 +54,6 @@ export default {
     }
   },
   mounted() {
-    this.width = window.innerWidth;
     this.$axios.get(`${process.env.VUE_APP_BASE_URL}/ifLogin`).then(res => {
       this.$axios
         .post(`${process.env.VUE_APP_BASE_URL}/user/checkRule`, {

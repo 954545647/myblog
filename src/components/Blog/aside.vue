@@ -16,7 +16,12 @@
         </li>
       </ul>
       <keep-alive>
-        <component :is="currentView" :blogTitles="blogTitles"></component>
+        <component
+          :is="currentView"
+          :blogTitles="blogTitles"
+          :userInfo="userInfo"
+          :blogInfo="blogInfo"
+        ></component>
       </keep-alive>
     </div>
   </div>
@@ -30,7 +35,9 @@ export default {
   data() {
     return {
       currentView: "HotBlog",
-      blogTitles: []
+      blogTitles: [],
+      userInfo: {},
+      blogInfo: {}
     };
   },
   components: {
@@ -43,11 +50,12 @@ export default {
     }
   },
   mounted() {
-    this.$axios
-      .get(`${process.env.VUE_APP_BASE_URL}/blog/getAllBlog`)
-      .then(res => {
-        this.blogTitles = res.data.blogTitles;
-      });
+    // 获取博客信息和用户信息
+    this.$axios.get(`${process.env.VUE_APP_BASE_URL}/blog/info`).then(res => {
+      this.blogTitles = res.data.blogInfo.blogTitles;
+      this.userInfo = res.data.userInfo;
+      this.blogInfo = res.data.blogInfo;
+    });
   }
 };
 </script>

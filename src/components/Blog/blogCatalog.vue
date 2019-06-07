@@ -3,7 +3,7 @@
     <ul class="blog-catalog-lists">
       <li class="title">文章目录</li>
       <li v-for="(item,index) in catalogsNames" :key="index" class="blog-item">
-        <a :href='catalogsIds[index]'>{{item}}</a>
+        <a :href="catalogsIds[index]" @click="goDown">{{item}}</a>
       </li>
     </ul>
   </div>
@@ -18,12 +18,17 @@ export default {
       type: Array,
       default: () => []
     },
-    catalogsIds:{
-      type:Array,
-      default:()=>[]
+    catalogsIds: {
+      type: Array,
+      default: () => []
     }
   },
   methods: {
+    goDown() {
+      setTimeout(() => {
+        window.scrollBy(0, -50);
+      }, 0);
+    },
     goToCatalog() {}
   }
 };
@@ -46,7 +51,7 @@ export default {
       font-size: 14px;
     }
     .blog-item {
-      border: 1px solid #DDDDDD;
+      border: 1px solid #dddddd;
       height: 50px;
       line-height: 50px;
       overflow: hidden;
