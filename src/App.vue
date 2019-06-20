@@ -18,7 +18,7 @@ function changeFontSize() {
 }
 // DOMContentLoaded是DOM加载完毕,但是图片等资源还没有加载完毕
 // window.addEventListener("DOMContentLoaded", () => {
-  changeFontSize();
+changeFontSize();
 // });
 </script>
 
