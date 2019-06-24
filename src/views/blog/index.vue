@@ -168,7 +168,7 @@ export default {
             top: 0;
             box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
             background-color: rgba(255, 255, 255, 0.9);
-            transition: all 0.2s linear;
+            transition: all 0.3s linear;
             .content-img {
               display: none;
             }
@@ -224,7 +224,6 @@ export default {
                   color: #fff;
                   text-shadow: 0 0 3px #fff;
                   font-size: 24px;
-                  transition: all 0.2s linear;
                 }
                 .article {
                   position: absolute;
