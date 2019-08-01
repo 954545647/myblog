@@ -1,9 +1,9 @@
 <template>
   <div class="nav-bar">
-    <div class="changeModel" @click="changeModel" title="换肤功能还没做~">
+    <!-- <div class="changeModel" @click="changeModel" title="换肤功能还没做~">
       <i v-if="model" class="iconfont icon-taiyang"></i>
       <i v-else class="iconfont icon-yejianmoshi"></i>
-    </div>
+    </div> -->
     <div class="toTop" @click="toTop">
       <i class="iconfont icon-fanhuidingbu"></i>
     </div>
@@ -38,7 +38,7 @@ export default {
     right: px2rem(15);
     bottom: px2rem(15);
     width: 35px;
-    height: 75px;
+    height: 35px;
     @include center;
     flex-direction: column;
     .changeModel {

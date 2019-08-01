@@ -92,9 +92,9 @@
         <li @click="goToMusic">
           <i class="iconfont icon-erji"></i>
         </li>
-        <li @click="goToWrite">
+        <!-- <li @click="goToWrite">
           <i class="iconfont icon-xiezi"></i>
-        </li>
+        </li> -->
         <li @click="goToUser">
           <i class="iconfont icon-yonghu"></i>
         </li>

@@ -140,7 +140,7 @@ export default {
       // 第一步.将图片上传到后端
       var formData = new FormData();
       formData.append("file", $file);
-      console.log(`${process.env.VUE_APP_BASE_URL}/blog/upload`);
+      // console.log(`${process.env.VUE_APP_BASE_URL}/blog/upload`);
       this.$axios({
         url: `${process.env.VUE_APP_BASE_URL}/blog/upload`,
         method: "post",

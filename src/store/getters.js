@@ -18,6 +18,4 @@ const getters = {
 // 使用mapGetters(将 store 中的 getter 映射到局部计算属性):
 // this.token
 
-// this.$store.state.user.token
-// this.$store.getters.token
 export default getters;

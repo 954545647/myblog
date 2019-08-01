@@ -48,11 +48,6 @@ export default new Router({
         requireAuth: true //需要登录
       }
     },
-    {
-      path:'/test',
-      name:'test',
-      component:()=> import('./views/test/test.vue')
-    },
     // 用户中心
     {
       path:'/user',

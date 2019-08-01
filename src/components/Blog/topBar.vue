@@ -6,19 +6,19 @@
     <div class="content">
       <i class="iconfont icon-index"></i>
     </div>
-    <div class="search-bar">
-      <div class="input-wrapper">
+    <div class="search-bar" />
+      <!-- <div class="input-wrapper">
         <div class="input-group">
           <input type="text" placeholder="输入关键词搜索...">
           <div class="sousuo-wrapper">
             <i class="iconfont icon-sousuo"></i>
           </div>
-        </div>
-      </div>
-      <div class="music-bar">
+        </div> -->
+      <!-- </div> -->
+      <!-- <div class="music-bar">
         <img src alt>
-      </div>
-    </div>
+      </div> -->
+    <!-- </div> -->
   </div>
 </template>
 

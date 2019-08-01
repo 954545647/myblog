@@ -65,16 +65,16 @@
         </el-form>
       </div>
       <!-- 使用合作帐号分界线 -->
-      <div class="cooperation-wrapper">
+      <!-- <div class="cooperation-wrapper">
         <span class="dashed-left"></span>
         <div class="cooperation">
           <span class="cooperation-text">使用合作伙伴登录</span>
         </div>
         <span class="dashed-right"></span>
-      </div>
+      </div> -->
 
       <!-- 使用合作帐号 -->
-      <div class="cooperation-btn-wrapper">
+      <!-- <div class="cooperation-btn-wrapper">
         <div class="btn-wrapper">
           <div class="youxiang">
             <span class="iconfont icon-youxiang1"></span>
@@ -83,7 +83,7 @@
             <span class="iconfont icon-youke"></span>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
     <div class="bar">
       <i
@@ -280,7 +280,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/assets/styles/global.scss";
+@import "@/assets/styles/home.scss";
 .register {
   width: 100%;
   height: 100%;
@@ -288,6 +288,7 @@ export default {
   @include center;
   .register-wrapper {
     width: 80%;
+    max-width: 700px;
     position: absolute;
     left: 50%;
     top: 50%;

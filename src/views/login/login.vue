@@ -49,27 +49,27 @@
         </div>
       </div>
       <!-- 记住密码,忘记密码 -->
-      <div class="remember-forget-wrapper">
+      <!-- <div class="remember-forget-wrapper">
         <div class="forget-wrapper">
           <label>
             <input name="forget" type="checkbox" value>忘记密码
           </label>
         </div>
-      </div>
+      </div>-->
       <!-- 登录注册按钮 -->
       <div class="login-check-wrapper">
         <div class="login-check" @click="submitForm('ruleForm')">登录</div>
       </div>
       <!-- 使用合作帐号分界线 -->
-      <div class="cooperation-wrapper">
+      <!-- <div class="cooperation-wrapper">
         <span class="dashed-left"></span>
         <div class="cooperation">
           <span class="cooperation-text">使用合作伙伴登录</span>
         </div>
         <span class="dashed-right"></span>
-      </div>
+      </div>-->
       <!-- 使用合作帐号 -->
-      <div class="cooperation-btn-wrapper">
+      <!-- <div class="cooperation-btn-wrapper">
         <div class="btn-wrapper">
           <div class="youxiang">
             <span class="iconfont icon-youxiang1"></span>
@@ -78,7 +78,7 @@
             <span class="iconfont icon-youke"></span>
           </div>
         </div>
-      </div>
+      </div>-->
     </div>
     <div class="bar" v-if="listShow">
       <i
@@ -190,7 +190,7 @@ export default {
                   message: this.warningText,
                   duration: 1000
                 });
-                this.setUserName(res.data.username)
+                this.setUserName(res.data.username);
                 setTimeout(() => {
                   this.$router.push({
                     path: "/blog"
@@ -218,13 +218,13 @@ export default {
         }
       });
     }
-  },
+  }
 };
 </script>
 
 
 <style lang="scss">
-@import "@/assets/styles/global.scss";
+@import "@/assets/styles/home.scss";
 @media screen and (min-width: 100px) {
   .login {
     width: 100%;
@@ -547,6 +547,13 @@ export default {
 // pc端
 @media screen and (min-width: 500px) {
   .login {
+    .login-wrapper {
+      max-width: 700px;
+      min-height: 300px;
+      .login-check-wrapper{
+        margin-bottom: 20px;
+      }
+    }
     .bar {
       left: 0;
       bottom: 50px;
