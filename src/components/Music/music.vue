@@ -444,7 +444,7 @@ export default {
 
 
 <style lang="scss">
-@import "@/assets/styles/global.scss";
+@import "@/assets/styles/home.scss";
 
 // 屏幕大于1px小于500px的时候
 @media screen and (min-width: 100px) {

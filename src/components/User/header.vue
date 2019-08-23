@@ -57,7 +57,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/assets/styles/global.scss";
+@import "@/assets/styles/home.scss";
 .header-img-wrapper {
   width: 20%;
   height: 30%;

@@ -87,7 +87,7 @@ export default {
 
 
 <style lang="scss">
-@import "@/assets/styles/global.scss";
+@import "@/assets/styles/home.scss";
   .setting {
     height: 100%;
     display: flex;

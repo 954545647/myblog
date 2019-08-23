@@ -61,7 +61,7 @@ export default {
 
 
 <style lang="scss">
-@import "@/assets/styles/global.scss";
+@import "@/assets/styles/home.scss";
 .scroll-wrapper {
   position: relative;
   width: 100%;

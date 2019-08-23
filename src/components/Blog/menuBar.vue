@@ -70,7 +70,7 @@ export default {
 
 
 <style lang="scss">
-@import "@/assets/styles/global.scss";
+@import "@/assets/styles/home.scss";
 .menu-bar-samll {
   position: fixed;
   z-index: 1000;

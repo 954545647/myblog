@@ -47,7 +47,7 @@ export default {
 
 
 <style lang="scss">
-@import "@/assets/styles/global.scss";
+@import "@/assets/styles/home.scss";
 .list-wrapper {
   position: absolute;
   left: 0;

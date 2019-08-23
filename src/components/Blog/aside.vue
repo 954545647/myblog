@@ -62,7 +62,7 @@ export default {
 
 
 <style lang="scss">
-@import "@/assets/styles/global.scss";
+@import "@/assets/styles/home.scss";
 .aside-wrapper {
   position: fixed;
   right: 0;

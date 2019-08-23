@@ -169,7 +169,7 @@ export default {
 
 
 <style lang="scss">
-@import "@/assets/styles/global.scss";
+@import "@/assets/styles/home.scss";
 // 针对小屏手机让编辑区域变小
 @media screen and (min-width: 100px) {
   .article-wrapper {

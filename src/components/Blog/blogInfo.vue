@@ -74,7 +74,7 @@ export default {
 
 
 <style lang="scss">
-@import "@/assets/styles/global.scss";
+@import "@/assets/styles/home.scss";
 .info {
   @include center;
   flex-direction: column;

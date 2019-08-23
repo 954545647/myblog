@@ -31,7 +31,7 @@ export default {
 
 
 <style lang="scss">
-@import "@/assets/styles/global.scss";
+@import "@/assets/styles/home.scss";
 @media screen and (min-width: 100px) {
   .nav-bar {
     position: fixed;

@@ -49,7 +49,7 @@ export default {
 
 
 <style lang="scss">
-@import "@/assets/styles/global.scss";
+@import "@/assets/styles/home.scss";
 @media screen and (min-width: 10px) {
   #app .topbar-wrapper {
     width: 100%;

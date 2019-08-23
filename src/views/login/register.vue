@@ -271,7 +271,6 @@ export default {
         ) {
           this.sendEmail(this.ruleForm.email);
           this.CanSend = false;
-          console.log("发送邮件咯");
         }
       });
     }

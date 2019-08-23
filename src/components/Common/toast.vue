@@ -39,7 +39,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/assets/styles/global.scss";
+@import "@/assets/styles/home.scss";
 .toast-wrapper {
   position: absolute;
   left: 0;

@@ -48,7 +48,7 @@ export default {
 
 
 <style lang="scss">
-@import "@/assets/styles/global.scss";
+@import "@/assets/styles/home.scss";
 .footer-bar {
   flex: 0 0 px2rem(50);
   margin-top: 15px;
