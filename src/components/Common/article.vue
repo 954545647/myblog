@@ -18,7 +18,6 @@
         <div class="next">下一步</div>
       </div>
     </div>
-
     <next-bar v-if="canshowNextBar" ref="nextBar"></next-bar>
   </div>
 </template>
