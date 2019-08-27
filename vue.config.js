@@ -1,3 +1,4 @@
+const CompressionPlugin = require("compression-webpack-plugin");
 module.exports = {
   // publicPath: '/',
   publicPath: process.env.NODE_ENV === "production" ? "./" : "/",
@@ -29,13 +30,27 @@ module.exports = {
       vuex: "Vuex",
       "vue-router": "VueRouter",
       "element-ui": "ELEMENT",
-      "echarts": "echarts" ,
-      "axios":'axios'
+      echarts: "echarts",
+      axios: "axios"
     });
   },
   // // CSS 配置
   css: {
     // 是否动态的将CSS代码生成style标签插入到js文件中
     extract: false // 是
+  },
+  // 配置 gzip
+  configureWebpack: config => {
+    // if(process.env.NODE_ENV === 'production'){
+    return {
+      plugins: [
+        new CompressionPlugin({
+          test: /\.js$|\.html$|.\css/, //匹配文件名
+          threshold: 10240, //对超过10k的数据压缩
+          deleteOriginalAssets: false //不删除源文件
+        })
+      ]
+    };
+    // }
   }
 };

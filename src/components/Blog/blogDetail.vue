@@ -24,6 +24,8 @@
 import MenuBarSmall from "@/components/Blog/menuBar.vue";
 import BlogCatalog from "@/components/Blog/blogCatalog.vue";
 import { mavonEditor } from "mavon-editor";
+import "mavon-editor/dist/css/index.css";
+Vue.use(mavonEditor)
 export default {
   data() {
     return {
