@@ -41,7 +41,7 @@ module.exports = {
   },
   // 配置 gzip
   configureWebpack: config => {
-    // if(process.env.NODE_ENV === 'production'){
+    if(process.env.NODE_ENV === 'production'){
     return {
       plugins: [
         new CompressionPlugin({
@@ -51,6 +51,6 @@ module.exports = {
         })
       ]
     };
-    // }
+    }
   }
 };
