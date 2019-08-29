@@ -100,6 +100,7 @@
 import { Message } from "element-ui";
 import { setTimeout } from "timers";
 import { userMixin } from "@/utils/mixin.js";
+import { readSync } from "fs";
 export default {
   mixins: [userMixin],
   data() {
@@ -151,11 +152,16 @@ export default {
       this.activeName = this.$route.name;
     }
   },
+  mounted: function() {
+    let loadingWrapper = document.getElementById("loader-wrapper");
+    loadingWrapper.style.display = "none";
+  },
   methods: {
     // 显示导航菜单
     showList() {
       this.listShow = !this.listShow;
     },
+
     // 去博客首页
     toHome() {
       this.activeName = "blog";
@@ -550,7 +556,7 @@ export default {
     .login-wrapper {
       max-width: 700px;
       min-height: 300px;
-      .login-check-wrapper{
+      .login-check-wrapper {
         margin-bottom: 20px;
       }
     }

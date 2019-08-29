@@ -17,8 +17,7 @@ import store from "./store";
 //   TabPane
 // } from "element-ui";
 
-import mavonEditor from "mavon-editor"; //markdown编辑器
-import "mavon-editor/dist/css/index.css";
+
 // Vue.use(Button);
 // Vue.use(Form);
 // Vue.use(Input);
@@ -32,8 +31,10 @@ import "mavon-editor/dist/css/index.css";
 // Vue.use(MenuItemGroup);
 // Vue.use(Tabs);
 // Vue.use(TabPane);
+// import mavonEditor from "mavon-editor"; //markdown编辑器
+// import "mavon-editor/dist/css/index.css";
 Vue.use(ELEMENT)
-Vue.use(mavonEditor)
+// Vue.use(mavonEditor)
 // import "element-ui/lib/theme-chalk/index.css";
 // import "@/assets/styles/global.scss";
 import "@/assets/styles/fonts/iconfont.css";

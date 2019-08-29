@@ -5,7 +5,7 @@
         <!-- 作者信息 -->
         <div class="auth">
           <div class="author-cover">
-            <img class="author-cover-img" src="./../../assets/author.jpg" alt>
+            <img class="author-cover-img" src={useImg} alt>
           </div>
           <strong class="name">{{username}}</strong>
         </div>
@@ -27,6 +27,7 @@
 
 <script>
 // import { userMixin } from "@/utils/mixin.js";
+import useImg from './../../assets/author.jpg'
 export default {
   name: "MenuBar",
   // mixins: [userMixin],
