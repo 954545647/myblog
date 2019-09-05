@@ -39,7 +39,6 @@ Vue.use(ELEMENT)
 // import "@/assets/styles/global.scss";
 import "@/assets/styles/fonts/iconfont.css";
 import "@/utils/useCommon.js";
-
 // import axios from "axios"; //引入axios
 axios.defaults.withCredentials = true; //允许携带cookie
 Vue.prototype.$axios = axios;

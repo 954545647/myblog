@@ -94,7 +94,7 @@
         </li>
         <!-- <li @click="goToWrite">
           <i class="iconfont icon-xiezi"></i>
-        </li> -->
+        </li>-->
         <li @click="goToUser">
           <i class="iconfont icon-yonghu"></i>
         </li>
@@ -138,7 +138,7 @@ export default {
     };
   },
   watch: {
-    musicIndex:function(val){
+    musicIndex: function(val) {
       this.imgCover = this.imgUrlList[this.musicIndex];
     },
     // 避免mounted还没获取到数据,此时值为undefined
@@ -398,40 +398,42 @@ export default {
     let data = this.$axios
       .get(`${process.env.VUE_APP_MUSIC_URL}/music/getMusicDate`)
       .then(res => {
-        this.musicList = res.data.result.musicList; //音乐数据列表
-        // 音乐MP3链接
-        this.musicList.map((item, index) => {
-          return this.musicUrlList.push(item.url);
-        });
-        // 音乐歌词
-        this.musicList.map((item, index) => {
-          // 歌词需要单独处理
-          return this.lyricList.push(item.lyric);
-        });
-        // 发起请求,单独获取每首歌的歌词的真正数据
-        this.$axios
-          .get(`${process.env.VUE_APP_MUSIC_URL}/music/getLyric`, {
-            params: {
-              // 两种数组降维的方式
-              // 1: [].concat(...this.lyricList)
-              // 2: [].concat.apply([],this.lyricList)
-              lyric: [].concat.apply([], this.lyricList)
-            }
-          })
-          .then(res => {
-            this.lyricResult = res.data.lyricResult; //所有歌的歌词集合
-            this.timeResult = res.data.timesResult; //所有歌的时间戳的集合
-            this.currentlyric = this.lyricResult[this.musicIndex]; //当前播放歌的歌词
-            this.currentMusicTime = this.timeResult[this.musicIndex]; //当前播放歌的时间
+        if (res && res.data) {
+          this.musicList = res.data.result.musicList; //音乐数据列表
+          // 音乐MP3链接
+          this.musicList.map((item, index) => {
+            return this.musicUrlList.push(item.url);
           });
-        // 音乐封面
-        this.musicList.map((item, index) => {
-          return this.imgUrlList.push(encodeURI(item.cover));
-        });
-        // 音乐列表名字
-        this.musicList.map((item, index) => {
-          return this.musicName.push(item.name);
-        });
+          // 音乐歌词
+          this.musicList.map((item, index) => {
+            // 歌词需要单独处理
+            return this.lyricList.push(item.lyric);
+          });
+          // 发起请求,单独获取每首歌的歌词的真正数据
+          this.$axios
+            .get(`${process.env.VUE_APP_MUSIC_URL}/music/getLyric`, {
+              params: {
+                // 两种数组降维的方式
+                // 1: [].concat(...this.lyricList)
+                // 2: [].concat.apply([],this.lyricList)
+                lyric: [].concat.apply([], this.lyricList)
+              }
+            })
+            .then(res => {
+              this.lyricResult = res.data.lyricResult; //所有歌的歌词集合
+              this.timeResult = res.data.timesResult; //所有歌的时间戳的集合
+              this.currentlyric = this.lyricResult[this.musicIndex]; //当前播放歌的歌词
+              this.currentMusicTime = this.timeResult[this.musicIndex]; //当前播放歌的时间
+            });
+          // 音乐封面
+          this.musicList.map((item, index) => {
+            return this.imgUrlList.push(encodeURI(item.cover));
+          });
+          // 音乐列表名字
+          this.musicList.map((item, index) => {
+            return this.musicName.push(item.name);
+          });
+        }
       });
   },
   beforeDestroy() {
