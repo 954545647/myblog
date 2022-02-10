@@ -21,7 +21,7 @@
     "echarts": "^4.2.1",
     "element-ui": "^2.8.2",
     "mavon-editor": "^2.7.4",
-    "node-sass": "^4.9.0",
+    "node-sass": "^7.0.0",
     "sass-loader": "^7.1.0",
     "vue-create-api": "^0.2.1",
     "vue-template-compiler": "^2.5.21",
